@@ -179,6 +179,28 @@ canvas{display:block;width:100%;height:340px;touch-action:none}
 .foot{text-align:center;color:var(--mute);font-family:var(--f-head);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:12px;padding:14px 0 4px}
 .final-hp{text-align:center;font-family:var(--f-head);font-weight:800;font-size:18px;letter-spacing:.1em;color:var(--mute);margin:0}
 .final-hp strong{color:var(--ink);font-size:34px;font-variant-numeric:tabular-nums}
+
+/* Beta feedback */
+.fbBtn{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;display:flex;align-items:center;gap:6px;background:var(--warm);color:#2a2008;border:0;border-radius:999px;padding:10px 16px;font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.55)}
+.fbWrap{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.72);display:flex;align-items:flex-end;justify-content:center;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+@media (min-width:600px){.fbWrap{align-items:center}}
+.fbCard{width:100%;max-width:440px;max-height:100%;overflow:auto;background:var(--cab);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.fbHead{display:flex;justify-content:space-between;align-items:start;gap:12px}
+.fbHead h3{margin:0;font-family:var(--f-head);font-weight:800;font-size:22px;text-transform:uppercase}
+.fbHead p{margin:2px 0 0;color:var(--mute);font-size:14px}
+.fbX{background:none;border:1px solid var(--line);border-radius:10px;width:36px;height:36px;flex:none;font-size:18px;color:var(--mute)}
+.stars{display:flex;gap:6px}
+.star{flex:1;border:1.5px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 0;font-size:24px;line-height:1;color:var(--line)}
+.star.on{color:var(--warm);border-color:var(--warm)}
+.fbTags{display:flex;flex-wrap:wrap;gap:8px}
+.fbTag{border:1.5px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 12px;font-size:14px;font-weight:500}
+.fbTag[aria-pressed="true"]{background:#fff;color:#111;border-color:#fff;font-weight:600}
+.fbThanks{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;padding:8px 0}
+.fbThanks strong{font-family:var(--f-display);font-size:24px;color:var(--warm)}
+.fbThanks p{margin:0;color:#d6d0d6}
+.fbInline{display:flex;gap:12px;align-items:center;justify-content:space-between;border:1px dashed var(--warm);border-radius:14px;padding:12px 14px;background:#1d1910}
+.fbInline p{margin:0;color:#efe6cf;font-size:14px}
+.fbInline button{flex:none;background:var(--warm);color:#2a2008;border:0;border-radius:10px;padding:9px 14px;font-family:var(--f-head);font-weight:800;letter-spacing:.06em;text-transform:uppercase}
 </style>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
 </head>
@@ -320,11 +342,35 @@ canvas{display:block;width:100%;height:340px;touch-action:none}
     <div class="label">Share your results</div>
     <div class="share" id="shareText"></div>
     <button class="btn" id="copyBtn">Copy for LinkedIn</button>
+    <div class="fbInline"><p>You’re one of our first players. How was it?</p><button id="fbEnd" type="button">Rate it</button></div>
     <button class="btn ghosty" id="againBtn">Play again</button>
     <div class="foot">Let's make hiring human again</div>
   </section>
 </div>
 
+<button class="fbBtn" id="fbBtn" type="button" aria-haspopup="dialog">★ Beta feedback</button>
+<div class="fbWrap" id="fbWrap" hidden>
+  <div class="fbCard" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+    <div id="fbForm" style="display:flex;flex-direction:column;gap:14px">
+      <div class="fbHead">
+        <div><h3 id="fbTitle">Help shape the beta</h3><p>Takes 10 seconds. Anonymous.</p></div>
+        <button class="fbX" id="fbClose" type="button" aria-label="Close feedback">✕</button>
+      </div>
+      <div class="label">How's the game so far?</div>
+      <div class="stars" id="stars" role="radiogroup" aria-label="Rating from 1 to 5"></div>
+      <div class="label">Anything stand out? <small>Pick any</small></div>
+      <div class="fbTags" id="fbTags"></div>
+      <button class="btn" id="fbSend" type="button" disabled>Send feedback</button>
+      <a class="btn ghosty" id="fbMore" href="#" target="_blank" rel="noopener" hidden>Write more on the feedback form ↗</a>
+    </div>
+    <div class="fbThanks" id="fbThanks" hidden>
+      <strong>Thank you!</strong>
+      <p>Your feedback helps make hiring, and this game, more human.</p>
+      <a class="btn ghosty" id="fbMore2" href="#" target="_blank" rel="noopener" hidden>Add a comment on the feedback form ↗</a>
+      <button class="btn" id="fbDone" type="button">Back to the game</button>
+    </div>
+  </div>
+</div>
 <script>
 /* ---------- analytics (GoatCounter events) ---------- */
 function track(name){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:name,title:name,event:true});}catch(e){}}
@@ -342,7 +388,7 @@ let sound=false,ac=null,cur=1;
 function beep(f=520,d=.08,type="square"){if(!sound)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.value=.05;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.stop(ac.currentTime+d);}catch(e){}}
 const yay=()=>{beep(660,.1);setTimeout(()=>beep(990,.15),110)};
 const boo=()=>{beep(220,.2,"sawtooth");setTimeout(()=>beep(140,.3,"sawtooth"),180)};
-function show(id){for(const s of document.querySelectorAll(".screen"))s.hidden=s.id!==id;$("hud").hidden=(id==="s-title"||id==="s-end");window.scrollTo({top:0});}
+function show(id){for(const s of document.querySelectorAll(".screen"))s.hidden=s.id!==id;$("hud").hidden=(id==="s-title"||id==="s-end");curScreen=id;$("fbBtn").hidden=(id==="s-l1"||id==="s-l3");window.scrollTo({top:0});}
 function hud(){$("confFill").style.width=S.conf+"%";$("confNum").textContent=S.conf;$("hpNum").textContent=S.hp;}
 function addHP(n){S.hp=Math.max(0,S.hp+n);hud();}
 function addConf(n){S.conf=Math.max(5,Math.min(100,S.conf+n));hud();}
@@ -642,6 +688,33 @@ function end(){
   $("copyBtn").textContent="Copy for LinkedIn";track("game-finished");track("ending-"+(S.ending||"quick"));yay();show("s-end");
 }
 $("copyBtn").onclick=async()=>{track("share-copied");try{await navigator.clipboard.writeText($("shareText").textContent);$("copyBtn").textContent="Copied ✓";}catch(e){const s=window.getSelection(),rg=document.createRange();rg.selectNodeContents($("shareText"));s.removeAllRanges();s.addRange(rg);$("copyBtn").textContent="Text selected, press copy";}};
+
+/* ---------- beta feedback ---------- */
+/* Paste your Google Form (or Tally) link between the quotes to turn on written feedback. */
+const FEEDBACK_FORM_URL="https://docs.google.com/forms/d/e/1FAIpQLSduOuNzPb0yC1QF_BtQfPOIMbSHWM-4mc2wif-rJCRj2GVjMg/viewform";
+let curScreen="s-title",fbRating=0,fbPicked=new Set(),fbLast=null;
+const FB_TAGS=["Fun","Learned something","Felt too real","Too hard","Confusing","Found a bug","Would share it"];
+const slug=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+for(let i=1;i<=5;i++){const b=document.createElement("button");b.type="button";b.className="star";b.id="star-"+i;b.textContent="★";b.setAttribute("role","radio");b.setAttribute("aria-label",i+" out of 5");
+  b.onclick=()=>{fbRating=i;paintFb();};$("stars").appendChild(b);}
+FB_TAGS.forEach(t=>{const b=document.createElement("button");b.type="button";b.className="fbTag";b.id="tag-"+slug(t);b.textContent=t;b.setAttribute("aria-pressed","false");
+  b.onclick=()=>{fbPicked.has(t)?fbPicked.delete(t):fbPicked.add(t);paintFb();};$("fbTags").appendChild(b);});
+function paintFb(){document.querySelectorAll(".star").forEach((b,i)=>{b.classList.toggle("on",i<fbRating);b.setAttribute("aria-checked",i+1===fbRating);});
+  document.querySelectorAll(".fbTag").forEach(b=>b.setAttribute("aria-pressed",fbPicked.has(b.textContent)));$("fbSend").disabled=!fbRating&&!fbPicked.size;}
+function openFb(){fbRating=0;fbPicked=new Set();paintFb();
+  const has=!!FEEDBACK_FORM_URL;["fbMore","fbMore2"].forEach(id=>{$(id).hidden=!has;if(has)$(id).href=FEEDBACK_FORM_URL;});
+  $("fbForm").style.display="flex";$("fbThanks").hidden=true;fbLast=document.activeElement;$("fbWrap").hidden=false;track("feedback-opened");$("star-1").focus();}
+function closeFb(){$("fbWrap").hidden=true;if(fbLast&&fbLast.focus)fbLast.focus();}
+$("fbBtn").onclick=openFb;$("fbEnd").onclick=openFb;$("fbClose").onclick=closeFb;$("fbDone").onclick=closeFb;
+$("fbWrap").addEventListener("click",e=>{if(e.target===$("fbWrap"))closeFb();});
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("fbWrap").hidden)closeFb();});
+$("fbSend").onclick=()=>{
+  const where=curScreen.replace("s-","");
+  if(fbRating)track("feedback-rating-"+fbRating);
+  fbPicked.forEach(t=>track("feedback-tag-"+slug(t)));
+  track("feedback-from-"+where);
+  $("fbForm").style.display="none";$("fbThanks").hidden=false;$("fbDone").focus();beep(880,.08);
+};
 
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}
