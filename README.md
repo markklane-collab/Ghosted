@@ -12,7 +12,7 @@ Under the humor is a serious goal: help job seekers feel seen, share practical t
 
 ## Play
 
-Play in your browser: **[add your GitHub Pages link here]**
+Play in your browser: **[markklane-collab.github.io/Ghosted](https://markklane-collab.github.io/Ghosted/)**
 
 No download, no sign-up. Works on phone and desktop. About 8 minutes from start to finish.
 
@@ -64,7 +64,7 @@ Played it? We'd love to hear what made you laugh, what felt too real, and what y
 
 *Ghosted by the Machine* explores AI in hiring, candidate experience, and how to make hiring more human.
 
-[**[add your podcast link here]**](https://assets.beamly.com/img/icons/youtube_music.svg)
+**[add your podcast link here]**
 
 ---
 
