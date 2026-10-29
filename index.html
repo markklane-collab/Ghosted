@@ -149,14 +149,23 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
 .circus{height:6px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--red) 0 18px,#fff 18px 36px)}
 
 /* L3 arcade */
-.arena{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#0b0a0c}
-canvas{display:block;width:100%;height:340px;touch-action:none}
-.legend{display:flex;gap:14px;justify-content:center;font-size:13px;color:var(--mute);flex-wrap:wrap}
-.legend span::before{content:"";display:inline-block;width:12px;height:9px;border-radius:2px;margin-right:6px;vertical-align:0}
-.legend .y::before{background:#fff;box-shadow:inset 0 0 0 2px var(--good)} .legend .n::before{background:var(--red)}
-.pad{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pad button{border:2px solid var(--line);background:var(--panel);border-radius:14px;padding:14px;font-size:22px;user-select:none;-webkit-user-select:none;touch-action:none}
-.pad button:active{background:#2a252b}
+.whack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.hole{aspect-ratio:1/1;width:100%;min-width:0;min-height:0;border:1.5px solid var(--line);border-radius:16px;background:radial-gradient(ellipse 34% 7% at 50% 88%,rgba(0,0,0,.85) 0 96%,transparent 100%),linear-gradient(#24202a,var(--panel));position:relative;overflow:hidden;padding:0;touch-action:manipulation;user-select:none;-webkit-user-select:none;transition:background .15s,border-color .15s}
+.hole .pop{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding-bottom:10%;opacity:1}
+@media (prefers-reduced-motion:no-preference){.hole .pop{animation:rise .16s ease-out}}
+@keyframes rise{from{transform:translateY(30%) scale(.85);opacity:0}}
+.hole svg{width:52%;height:auto;display:block}
+.hole.is-ghost svg{filter:drop-shadow(0 0 1.5px rgba(255,255,255,.85)) drop-shadow(0 0 7px rgba(59,91,255,.9))}
+.hole.is-ghost{border-color:#3b4fb8}
+.hole.is-bot{border-color:var(--red-deep)}
+.hole .who{font-family:var(--f-head);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hole.is-bot .who{color:var(--red)}
+.hole .burst{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-size:15px;letter-spacing:.02em}
+.hole.hit{background:rgba(60,207,122,.14);border-color:var(--good)} .hole.hit .burst{color:var(--good)}
+.hole.bad{background:rgba(227,19,27,.18);border-color:var(--red)} .hole.bad .burst{color:var(--red);font-size:13px}
+.hole.gone .burst{color:var(--mute);font-size:13px}
+.hole .key{position:absolute;top:6px;left:9px;font-family:var(--f-head);font-weight:700;font-size:11px;color:var(--line)}
+.legend{display:flex;gap:14px;justify-content:center;font-size:13px;color:var(--mute);flex-wrap:wrap;text-align:center}
 
 /* L5 */
 .offer{background:#fff;color:#111;border-radius:14px;padding:14px 16px}
@@ -243,6 +252,7 @@ canvas{display:block;width:100%;height:340px;touch-action:none}
       <p class="sub">Five levels. One very literal résumé scanner, an AI interviewer, a lot of silence, and one recruiter who's actually on your side. About 5 minutes.</p>
     </div>
     <button class="btn" id="startBtn">Start game →</button>
+    <p class="meta" style="text-align:center">🎧 Tap Sound for the soundtrack</p>
     <div class="foot">Let's make hiring human again</div>
   </section>
 
@@ -297,14 +307,13 @@ canvas{display:block;width:100%;height:340px;touch-action:none}
 
   <!-- LEVEL 3 -->
   <section class="screen" id="s-l3" hidden>
-    <div><p class="meta">Catch real replies. Dodge auto-rejections.</p><h2 class="lvl"><em>Level 3:</em> The Ghosting Zone</h2></div>
+    <div><p class="meta">Tap the fading ghosts before they vanish. Skip the bots.</p><h2 class="lvl"><em>Level 3:</em> The Ghosting Zone</h2></div>
     <div class="hud">
-      <div class="pill" id="t3Pill">TIME <strong id="t3">30</strong></div>
+      <div class="pill" id="t3Pill">TIME <strong id="t3">25</strong></div>
       <div class="pill">REPLIES <strong id="r3">0</strong></div>
     </div>
-    <div class="arena"><canvas id="cv" aria-label="Arcade game: move left and right to catch white reply envelopes and avoid red rejection envelopes"></canvas></div>
-    <div class="legend"><span class="y">Real reply +25</span><span class="n">Auto-rejection, costs confidence</span></div>
-    <div class="pad"><button id="padL" aria-label="Move left">◀</button><button id="padR" aria-label="Move right">▶</button></div>
+    <div class="whack" id="whack" aria-label="Whack-a-ghost board"></div>
+    <div class="legend"><span>👻 Fading conversation: tap it to get a reply (+25)</span><span>🤖 No-reply bot: don't tap, it costs confidence</span></div>
   </section>
 
   <!-- LEVEL 5 -->
@@ -388,7 +397,7 @@ const S={hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:nul
 const LEVELS=[
  {n:1,name:"The ATS Strikes Back",short:"Get past the résumé scanner",brief:"Three job postings, 25 seconds each. Tap up to 5 skills that match the posting's exact language. Hit 60% to reach a human."},
  {n:2,name:"Interview Impossible",short:"Survive the AI interviewer",brief:"Interviewer.exe has three questions. Some are real. Some are ridiculous. Answer like a human and keep your confidence up."},
- {n:3,name:"The Ghosting Zone",short:"Catch replies, dodge rejections",brief:"30 seconds of inbox chaos. Move left and right to catch real replies and dodge automated rejections. Catch 5 to clear the level."},
+ {n:3,name:"The Ghosting Zone",short:"Whack the ghosts before they vanish",brief:"25 seconds. Conversations pop up and start to fade. Tap them before they go silent to get a reply, and skip the no-reply bots. Get 10 replies to clear the level."},
  {n:4,name:"The Hiring Circus",short:"Spot the red flags",brief:"Three questions about job postings and hiring processes. Spot the red flags before they spot you."},
  {n:5,name:"The Final Offer",short:"Negotiate and decide",brief:"An offer from a real human. Accept, negotiate, or walk away. Your choice decides your ending."}
 ];
@@ -396,7 +405,7 @@ let sound=false,ac=null,cur=1;
 function beep(f=520,d=.08,type="square"){if(!sound)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.value=.05;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.stop(ac.currentTime+d);}catch(e){}}
 const yay=()=>{beep(660,.1);setTimeout(()=>beep(990,.15),110)};
 const boo=()=>{beep(220,.2,"sawtooth");setTimeout(()=>beep(140,.3,"sawtooth"),180)};
-function show(id){for(const s of document.querySelectorAll(".screen"))s.hidden=s.id!==id;$("hud").hidden=(id==="s-title"||id==="s-end");curScreen=id;$("fbBtn").hidden=(id==="s-l1"||id==="s-l3");window.scrollTo({top:0});}
+function show(id){for(const s of document.querySelectorAll(".screen"))s.hidden=s.id!==id;$("hud").hidden=(id==="s-title"||id==="s-end");curScreen=id;Music.mode(id==="s-l1"||id==="s-l3"?"tense":"calm");$("fbBtn").hidden=(id==="s-l1"||id==="s-l3");window.scrollTo({top:0});}
 function hud(){$("confFill").style.width=S.conf+"%";$("confNum").textContent=S.conf;$("hpNum").textContent=S.hp;}
 function addHP(n){S.hp=Math.max(0,S.hp+n);hud();}
 function addConf(n){S.conf=Math.max(5,Math.min(100,S.conf+n));hud();}
@@ -531,64 +540,53 @@ function startL2(){runQuiz({items:L2,metaWord:"Question",levelHTML:"<em>Level 2:
       stats:[[`${s}/3`,"Strong answers"],[S.conf,"Confidence"],[S.hp,"Human Points"]],
       tip:"Treat an AI interview like a real one: short, specific stories with a result at the end. It's also fair to ask how the recording is reviewed and whether a person sees it. You're evaluating them too."});}});}
 
-/* ---------- LEVEL 3: GHOSTING ZONE ---------- */
-let ctx,W,H=340,px,tx,items,ghost,t3,spawnT,lastTs,running=false,flash,timer3,keyL=false,keyR=false,ghostT;
+/* ---------- LEVEL 3: GHOSTING ZONE (whack-a-ghost) ---------- */
+const COS=["Brightline","Northwind","Copperleaf","Lumen Labs","Harbor & Co.","Pinecrest","Vertex","Bluebird","Summit"];
+const GHOST_SVG=`<svg viewBox="0 0 100 100" aria-hidden="true"><use href="#gbtm"/></svg>`;
+const BOT_HOLE_SVG=`<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="30" y="4" width="4" height="10" rx="2" fill="#e3131b"/><rect x="8" y="14" width="48" height="40" rx="9" fill="#e3131b"/><rect x="15" y="22" width="34" height="18" rx="4" fill="#0b0a0c"/><rect x="21" y="27" width="7" height="7" rx="1.5" fill="#fff"/><rect x="36" y="27" width="7" height="7" rx="1.5" fill="#fff"/><rect x="22" y="45" width="20" height="4" rx="2" fill="#0b0a0c"/></svg>`;
+const T3=25;let t3=T3,timer3=null,spawnT=null,running=false,holes=[],missed=0;
+function buildBoard(){if(holes.length)return;for(let i=0;i<9;i++){const b=document.createElement("button");b.type="button";b.className="hole";b.id="hole-"+i;b.setAttribute("aria-label","Empty");b.dataset.key=i+1;
+  b.addEventListener("pointerdown",e=>{e.preventDefault();whack(i);});b.addEventListener("click",e=>{if(e.detail===0)whack(i);});$("whack").appendChild(b);holes.push({el:b,type:null,t:null});}}
+function setHole(h,cls,html,label){h.el.className="hole"+(cls?" "+cls:"");h.el.innerHTML=`<span class="key" aria-hidden="true">${h.el.dataset.key}</span>`+html;h.el.setAttribute("aria-label",label);}
+function clearHole(h){clearTimeout(h.t);h.type=null;h.t=null;setHole(h,"","","Empty");}
 function startL3(){
-  show("s-l3");const cv=$("cv"),dpr=Math.min(2,window.devicePixelRatio||1);W=cv.clientWidth;cv.width=W*dpr;cv.height=H*dpr;
-  ctx=cv.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
-  px=tx=W/2;items=[];ghost=null;ghostT=3;t3=30;spawnT=0;lastTs=null;S.replies=0;S.hits=0;flash=0;running=true;
-  $("t3").textContent=t3;$("r3").textContent=0;
+  show("s-l3");buildBoard();holes.forEach(clearHole);
+  t3=T3;S.replies=0;S.hits=0;missed=0;running=true;$("t3").textContent=t3;$("r3").textContent=0;$("t3Pill").classList.remove("low");
   clearInterval(timer3);timer3=setInterval(()=>{t3--;$("t3").textContent=Math.max(0,t3);$("t3Pill").classList.toggle("low",t3<=5);if(t3<=0)endL3();},1000);
-  requestAnimationFrame(loop);
+  clearTimeout(spawnT);spawnT=setTimeout(spawn,600);
 }
-function env(x,y,yes){
-  ctx.save();ctx.translate(x,y);ctx.fillStyle=yes?"#ffffff":"#e3131b";ctx.beginPath();ctx.roundRect(-17,-12,34,24,3);ctx.fill();
-  ctx.strokeStyle=yes?"#3ccf7a":"#8f0c11";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-15,-10);ctx.lineTo(0,2);ctx.lineTo(15,-10);ctx.stroke();
-  ctx.font="700 9px 'Barlow Condensed',sans-serif";ctx.textAlign="center";ctx.fillStyle=yes?"#0b7a3e":"#fff";ctx.fillText(yes?"REPLY":"NO",0,10);ctx.restore();
+function spawn(){
+  if(!running)return;const el=T3-t3;
+  const free=holes.filter(h=>!h.type);
+  const n=el>12&&Math.random()<.35?2:1;
+  for(let k=0;k<n&&free.length;k++){
+    const h=free.splice(Math.floor(Math.random()*free.length),1)[0];
+    const bot=Math.random()<.27;const life=bot?1500:Math.max(750,1500-el*32);
+    h.type=bot?"bot":"ghost";
+    const who=bot?"No-reply bot":COS[Math.floor(Math.random()*COS.length)];
+    setHole(h,"is-"+h.type,`<div class="pop">${bot?BOT_HOLE_SVG:GHOST_SVG}<span class="who">${who}</span></div>`,bot?"No-reply bot. Don't tap.":who+" is going quiet. Tap for a reply.");
+    const pop=h.el.querySelector(".pop");
+    if(!bot)requestAnimationFrame(()=>requestAnimationFrame(()=>{pop.style.transition=`opacity ${life}ms linear`;pop.style.opacity=".12";}));
+    h.t=setTimeout(()=>expire(h),life);
+  }
+  spawnT=setTimeout(spawn,Math.max(420,820-el*16));
 }
-function drawGhost(g){
-  ctx.save();ctx.globalAlpha=g.a;ctx.translate(g.x,g.y);
-  ctx.shadowColor="rgba(59,91,255,.9)";ctx.shadowBlur=14;ctx.fillStyle="#272526";ctx.beginPath();ctx.arc(0,0,18,Math.PI,0);ctx.lineTo(18,20);
-  for(let i=0;i<3;i++){ctx.lineTo(18-(i*2+1)*6,15);ctx.lineTo(18-(i*2+2)*6,20);}ctx.closePath();ctx.fill();ctx.shadowBlur=0;
-  ctx.fillStyle="#fff";ctx.fillRect(-1.5,-14,3,6);ctx.fillRect(-11,-9,22,18);ctx.fillRect(-14,-4,28,8);
-  ctx.fillStyle="#272526";ctx.beginPath();ctx.arc(-4.5,-3,2.4,0,7);ctx.arc(4.5,-3,2.4,0,7);ctx.fill();ctx.fillRect(-4.5,3,9,2.5);
-  ctx.font="600 12px 'Barlow',sans-serif";ctx.fillStyle="#a39ba3";ctx.textAlign="center";ctx.fillText(g.a>.6?"Recruiter is typing…":"…",0,-26);ctx.restore();
-}
-function drawPlayer(){
-  const y=H-30;ctx.fillStyle="#8f0c11";ctx.beginPath();ctx.roundRect(px-20,y-2,10,22,3);ctx.fill();
-  ctx.fillStyle="#e3131b";ctx.beginPath();ctx.roundRect(px-14,y-6,28,30,8);ctx.fill();
-  ctx.fillStyle="#f4f1f2";ctx.beginPath();ctx.arc(px,y-16,11,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#2a252b";ctx.fillRect(px+10,y+6,14,11);ctx.fillStyle="#f2c14e";ctx.fillRect(px+15,y+3,4,3);
-}
-function loop(ts){
-  if(!running)return;if(lastTs===null)lastTs=ts;const dt=Math.min(.05,(ts-lastTs)/1000);lastTs=ts;const el=30-t3;
-  spawnT-=dt;if(spawnT<=0){spawnT=Math.max(.3,.62-el*.01);items.push({x:20+Math.random()*(W-40),y:-14,vy:115+el*5+Math.random()*45,yes:Math.random()<.36});}
-  ghostT-=dt;if(ghostT<=0&&!ghost){ghost={x:-30,y:60+Math.random()*70,a:1};ghostT=7;}
-  if(keyL)tx-=360*dt;if(keyR)tx+=360*dt;tx=Math.max(22,Math.min(W-22,tx));px+=(tx-px)*Math.min(1,dt*14);
-  const top=H-50,bot=H-6;
-  items=items.filter(it=>{it.y+=it.vy*dt;
-    if(it.y+12>top&&it.y-12<bot&&Math.abs(it.x-px)<36){if(it.yes){S.replies++;addHP(25);beep(880,.06);$("r3").textContent=S.replies;}else{S.hits++;addConf(-6);flash=.3;beep(150,.12,"sawtooth");}return false;}
-    return it.y<H+20;});
-  if(ghost){ghost.x+=95*dt;if(ghost.x>W*.55)ghost.a-=dt*1.4;if(ghost.a<=0)ghost=null;}
-  ctx.fillStyle="#0b0a0c";ctx.fillRect(0,0,W,H);ctx.strokeStyle="rgba(227,19,27,.08)";ctx.lineWidth=1;
-  for(let x=0;x<W;x+=28){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-  if(ghost)drawGhost(ghost);items.forEach(it=>env(it.x,it.y,it.yes));drawPlayer();
-  if(flash>0){flash-=dt;ctx.fillStyle=`rgba(227,19,27,${Math.max(0,flash)})`;ctx.fillRect(0,0,W,H);}
-  requestAnimationFrame(loop);
+function flashHole(h,cls,txt,label){clearTimeout(h.t);h.type="done";setHole(h,cls,`<span class="burst">${txt}</span>`,label);h.t=setTimeout(()=>clearHole(h),cls==="gone"?380:300);}
+function expire(h){if(h.type==="ghost"){missed++;flashHole(h,"gone","Ghosted","Ghosted");}else clearHole(h);}
+function whack(i){
+  const h=holes[i];if(!running||!h||(h.type!=="ghost"&&h.type!=="bot"))return;
+  if(h.type==="ghost"){S.replies++;addHP(25);$("r3").textContent=S.replies;beep(880,.06);flashHole(h,"hit","Reply!","Reply received");}
+  else{S.hits++;addConf(-6);beep(150,.12,"sawtooth");flashHole(h,"bad","Auto-rejected","Auto-rejected");}
 }
 function endL3(){
-  running=false;clearInterval(timer3);keyL=keyR=false;const pass=S.replies>=5;S.done[2]=`${S.replies} REPLIES`;addHP(pass?100:0);
+  running=false;clearInterval(timer3);clearTimeout(spawnT);holes.forEach(clearHole);
+  const pass=S.replies>=10;S.done[2]=`${S.replies} REPLIES`;addHP(pass?100:0);
   result({lvl:3,title:pass?"Someone actually <em>wrote back</em>.":"The silence <em>won</em> this round.",pass,stamp:pass?"REPLIED":"GHOSTED",
-    line:pass?`You caught ${S.replies} real replies. In this economy, that's a highlight reel.`:`Only ${S.replies} real ${S.replies===1?"reply":"replies"} made it through. The rest was automated noise.`,
-    stats:[[S.replies,"Real replies"],[S.hits,"Rejections hit"],[S.conf,"Confidence"]],
+    line:pass?`You kept ${S.replies} conversations alive. In this economy, that's a highlight reel.`:`${S.replies} ${S.replies===1?"conversation":"conversations"} got a reply. ${missed} faded into silence. You needed 10.`,
+    stats:[[S.replies,"Real replies"],[missed,"Ghosted"],[S.hits,"Bots tapped"]],
     tip:"Silence usually isn't about you. Most recruiters are juggling a lot of open roles. Follow up once, about a week after your interview, then put your energy into the next one. And to my fellow recruiters: a two-line \"we went another direction\" email takes 30 seconds. Send it."});
 }
-function setTarget(e){const r=$("cv").getBoundingClientRect();tx=e.clientX-r.left;}
-$("cv").addEventListener("pointerdown",e=>{setTarget(e);$("cv").setPointerCapture(e.pointerId);});
-$("cv").addEventListener("pointermove",e=>{if(e.buttons||e.pointerType==="mouse")setTarget(e);});
-[["padL",v=>keyL=v],["padR",v=>keyR=v]].forEach(([id,f])=>{const b=$(id);b.addEventListener("pointerdown",e=>{e.preventDefault();f(true);});["pointerup","pointerleave","pointercancel"].forEach(ev=>b.addEventListener(ev,()=>f(false)));});
-addEventListener("keydown",e=>{if(!running)return;if(e.key==="ArrowLeft"){keyL=true;e.preventDefault();}if(e.key==="ArrowRight"){keyR=true;e.preventDefault();}});
-addEventListener("keyup",e=>{if(e.key==="ArrowLeft")keyL=false;if(e.key==="ArrowRight")keyR=false;});
+addEventListener("keydown",e=>{if(!running)return;const k=parseInt(e.key,10);if(k>=1&&k<=9){e.preventDefault();whack(k-1);}});
 
 /* ---------- LEVEL 4: HIRING CIRCUS ---------- */
 const L4=[
@@ -699,11 +697,47 @@ $("fbSend").onclick=()=>{
   $("fbForm").style.display="none";$("fbThanks").hidden=false;$("fbDone").focus();beep(880,.08);
 };
 
+/* ---------- soundtrack (original, generated in the browser) ---------- */
+const Music=(()=>{
+  const A=440,f=n=>A*Math.pow(2,(n-69)/12); // MIDI note -> Hz
+  // A minor: Am - F - C - G (i - VI - III - VII)
+  const CH=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],ROOT=[45,41,48,43];
+  const LEAD=[[],[76,null,null,null,74,null,null,null,72,null,null,null,71,null,null,null],[],[72,null,null,null,71,null,69,null,null,null,null,null,64,null,null,null]];
+  let ctx=null,out=null,noise=null,timer=null,on=false,step=0,next=0,mode="calm";
+  function init(){ctx=ac=ac||new (window.AudioContext||window.webkitAudioContext)();
+    if(!out){out=ctx.createGain();out.gain.value=0;out.connect(ctx.destination);
+      const len=ctx.sampleRate*.2,b=ctx.createBuffer(1,len,ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;noise=b;}}
+  function tone(freq,t,dur,type,vol,cut){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=freq;
+    let node=o;if(cut){const lp=ctx.createBiquadFilter();lp.type="lowpass";lp.frequency.value=cut;o.connect(lp);node=lp;}
+    node.connect(g);g.connect(out);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.start(t);o.stop(t+dur+.02);}
+  function hat(t,vol){const src=ctx.createBufferSource(),hp=ctx.createBiquadFilter(),g=ctx.createGain();src.buffer=noise;hp.type="highpass";hp.frequency.value=7000;
+    src.connect(hp);hp.connect(g);g.connect(out);g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.0001,t+.05);src.start(t);src.stop(t+.06);}
+  function kick(t){const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(42,t+.12);
+    o.connect(g);g.connect(out);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.0001,t+.18);o.start(t);o.stop(t+.2);}
+  function play(i,t,sx){const bar=Math.floor(i/16)%4,s=i%16,tense=mode==="tense";
+    if(s===0||s===6||s===8||s===14)tone(f(ROOT[bar]),t,sx*(s===6||s===14?1.6:3),"triangle",.32);
+    if(s%2===0){const c=CH[bar],k=[0,1,2,1][(s/2)%4];tone(f(c[k]+12),t,sx*1.4,"square",.07,tense?2600:1500);}
+    if(tense?true:s%4===2)hat(t,tense?.05:.04);
+    if(tense&&s%4===0)kick(t);
+    const n=LEAD[bar][s];if(n&&!tense)tone(f(n),t,sx*5,"sine",.09);}
+  function tick(){const bpm=mode==="tense"?134:100,sx=60/bpm/4;
+    while(next<ctx.currentTime+.12){play(step,next,sx);step++;next+=sx;}}
+  return{
+    start(){init();if(ctx.state==="suspended")ctx.resume();if(on)return;on=true;step=0;next=ctx.currentTime+.08;
+      out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(.0001,ctx.currentTime);out.gain.exponentialRampToValueAtTime(.55,ctx.currentTime+.6);
+      timer=setInterval(tick,25);},
+    stop(){if(!on)return;on=false;clearInterval(timer);if(out){out.gain.cancelScheduledValues(ctx.currentTime);out.gain.setValueAtTime(out.gain.value||.0001,ctx.currentTime);out.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.3);}},
+    mode(m){mode=m;},
+    get playing(){return on;}
+  };
+})();
+document.addEventListener("visibilitychange",()=>{if(document.hidden)Music.stop();else if(sound)Music.start();});
+
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}
 $("startBtn").onclick=()=>{track("game-started");reset();beep(523);showMap();};
 $("againBtn").onclick=()=>{reset();show("s-title");};
-$("soundBtn").onclick=e=>{sound=!sound;e.currentTarget.textContent=sound?"SOUND ON":"SOUND OFF";e.currentTarget.setAttribute("aria-pressed",sound);beep(700);};
+$("soundBtn").onclick=e=>{sound=!sound;e.currentTarget.textContent=sound?"♪ SOUND ON":"SOUND OFF";e.currentTarget.setAttribute("aria-pressed",sound);beep(700);sound?Music.start():Music.stop();};
 hud();
 </script>
 </body>
