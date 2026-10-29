@@ -14,7 +14,7 @@ Under the humor is a serious goal: help job seekers feel seen, share practical t
 
 Play in your browser: **[markklane-collab.github.io/Ghosted](https://markklane-collab.github.io/Ghosted/)**
 
-No download, no sign-up. Works on phone and desktop. About 8 minutes from start to finish.
+No download, no sign-up. Works on phone and desktop. About 5 minutes from start to finish.
 
 ---
 

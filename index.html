@@ -240,7 +240,7 @@ canvas{display:block;width:100%;height:340px;touch-action:none}
       <h1 class="logo"><span class="gh">GHOSTED</span><span class="by">BY THE</span><span class="mac">MACHINE</span></h1>
       <span class="tag">THE GAME</span>
       <p class="hook">Can you beat the hiring machine?</p>
-      <p class="sub">Five levels. One very literal résumé scanner, an AI interviewer, a lot of silence, and one recruiter who's actually on your side. About 8 minutes.</p>
+      <p class="sub">Five levels. One very literal résumé scanner, an AI interviewer, a lot of silence, and one recruiter who's actually on your side. About 5 minutes.</p>
     </div>
     <button class="btn" id="startBtn">Start game →</button>
     <div class="foot">Let's make hiring human again</div>
@@ -343,7 +343,7 @@ canvas{display:block;width:100%;height:340px;touch-action:none}
       <div class="stat"><strong id="eHuman">0</strong><span>Reached a human</span></div>
       <div class="stat"><strong id="eGhost">0</strong><span>Rejections</span></div>
       <div class="stat"><strong id="eReplies">0</strong><span>Real replies</span></div>
-      <div class="stat"><strong id="eFlags">0/6</strong><span>Red flags spotted</span></div>
+      <div class="stat"><strong id="eFlags">0/3</strong><span>Red flags spotted</span></div>
       <div class="stat"><strong id="eOffer">—</strong><span>Final offer</span></div>
     </div>
     <div class="badge"><div class="medal" id="medal">HP</div><div><h4 id="badgeName"></h4><p id="badgeDesc"></p></div></div>
@@ -387,9 +387,9 @@ const $=id=>document.getElementById(id);
 const S={hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]};
 const LEVELS=[
  {n:1,name:"The ATS Strikes Back",short:"Get past the résumé scanner",brief:"Three job postings, 25 seconds each. Tap up to 5 skills that match the posting's exact language. Hit 60% to reach a human."},
- {n:2,name:"Interview Impossible",short:"Survive the AI interviewer",brief:"Interviewer.exe has five questions. Some are real. Some are ridiculous. Answer like a human and keep your confidence up."},
+ {n:2,name:"Interview Impossible",short:"Survive the AI interviewer",brief:"Interviewer.exe has three questions. Some are real. Some are ridiculous. Answer like a human and keep your confidence up."},
  {n:3,name:"The Ghosting Zone",short:"Catch replies, dodge rejections",brief:"30 seconds of inbox chaos. Move left and right to catch real replies and dodge automated rejections. Catch 5 to clear the level."},
- {n:4,name:"The Hiring Circus",short:"Spot the red flags",brief:"Six questions about job postings and hiring processes. Spot the red flags before they spot you."},
+ {n:4,name:"The Hiring Circus",short:"Spot the red flags",brief:"Three questions about job postings and hiring processes. Spot the red flags before they spot you."},
  {n:5,name:"The Final Offer",short:"Negotiate and decide",brief:"An offer from a real human. Accept, negotiate, or walk away. Your choice decides your ending."}
 ];
 let sound=false,ac=null,cur=1;
@@ -508,37 +508,27 @@ $("qNext").onclick=()=>{qi++;qi<Q.items.length?askQ():Q.done(qScore);};
 
 /* ---------- LEVEL 2: AI INTERVIEW ---------- */
 const L2=[
- {q:"Tell me about yourself. You have 30 seconds. Begin.",o:[
-  {t:"Start with kindergarten and work forward chronologically.",hp:-10,c:-5,fb:"Interviewer.exe timed out at age 9."},
-  {t:"Who I am now, what I've done that fits this role, and why I want it next.",hp:60,c:8,best:true,fb:"Present, past, future. Tight and relevant. Works on bots and humans."},
-  {t:"\"It's all on my résumé.\"",hp:-20,c:-5,fb:"Technically true. Strategically fatal."},
-  {t:"Stare into the camera until it speaks first.",hp:5,c:-2,fb:"The AI also stared. It lasted four minutes. Nobody won."}]},
- {q:"Describe yourself in three words, using only emojis.",emoji:true,o:[
-  {t:"🎯 🚀 💡",hp:40,c:4,best:true,fb:"The AI scored this 87%. Nobody knows why. Honestly, nobody knows why for any of them."},
-  {t:"😐 ☕ 💻",hp:25,c:2,fb:"Relatable. The algorithm flagged it as \"honest,\" which is apparently a risk factor."},
-  {t:"🔥 🤝 📈",hp:30,c:3,fb:"Read as \"growth-minded collaborator.\" Or possibly \"arsonist with a sales quota.\""},
-  {t:"🤖 ❤️ 😎",hp:20,c:2,fb:"The AI thought you were flirting with it. Awkward for everyone."}]},
- {q:"Tell me about a time you failed.",o:[
-  {t:"\"My biggest weakness is that I work too hard.\"",hp:-15,c:-4,fb:"Every interviewer, human or bot, has heard this ten thousand times."},
-  {t:"\"I've honestly never failed.\"",hp:-25,c:-6,fb:"Bold claim. The AI marked you as \"possibly a robot.\" Takes one to know one."},
-  {t:"A real, specific miss, what I learned, and what I do differently now.",hp:60,c:8,best:true,fb:"Ownership plus growth. That's the whole point of the question."},
-  {t:"A long story about how it was my old manager's fault.",hp:-20,c:-5,fb:"Blame reads loud and clear, even through a webcam."}]},
+ {q:"Our AI flagged a 7-month gap on your résumé. Please explain.",o:[
+  {t:"Apologize, then walk through every week of it in detail.",hp:-10,c:-5,fb:"Over-explaining makes a normal gap sound like a problem. Interviewer.exe stopped listening at week three."},
+  {t:"Say you were \"freelancing\" and hope nobody asks for clients.",hp:-20,c:-5,fb:"A vague cover story usually gets a follow-up question. Then it gets awkward."},
+  {t:"One honest sentence on why, what you did with the time, and why you're ready now.",hp:60,c:8,best:true,fb:"Brief, honest, forward-looking. Gaps are common, and most hiring managers care far more about what comes next."},
+  {t:"\"I was busy getting ghosted by 212 other companies.\"",hp:15,c:3,fb:"Honest and funny. The AI didn't laugh. A human might have."}]},
  {q:"Our system detected you blinked 14 times. Please explain.",o:[
   {t:"Apologize and try not to blink for the rest of the interview.",hp:-10,c:-8,fb:"Your eyes are watering. The AI logged \"emotional instability.\""},
   {t:"\"I'm a human. We do that.\"",hp:30,c:5,fb:"Fair. Confident. The AI had no follow-up."},
   {t:"Ask if a person reviews these recordings, and how the AI is used.",hp:60,c:8,best:true,fb:"Totally fair to ask. Some places, like Illinois, require employers to tell you when AI analyzes video interviews."},
   {t:"Leave the interview.",hp:-30,c:-6,fb:"Understandable. Also the end of this application."}]},
- {q:"Do you have any questions for us?",o:[
-  {t:"\"Nope, I'm good!\"",hp:-15,c:-3,fb:"Missed chance. This is where you interview them."},
-  {t:"\"What does success look like in the first 90 days?\"",hp:60,c:8,best:true,fb:"Shows you're already picturing the job. Hiring managers love this one."},
-  {t:"\"How soon can I take vacation?\"",hp:-10,c:-2,fb:"Valid question. Wrong round."},
-  {t:"\"Am I talking to you, or is there another AI behind you?\"",hp:20,c:3,fb:"The AI paused for 11 seconds. Points for courage."}]}
+ {q:"Before we continue: what are your salary expectations?",o:[
+  {t:"\"Whatever you think is fair.\"",hp:-15,c:-4,fb:"Generous of you. Also a fast way to get offered the bottom of the range."},
+  {t:"Name a number you picked on the drive over.",hp:-5,c:-2,fb:"A number with no research behind it can anchor you too low, or price you out."},
+  {t:"Ask for the role's budgeted range, then share a researched range that fits.",hp:60,c:8,best:true,fb:"You learn their number and show you've done your homework. Asking about the range is completely normal."},
+  {t:"\"Higher than the frame rate on this video call.\"",hp:10,c:2,fb:"Points for wit. Interviewer.exe logged your answer as \"$24.\""}]}
 ];
 function startL2(){runQuiz({items:L2,metaWord:"Question",levelHTML:"<em>Level 2:</em> Interview Impossible",avatar:BOT_SVG,who:"Interviewer.exe",circus:false,
-  done:s=>{S.l2=s;const pass=s>=3;S.done[1]=`${s}/5 STRONG`;addHP(pass?100:0);
+  done:s=>{S.l2=s;const pass=s>=2;S.done[1]=`${s}/3 STRONG`;addHP(pass?100:0);
     result({lvl:2,title:pass?"You passed the <em>bot</em>.":"The bot is <em>unsure</em> about you.",pass,stamp:pass?"NEXT ROUND":"PENDING",
       line:pass?"Interviewer.exe has forwarded your recording to a human. A real one, with a calendar and everything.":"Interviewer.exe gave you a score of 6.2. Out of what? It won't say.",
-      stats:[[`${s}/5`,"Strong answers"],[S.conf,"Confidence"],[S.hp,"Human Points"]],
+      stats:[[`${s}/3`,"Strong answers"],[S.conf,"Confidence"],[S.hp,"Human Points"]],
       tip:"Treat an AI interview like a real one: short, specific stories with a result at the end. It's also fair to ask how the recording is reviewed and whether a person sees it. You're evaluating them too."});}});}
 
 /* ---------- LEVEL 3: GHOSTING ZONE ---------- */
@@ -602,42 +592,27 @@ addEventListener("keyup",e=>{if(e.key==="ArrowLeft")keyL=false;if(e.key==="Arrow
 
 /* ---------- LEVEL 4: HIRING CIRCUS ---------- */
 const L4=[
- {q:"Which line in a job posting is the biggest red flag?",o:[
-  {t:"\"Clear responsibilities and reporting structure\"",hp:-10,fb:"That's a green flag. Clarity is a gift."},
-  {t:"\"Must be available 24/7\"",hp:50,best:true,fb:"Nobody is available 24/7. A posting that asks for it is telling you how the job will feel."},
-  {t:"\"Salary range: $70,000–$85,000\"",hp:-10,fb:"Green flag. Transparency saves everyone time."},
-  {t:"\"Opportunities for growth and mentorship\"",hp:-10,fb:"Generally a good sign. Ask for an example in the interview."}]},
- {q:"\"We're not a company, we're a family!\" What should you ask about?",o:[
-  {t:"Whether they host Thanksgiving",hp:5,fb:"Fun question. Not the useful one."},
-  {t:"Work hours, boundaries, and how after-hours requests are handled",hp:50,best:true,fb:"\"Family\" can mean warmth, or it can mean blurry boundaries. Ask how it plays out day to day."},
-  {t:"Nothing, it's obviously a great sign",hp:-10,fb:"Could be. Could also be code. Worth a follow-up question."},
-  {t:"Whether you get an allowance",hp:5,fb:"Ha. Ask about the salary range instead."}]},
- {q:"Several U.S. states, including Colorado, California, New York, and Washington, require what in many job postings?",o:[
-  {t:"A company mission statement",hp:-10,fb:"Nice to have. Not required."},
-  {t:"The hiring manager's phone number",hp:-10,fb:"We wish."},
-  {t:"A pay or salary range",hp:50,best:true,fb:"Pay transparency laws are spreading. If a posting skips the range, it's fair to ask for it early."},
-  {t:"A promise to reply to every applicant",hp:-5,fb:"Not a law yet. Some of us are still hoping."}]},
- {q:"An entry-level role asks for an unpaid \"take-home test\": build a full 3-month marketing campaign. What is this?",o:[
+ {q:"This \"entry-level\" posting has one line that should make you pause. Which one?",o:[
+  {t:"\"Salary range: $55,000–$65,000\"",hp:-10,fb:"That's a green flag. A posted range saves everyone time."},
+  {t:"\"Requires 5+ years of experience\"",hp:50,best:true,fb:"Entry-level with five years required? Ask what \"entry-level\" means to them. The answer tells you how realistic the role is."},
+  {t:"\"Mentorship program for new hires\"",hp:-10,fb:"Generally a good sign. Ask for an example in the interview."},
+  {t:"\"Hybrid, 2 days in office\"",hp:-5,fb:"Neutral. Just make sure the schedule works for you."}]},
+ {q:"An unpaid \"take-home test\" asks you to build a full 3-month marketing campaign. What is this?",o:[
   {t:"A normal part of every hiring process",hp:-10,fb:"Short skills tests are common. A full campaign is a project."},
-  {t:"Possibly free consulting. Ask to scope it down or be paid for it.",hp:50,best:true,fb:"A good assignment takes an hour or two and tests a skill. Anything bigger deserves a conversation."},
+  {t:"Possibly free consulting. Ask to scope it down or be paid for it.",hp:50,best:true,fb:"A good assignment takes an hour or two and tests one skill. Anything bigger deserves a conversation."},
   {t:"A great chance to show off, so do all of it",hp:5,fb:"Your enthusiasm is real. So is your time. Protect it."},
   {t:"A sign they really like you",hp:-5,fb:"Maybe. Or they really like free work."}]},
- {q:"Which of these is a GREEN flag in a hiring process?",o:[
-  {t:"Seven interview rounds for an entry-level role",hp:-10,fb:"That's a marathon, not a process."},
-  {t:"\"We'll get back to you soon\" with no date",hp:-5,fb:"\"Soon\" is doing a lot of work there."},
-  {t:"Interview steps and timeline shared up front",hp:50,best:true,fb:"When a company tells you the process, they respect your time. That usually shows up in the job too."},
-  {t:"The recruiter's email bounces",hp:-10,fb:"Spooky. Very on-brand for this podcast."}]},
- {q:"The same job posting has been reposted every month for a year. What could that mean?",o:[
+ {q:"The same job has been reposted every month for a year. What could that mean?",o:[
   {t:"High turnover in the role",hp:20,fb:"Possible. But not the only answer."},
   {t:"A \"ghost job\" that isn't actively being filled",hp:20,fb:"Possible. But not the only answer."},
-  {t:"They're having trouble finding the right fit",hp:20,fb:"Possible. But not the only answer."},
-  {t:"Any of these. It's worth asking about directly.",hp:50,best:true,fb:"You can't know from the outside. Ask how long the role has been open and why. The answer tells you a lot."}]}
+  {t:"They can't find the right fit",hp:20,fb:"Possible. But not the only answer."},
+  {t:"Any of these. Ask about it directly.",hp:50,best:true,fb:"You can't tell from the outside. Ask how long the role has been open and why. The answer tells you a lot."}]}
 ];
 function startL4(){runQuiz({items:L4,metaWord:"Act",levelHTML:"<em>Level 4:</em> The Hiring Circus",avatar:TENT_SVG,who:"The Ringmaster",circus:true,
-  done:s=>{S.flags=s;const pass=s>=4;S.done[3]=`${s}/6 SPOTTED`;addConf(pass?8:-4);addHP(pass?100:0);
+  done:s=>{S.flags=s;const pass=s>=2;S.done[3]=`${s}/3 SPOTTED`;addConf(pass?8:-4);addHP(pass?100:0);
     result({lvl:4,title:pass?"You can <em>spot</em> a circus.":"The circus <em>fooled</em> you a little.",pass,stamp:pass?"FLAG EXPERT":"KEEP LOOKING",
       line:pass?"You know the difference between a quirky company and a chaotic one. That skill saves careers.":"Some red flags wear really good costumes. Now you know what to look for.",
-      stats:[[`${s}/6`,"Flags spotted"],[S.conf,"Confidence"],[S.hp,"Human Points"]],
+      stats:[[`${s}/3`,"Flags spotted"],[S.conf,"Confidence"],[S.hp,"Human Points"]],
       tip:"Red flags are rarely one big thing. They're small signals that add up: no pay range, no timeline, a role that's always open. You're allowed to ask about every one of them. A good company will have an answer."});}});}
 
 /* ---------- LEVEL 5: FINAL OFFER ---------- */
@@ -688,11 +663,11 @@ function finish(key,pts){
 function end(){
   const E=ENDINGS[S.ending||"quick"],rej=S.l1fail+S.hits;
   $("endTitle").innerHTML=E.title;$("eHP").textContent=S.hp.toLocaleString("en-US");
-  $("eHuman").textContent=S.l1pass;$("eGhost").textContent=rej;$("eReplies").textContent=S.replies;$("eFlags").textContent=S.flags+"/6";
+  $("eHuman").textContent=S.l1pass;$("eGhost").textContent=rej;$("eReplies").textContent=S.replies;$("eFlags").textContent=S.flags+"/3";
   $("eOffer").textContent=S.salary?money(S.salary).replace(",000","K"):"Passed";
   $("badgeName").textContent=E.badge;$("badgeDesc").textContent=E.desc;$("medal").textContent=Math.round(S.hp/100)/10+"K HP";
   const out=S.salary?`landed a ${money(S.salary)} offer`:"turned down an offer that wasn't right";
-  $("shareText").textContent=`I just played Ghosted by the Machine: The Game.\n\nI sent 3 applications, got past the ATS ${S.l1pass} ${S.l1pass===1?"time":"times"}, survived an AI interviewer, caught ${S.replies} real replies through ${rej} rejections, spotted ${S.flags}/6 red flags, and ${out}.\n\nFinal score: ${S.hp.toLocaleString("en-US")} Human Points. Badge: ${E.badge}.\n\nCan you beat the hiring machine? #MakeHiringHumanAgain`;
+  $("shareText").textContent=`I just played Ghosted by the Machine: The Game.\n\nI sent 3 applications, got past the ATS ${S.l1pass} ${S.l1pass===1?"time":"times"}, survived an AI interviewer, caught ${S.replies} real replies through ${rej} rejections, spotted ${S.flags}/3 red flags, and ${out}.\n\nFinal score: ${S.hp.toLocaleString("en-US")} Human Points. Badge: ${E.badge}.\n\nCan you beat the hiring machine? #MakeHiringHumanAgain`;
   $("copyBtn").textContent="Copy for LinkedIn";track("game-finished");track("ending-"+(S.ending||"quick"));yay();show("s-end");
 }
 $("copyBtn").onclick=async()=>{track("share-copied");try{await navigator.clipboard.writeText($("shareText").textContent);$("copyBtn").textContent="Copied ✓";}catch(e){const s=window.getSelection(),rg=document.createRange();rg.selectNodeContents($("shareText"));s.removeAllRanges();s.addRange(rg);$("copyBtn").textContent="Text selected, press copy";}};
