@@ -264,6 +264,7 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
     <button class="btn" id="startBtn">Start game →</button>
     <p class="meta" style="text-align:center">🎧 Tap Sound for the soundtrack</p>
     <button class="btn ghosty" id="installBtn" type="button" hidden>📲 Install the app</button>
+    <button class="btn ghosty" id="shareAppBtn" type="button">🔗 Share the game</button>
     <div class="iosHelp" id="iosHelp" hidden>On iPhone: tap the <b>Share</b> button <span aria-hidden="true">⬆︎</span> at the bottom of Safari, then <b>Add to Home Screen</b>.</div>
     <div class="foot">Let's make hiring human again</div>
   </section>
@@ -371,6 +372,7 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
     <div class="label">Share your results</div>
     <div class="share" id="shareText"></div>
     <button class="btn" id="copyBtn">Copy for LinkedIn</button>
+    <button class="btn ghosty" id="shareScoreBtn" type="button">📲 Challenge a friend</button>
     <div class="fbInline"><p>You’re one of our first players. How was it?</p><button id="fbEnd" type="button">Rate it</button></div>
     <button class="btn ghosty" id="againBtn">Play again</button>
     <div class="foot">Let's make hiring human again</div>
@@ -757,6 +759,19 @@ addEventListener("appinstalled",()=>{track("app-installed");$("installBtn").hidd
 if(!standalone&&/iphone|ipad|ipod/i.test(navigator.userAgent))$("installBtn").hidden=false;
 $("installBtn").onclick=async()=>{if(installEvt){installEvt.prompt();const c=await installEvt.userChoice.catch(()=>null);track("install-"+(c&&c.outcome||"unknown"));installEvt=null;$("installBtn").hidden=true;}else{$("iosHelp").hidden=!$("iosHelp").hidden;track("install-ios-help");}};
 if(window.GAME_CONTENT&&GAME_CONTENT.week){$("packLabel").textContent="New this week · "+GAME_CONTENT.week;$("packLabel").hidden=false;}
+
+/* ---------- share the game ---------- */
+const GAME_URL="https://markklane-collab.github.io/Ghosted/";
+async function shareGame(btn,text,src,label){
+  const data={title:"Ghosted by the Machine: The Game",text,url:GAME_URL};
+  if(navigator.share){try{await navigator.share(data);track("share-"+src);}catch(e){}return;}
+  const all=text+" "+GAME_URL;
+  try{await navigator.clipboard.writeText(all);btn.textContent="✓ Link copied. Paste it anywhere";track("share-"+src+"-copied");}
+  catch(e){btn.textContent=GAME_URL;}
+  setTimeout(()=>{btn.textContent=label;},2600);
+}
+$("shareAppBtn").onclick=e=>shareGame(e.currentTarget,"Can you beat the hiring machine? A free 5-minute game about the modern job search.","title","🔗 Share the game");
+$("shareScoreBtn").onclick=e=>{const b=$("badgeName").textContent;shareGame(e.currentTarget,`I scored ${S.hp.toLocaleString("en-US")} Human Points and earned "${b}" in Ghosted by the Machine: The Game. Can you beat me?`,"end","📲 Challenge a friend");};
 
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}

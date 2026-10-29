@@ -37,7 +37,7 @@ At the end, you get a badge and a ready-to-post LinkedIn summary of your results
 ## How it's built
 
 - `index.html` is the game. `content.js` holds the questions. Plain HTML, CSS, and JavaScript.
-- No frameworks, no build step, no database, no tracking.
+- No frameworks, no build step, no database. Privacy-friendly analytics (GoatCounter), no cookies.
 - Fonts load from Google Fonts. Everything else is self-contained.
 
 ### Install it like an app
@@ -50,11 +50,11 @@ All questions live in `content.js`, and the game picks 3 at random from each lis
 
 ### Run it locally
 
-Download `index.html` and open it in any modern browser.
+Download the repository and open `index.html` in any modern browser.
 
 ### Publish it with GitHub Pages
 
-1. Upload `index.html` and `README.md` to this repository.
+1. Keep all files at the top level of this repository.
 2. Go to **Settings → Pages**.
 3. Under **Build and deployment**, set **Source** to *Deploy from a branch*.
 4. Choose the `main` branch and the `/ (root)` folder, then click **Save**.
