@@ -7,7 +7,7 @@
  * Keep at least 3 items in each list. See CONTENT-GUIDE.md for templates.
  */
 window.GAME_CONTENT = {
-  "week": "Nov 2",
+  "week": "Oct 26",
   "resumes": [
     {
       "title": "Marketing Communications Manager",
@@ -103,6 +103,25 @@ window.GAME_CONTENT = {
         "Good vibes only"
       ],
       "tip": "\"People person\" matters, but it doesn't match anything. Translate it into the posting's language, like \"client onboarding,\" and add a result: \"onboarded 40 clients in one quarter.\""
+    },
+    {
+      "title": "Talent Acquisition Coordinator",
+      "co": "Lanternfish Labs · Remote",
+      "jd": "We're hiring a Talent Acquisition Coordinator to own [interview scheduling], [candidate communication], and [offer letters]. Experience with [applicant tracking systems] and [Boolean search] required.",
+      "right": [
+        "Interview scheduling",
+        "Candidate communication",
+        "Offer letters",
+        "Applicant tracking systems",
+        "Boolean search"
+      ],
+      "wrong": [
+        "Calendar Tetris champion",
+        "Inbox zero hero",
+        "Ghost-proof",
+        "Hidden white-text keywords"
+      ],
+      "tip": "Lots of people now hide keywords in white text to trick the scanner. Please don't. When I open your résumé, hidden text looks like a trick, not a skill. Use the posting's words where they're true, keep everything visible, and only claim what you can talk about in an interview."
     }
   ],
   "interview": [
@@ -316,6 +335,36 @@ window.GAME_CONTENT = {
           "fb": "The AI paused for 11 seconds. Points for courage."
         }
       ]
+    },
+    {
+      "q": "Quick check from our system: did you use AI to write your application?",
+      "o": [
+        {
+          "t": "\"Absolutely not. Every comma was hand-crafted.\"",
+          "hp": -15,
+          "c": -4,
+          "fb": "If any part of it was AI-assisted, a flat denial is a risky bet. And if the next question is \"walk me through this line,\" you're stuck."
+        },
+        {
+          "t": "\"Yes, to tighten my draft. The examples and results are mine. Happy to walk you through any of them.\"",
+          "hp": 60,
+          "c": 8,
+          "best": true,
+          "fb": "Honest and specific. Lots of job seekers use AI tools now. What matters is that you can explain every line in your own words, so prep a story for each bullet."
+        },
+        {
+          "t": "\"A little, for formatting.\"",
+          "hp": 20,
+          "c": 3,
+          "fb": "Honest, but it leaves them guessing. Add what you used it for and what's yours, then point to one result you're proud of."
+        },
+        {
+          "t": "\"Did YOU use AI to write this question?\"",
+          "hp": 10,
+          "c": 2,
+          "fb": "Fair point. The system declined to comment. Answer the question first, then ask how they use AI in hiring. That's a fair thing to ask."
+        }
+      ]
     }
   ],
   "circus": [
@@ -472,6 +521,32 @@ window.GAME_CONTENT = {
           "t": "The recruiter's email bounces",
           "hp": -10,
           "fb": "Spooky. Very on-brand for this podcast."
+        }
+      ]
+    },
+    {
+      "q": "A text offers you a job you don't remember applying for. No interview. They just need $89 for your \"equipment kit\" before day one. What do you do?",
+      "o": [
+        {
+          "t": "Pay it. $89 is a small price for a job.",
+          "hp": -10,
+          "fb": "Real employers don't charge you to start working. That $89 is usually the whole point of the \"job.\""
+        },
+        {
+          "t": "Send your bank info so they can reimburse you later",
+          "hp": -10,
+          "fb": "Never share bank details before a verified offer. A real direct deposit setup happens through onboarding, after you've been hired."
+        },
+        {
+          "t": "Don't pay. Look up the company yourself and check its official careers page before you reply.",
+          "hp": 50,
+          "best": true,
+          "fb": "Scam jobs are common right now. Verify the company and the role through channels you find yourself, not the links in the message. No interview plus a payment request is a hard stop."
+        },
+        {
+          "t": "Ask if the kit comes in blue",
+          "hp": 5,
+          "fb": "Style points. Then block the number and report the message."
         }
       ]
     }
