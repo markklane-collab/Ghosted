@@ -23,7 +23,7 @@ No download, no sign-up. Works on phone and desktop. About 5 minutes from start 
 | Level | Name | What you do |
 | ----- | ---- | ----------- |
 | 1 | The ATS Strikes Back | Match your résumé skills to the job posting's exact keywords before time runs out |
-| 2 | Interview Impossible | Answer five questions from an AI interviewer, some real and some ridiculous |
+| 2 | Interview Impossible | Answer three questions from an AI interviewer, some real and some ridiculous |
 | 3 | The Ghosting Zone | Whack-a-ghost: tap fading conversations before they go silent, and skip the no-reply bots |
 | 4 | The Hiring Circus | Spot red flags in job postings and hiring processes |
 | 5 | The Final Offer | Accept, negotiate, or decline an offer. Your choice decides your ending |
