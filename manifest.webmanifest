@@ -1,0 +1,18 @@
+{
+  "name": "Ghosted by the Machine: The Game",
+  "short_name": "Ghosted",
+  "description": "Can you beat the hiring machine? A 5-minute game about the modern job search.",
+  "id": "./",
+  "start_url": "./?source=app",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0a0c",
+  "theme_color": "#0b0a0c",
+  "categories": ["games", "education", "business"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

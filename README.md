@@ -36,9 +36,17 @@ At the end, you get a badge and a ready-to-post LinkedIn summary of your results
 
 ## How it's built
 
-- One file: `index.html`. Plain HTML, CSS, and JavaScript.
+- `index.html` is the game. `content.js` holds the questions. Plain HTML, CSS, and JavaScript.
 - No frameworks, no build step, no database, no tracking.
 - Fonts load from Google Fonts. Everything else is self-contained.
+
+### Install it like an app
+
+On iPhone, open the game in Safari, tap **Share**, then **Add to Home Screen**. On Android or desktop Chrome, tap **Install the app** on the title screen. It opens full-screen with the ghost icon and works offline.
+
+### Adding new questions
+
+All questions live in `content.js`, and the game picks 3 at random from each list every time someone plays. See [CONTENT-GUIDE.md](CONTENT-GUIDE.md) for the weekly routine and copy-and-paste templates.
 
 ### Run it locally
 

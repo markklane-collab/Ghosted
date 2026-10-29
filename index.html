@@ -14,7 +14,14 @@
 <meta property="og:image:height" content="627">
 <meta property="og:image:alt" content="Ghosted by the Machine: The Game. Can you beat the hiring machine?">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" type="image/png" href="share.png">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b0a0c">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ghosted">
 
 <meta name="claude:viewport-fit-sides" content="cover">
 <script data-goatcounter="https://ghostgame.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
@@ -64,6 +71,8 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
 .tag{display:inline-block;border:2px solid var(--red);font-family:var(--f-head);font-weight:800;letter-spacing:.32em;padding:3px 12px 3px 16px;font-size:14px;border-radius:6px}
 .hook{font-family:var(--f-head);font-weight:700;font-size:22px;margin:8px 0 0;text-wrap:balance}
 .sub{color:var(--mute);margin:0;max-width:34ch}
+.pack{margin:0;display:inline-block;background:var(--warm);color:#2a2008;border-radius:999px;padding:4px 12px;font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.iosHelp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:#d6d0d6;font-size:14px;text-align:center}
 
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:15px 18px;
   font-family:var(--f-head);font-weight:800;font-size:20px;letter-spacing:.08em;text-transform:uppercase;background:var(--red);color:#fff;
@@ -249,10 +258,13 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
       <h1 class="logo"><span class="gh">GHOSTED</span><span class="by">BY THE</span><span class="mac">MACHINE</span></h1>
       <span class="tag">THE GAME</span>
       <p class="hook">Can you beat the hiring machine?</p>
+      <p class="pack" id="packLabel" hidden></p>
       <p class="sub">Five levels. One very literal résumé scanner, an AI interviewer, a lot of silence, and one recruiter who's actually on your side. About 5 minutes.</p>
     </div>
     <button class="btn" id="startBtn">Start game →</button>
     <p class="meta" style="text-align:center">🎧 Tap Sound for the soundtrack</p>
+    <button class="btn ghosty" id="installBtn" type="button" hidden>📲 Install the app</button>
+    <div class="iosHelp" id="iosHelp" hidden>On iPhone: tap the <b>Share</b> button <span aria-hidden="true">⬆︎</span> at the bottom of Safari, then <b>Add to Home Screen</b>.</div>
     <div class="foot">Let's make hiring human again</div>
   </section>
 
@@ -388,6 +400,7 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
     </div>
   </div>
 </div>
+<script src="content.js"></script>
 <script>
 /* ---------- analytics (GoatCounter events) ---------- */
 function track(name){try{if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:name,title:name,event:true});}catch(e){}}
@@ -464,7 +477,8 @@ const fmtJD=t=>t.replace(/\[(.+?)\]/g,'<span class="kw">$1</span>');
 function match(){const R=ROUNDS[r];let g=0,b=0;picks.forEach(p=>R.right.includes(p)?g++:b++);return Math.max(0,Math.min(100,Math.round(g/R.right.length*100-b*15)));}
 function paint1(){const p=match();$("fill").style.width=p+"%";$("pct").textContent=p+"%";$("picked").textContent=picks.size+" / "+MAX+" picked";$("submitBtn").disabled=picks.size===0;
   document.querySelectorAll("#chips .chip").forEach(c=>c.setAttribute("aria-pressed",picks.has(c.dataset.s)));}
-function startL1(){r=0;S.l1pass=0;S.l1fail=0;startRound();}
+function pickQ(k,fb){const b=window.GAME_CONTENT&&GAME_CONTENT[k];return shuffle(Array.isArray(b)&&b.length>=3?b:fb).slice(0,3);}
+function startL1(){ROUNDS.splice(0,ROUNDS.length,...pickQ("resumes",ROUNDS.slice()));r=0;S.l1pass=0;S.l1fail=0;startRound();}
 function startRound(){
   const R=ROUNDS[r];picks=new Set();left=T1;
   $("roundMeta").textContent=`Application ${r+1} of ${ROUNDS.length}`;
@@ -533,7 +547,7 @@ const L2=[
   {t:"Ask for the role's budgeted range, then share a researched range that fits.",hp:60,c:8,best:true,fb:"You learn their number and show you've done your homework. Asking about the range is completely normal."},
   {t:"\"Higher than the frame rate on this video call.\"",hp:10,c:2,fb:"Points for wit. Interviewer.exe logged your answer as \"$24.\""}]}
 ];
-function startL2(){runQuiz({items:L2,metaWord:"Question",levelHTML:"<em>Level 2:</em> Interview Impossible",avatar:BOT_SVG,who:"Interviewer.exe",circus:false,
+function startL2(){runQuiz({items:pickQ("interview",L2),metaWord:"Question",levelHTML:"<em>Level 2:</em> Interview Impossible",avatar:BOT_SVG,who:"Interviewer.exe",circus:false,
   done:s=>{S.l2=s;const pass=s>=2;S.done[1]=`${s}/3 STRONG`;addHP(pass?100:0);
     result({lvl:2,title:pass?"You passed the <em>bot</em>.":"The bot is <em>unsure</em> about you.",pass,stamp:pass?"NEXT ROUND":"PENDING",
       line:pass?"Interviewer.exe has forwarded your recording to a human. A real one, with a calendar and everything.":"Interviewer.exe gave you a score of 6.2. Out of what? It won't say.",
@@ -606,7 +620,7 @@ const L4=[
   {t:"They can't find the right fit",hp:20,fb:"Possible. But not the only answer."},
   {t:"Any of these. Ask about it directly.",hp:50,best:true,fb:"You can't tell from the outside. Ask how long the role has been open and why. The answer tells you a lot."}]}
 ];
-function startL4(){runQuiz({items:L4,metaWord:"Act",levelHTML:"<em>Level 4:</em> The Hiring Circus",avatar:TENT_SVG,who:"The Ringmaster",circus:true,
+function startL4(){runQuiz({items:pickQ("circus",L4),metaWord:"Act",levelHTML:"<em>Level 4:</em> The Hiring Circus",avatar:TENT_SVG,who:"The Ringmaster",circus:true,
   done:s=>{S.flags=s;const pass=s>=2;S.done[3]=`${s}/3 SPOTTED`;addConf(pass?8:-4);addHP(pass?100:0);
     result({lvl:4,title:pass?"You can <em>spot</em> a circus.":"The circus <em>fooled</em> you a little.",pass,stamp:pass?"FLAG EXPERT":"KEEP LOOKING",
       line:pass?"You know the difference between a quirky company and a chaotic one. That skill saves careers.":"Some red flags wear really good costumes. Now you know what to look for.",
@@ -732,6 +746,17 @@ const Music=(()=>{
   };
 })();
 document.addEventListener("visibilitychange",()=>{if(document.hidden)Music.stop();else if(sound)Music.start();});
+
+/* ---------- installable app ---------- */
+const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+let installEvt=null;
+if(standalone)track("opened-as-app");
+if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("sw.js").catch(()=>{});
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;if(!standalone)$("installBtn").hidden=false;});
+addEventListener("appinstalled",()=>{track("app-installed");$("installBtn").hidden=true;$("iosHelp").hidden=true;});
+if(!standalone&&/iphone|ipad|ipod/i.test(navigator.userAgent))$("installBtn").hidden=false;
+$("installBtn").onclick=async()=>{if(installEvt){installEvt.prompt();const c=await installEvt.userChoice.catch(()=>null);track("install-"+(c&&c.outcome||"unknown"));installEvt=null;$("installBtn").hidden=true;}else{$("iosHelp").hidden=!$("iosHelp").hidden;track("install-ios-help");}};
+if(window.GAME_CONTENT&&GAME_CONTENT.week){$("packLabel").textContent="New this week · "+GAME_CONTENT.week;$("packLabel").hidden=false;}
 
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}
