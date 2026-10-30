@@ -54,7 +54,7 @@ Two scores pull against each other: **Human Score** (how candidates feel) and **
 
 ## How it's built
 
-- `index.html` is the job seeker game. `recruiter.html` is Recruiter Mode. `content.js` holds the job seeker questions. Plain HTML, CSS, and JavaScript.
+- `index.html` is the job seeker game. `recruiter.html` is Recruiter Mode. `content.js` holds the weekly questions for both modes. Plain HTML, CSS, and JavaScript.
 - No frameworks, no build step, no database. Privacy-friendly analytics (GoatCounter), no cookies.
 - Fonts load from Google Fonts. Everything else is self-contained.
 
@@ -64,7 +64,7 @@ On iPhone, open the game in Safari, tap **Share**, then **Add to Home Screen**. 
 
 ### Adding new questions
 
-All questions live in `content.js`, and the game picks 3 at random from each list every time someone plays. See [CONTENT-GUIDE.md](CONTENT-GUIDE.md) for the weekly routine and copy-and-paste templates.
+Weekly questions for both modes live in `content.js`. The game draws a fresh mix from them every time someone plays. See [CONTENT-GUIDE.md](CONTENT-GUIDE.md) for the weekly routine and copy-and-paste templates.
 
 ### Run it locally
 
