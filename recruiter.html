@@ -1,0 +1,273 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<title>Inbox Avalanche</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
+</head><body>
+<style>
+/* Layout: the Ghosted arcade cabinet, recruiter side. One phone-width cabinet; the inbox scrolls inside it. Single dark look by design. */
+:root{
+  --void:#0b0a0c; --cab:#151316; --panel:#1f1c20; --line:#332e34;
+  --ink:#f4f1f2; --mute:#a39ba3; --red:#e3131b; --good:#3ccf7a; --warm:#f2c14e; --glow:#3b5bff;
+  --f-display:"Bungee","Impact","Arial Black",sans-serif;
+  --f-head:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+html,body{min-height:100%}
+body{background:var(--void);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px;
+  background-image:radial-gradient(ellipse at 50% -10%,rgba(59,91,255,.22),transparent 60%);background-attachment:fixed}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+button:disabled{opacity:.35;cursor:not-allowed}
+.cab{max-width:480px;margin:0 auto;background:var(--cab);border:1px solid var(--line);border-radius:22px;overflow:hidden;
+  box-shadow:0 0 0 1px #000,0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(59,91,255,.14)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);
+  font-family:var(--f-head);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:14px}
+.bar b{color:var(--red)}
+.tag{font-size:12px;color:var(--mute);letter-spacing:.1em}
+.screen{padding:20px 18px 24px;display:flex;flex-direction:column;gap:16px}
+.eyebrow{font-family:var(--f-head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--glow)}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,9vw,42px);line-height:1;margin:0;text-wrap:balance;color:var(--ink)}
+h1 span{color:var(--red)}
+p{margin:0}
+.lede{color:var(--mute);font-size:16px}
+.rules{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.rules li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.chip{display:inline-block;font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:11.5px;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.s-app{background:#26232a;color:var(--mute);border:1px solid var(--line)}
+.s-phone{background:rgba(59,91,255,.18);color:#aab8ff;border:1px solid rgba(59,91,255,.45)}
+.s-final{background:rgba(242,193,78,.16);color:var(--warm);border:1px solid rgba(242,193,78,.5)}
+.btn{border:0;border-radius:14px;padding:15px 18px;font-family:var(--f-head);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:19px;background:var(--red);color:#fff;box-shadow:0 4px 0 #8f0c11}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #8f0c11}
+.ghostbtn{background:none;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-family:var(--f-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--mute)}
+
+/* HUD */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:#100e11;border-bottom:1px solid var(--line);padding:10px 16px;display:grid;grid-template-columns:auto 1fr 1fr;gap:14px;align-items:center}
+.clock{font-family:var(--f-display);font-size:24px;line-height:1;font-variant-numeric:tabular-nums;color:var(--warm)}
+.clock small{display:block;font-family:var(--f-head);font-weight:700;font-size:11px;letter-spacing:.1em;color:var(--mute);margin-top:4px;text-transform:uppercase}
+.meter{display:grid;gap:5px;min-width:0}
+.meter label{font-family:var(--f-head);font-weight:700;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between;gap:6px}
+.meter label b{color:var(--ink);font-variant-numeric:tabular-nums}
+.track{height:8px;border-radius:99px;background:#2a262b;overflow:hidden}
+.fill{height:100%;border-radius:99px;transition:width .35s ease}
+#humanFill{background:var(--good)} #hmFill{background:var(--glow)}
+
+/* Tools + event */
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tool{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:left;display:grid;gap:3px}
+.tool strong{font-family:var(--f-head);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase}
+.tool span{font-size:12.5px;color:var(--mute);line-height:1.3}
+.tool.trap strong{color:#ff8a8f}
+.event{border:1px solid rgba(59,91,255,.6);background:rgba(59,91,255,.1);border-radius:14px;padding:12px;display:grid;gap:10px}
+.event p{font-size:14.5px}
+.event .row{display:flex;gap:8px;flex-wrap:wrap}
+.event button{flex:1 1 140px;border-radius:10px;padding:9px 10px;font-family:var(--f-head);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:14px;border:1px solid var(--line);background:var(--panel)}
+.event button.pri{background:var(--glow);border-color:var(--glow);color:#fff}
+
+/* Inbox */
+.inboxHead{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--f-head);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:13px;color:var(--mute)}
+.inbox{display:grid;gap:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:8px;transition:opacity .3s}
+.card.final{border-color:rgba(242,193,78,.45)}
+.card .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card .who{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .msg{color:var(--mute);font-size:14px;line-height:1.35}
+.card .wait{font-family:var(--f-head);font-weight:700;font-size:12px;letter-spacing:.06em;color:var(--mute);text-transform:uppercase}
+.card .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.card .acts button{border-radius:10px;padding:8px;font-family:var(--f-head);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:13.5px;border:1px solid var(--line);background:#2a262b}
+.card .acts .pers{background:rgba(60,207,122,.14);border-color:rgba(60,207,122,.5);color:#9ff0c2}
+.card.done{opacity:.55}
+.card .result{font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.r-pers{color:var(--good)} .r-temp{color:var(--mute)} .r-ghost{color:#ff8a8f}
+.wrap{display:flex;justify-content:center;padding-bottom:96px}
+
+/* Riley */
+.riley{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;width:min(448px,calc(100% - 32px));
+  background:#fffaf0;color:#1d1a1e;border-radius:16px;padding:12px 14px;box-shadow:0 12px 40px rgba(0,0,0,.6);display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.riley .av{width:36px;height:36px;border-radius:50%;background:var(--warm);display:grid;place-items:center;font-family:var(--f-display);color:#2a2008;font-size:16px}
+.riley b{font-family:var(--f-head);letter-spacing:.08em;text-transform:uppercase;font-size:13px;display:block}
+.riley p{font-size:14.5px;line-height:1.35}
+@media (prefers-reduced-motion:no-preference){.riley{animation:pop .25s ease-out}@keyframes pop{from{opacity:0;transform:translate(-50%,12px)}}}
+
+/* Results */
+.score{font-family:var(--f-display);font-size:64px;line-height:1;color:var(--good);font-variant-numeric:tabular-nums}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:2px}
+.stat b{font-family:var(--f-display);font-weight:400;font-size:24px;font-variant-numeric:tabular-nums}
+.stat span{font-family:var(--f-head);font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+th{font-family:var(--f-head);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:var(--mute)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.lessons{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.lessons li{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14.5px}
+.foot{text-align:center;font-family:var(--f-head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--mute)}
+</style>
+
+<div class="cab">
+  <div class="bar"><span>Ghosted by the <b>Machine</b></span><span class="tag">Recruiter Mode</span></div>
+
+  <!-- Intro -->
+  <section class="screen" id="intro">
+    <div class="eyebrow">Level 3 · The Inbox Avalanche</div>
+    <h1>You're the <span>recruiter</span> now.</h1>
+    <p class="lede">It's Friday, 4:00 PM. You have one hour before the weekend. 18 candidates are waiting to hear from you. Anyone you don't answer by 5:00 gets ghosted.</p>
+    <ul class="rules">
+      <li><span class="chip s-pers" style="background:rgba(60,207,122,.14);color:#9ff0c2;border:1px solid rgba(60,207,122,.5)">Personal</span><span>A real note. Takes 3–6 minutes. Means the most to people who've met the team.</span></li>
+      <li><span class="chip s-app">Template</span><span>A kind, clear form reply. Takes 1 minute.</span></li>
+      <li><span class="chip s-final">Watch</span><span>The hiring manager will want something from you too.</span></li>
+    </ul>
+    <p class="lede" style="font-size:15px">Two meters: <b style="color:var(--good)">Human Score</b> (how candidates feel) and <b style="color:#aab8ff">Hiring Manager</b> (how your boss feels). You can't max both by accident.</p>
+    <button class="btn" id="startBtn" type="button">Open the inbox →</button>
+    <p class="foot">Let's make hiring human again</p>
+  </section>
+
+  <!-- Game -->
+  <div id="game" hidden>
+    <div class="hud">
+      <div class="clock" id="clock">4:00<small id="left">60 min left</small></div>
+      <div class="meter"><label>Human <b id="humanTxt">0%</b></label><div class="track"><div class="fill" id="humanFill" style="width:0%"></div></div></div>
+      <div class="meter"><label>Hiring Mgr <b id="hmTxt">OK</b></label><div class="track"><div class="fill" id="hmFill" style="width:50%"></div></div></div>
+    </div>
+    <section class="screen">
+      <div class="tools" id="tools">
+        <button class="tool" id="bulkBtn" type="button"><strong>Bulk update</strong><span>Template to every "Applied" candidate · 5 min</span></button>
+        <button class="tool trap" id="autoBtn" type="button"><strong>Auto-close</strong><span>Close stale applications. No message sent · 0 min</span></button>
+      </div>
+      <div class="event" id="event" hidden>
+        <p><b>Hiring manager:</b> "Can you send me the shortlist before you log off? I want to read it this weekend."</p>
+        <div class="row"><button class="pri" id="slSend" type="button">Send shortlist · 8 min</button><button id="slDefer" type="button">"Monday at 10?" · 1 min</button></div>
+      </div>
+      <div class="inboxHead"><span>Inbox</span><span id="waiting">18 waiting</span></div>
+      <div class="inbox" id="inbox"></div>
+      <div class="wrap"><button class="ghostbtn" id="endBtn" type="button">Log off for the weekend</button></div>
+    </section>
+  </div>
+
+  <!-- Results -->
+  <section class="screen" id="results" hidden>
+    <div class="eyebrow">5:00 PM · Laptop closed</div>
+    <div style="display:flex;align-items:end;gap:14px;flex-wrap:wrap"><div class="score" id="finalScore">0%</div><div><div class="eyebrow" style="color:var(--good)">Human Score</div><h1 id="rank" style="font-size:26px">—</h1></div></div>
+    <p class="lede" id="verdict"></p>
+    <div class="grid3">
+      <div class="stat"><b id="nPers">0</b><span>Personal notes</span></div>
+      <div class="stat"><b id="nTemp">0</b><span>Templates</span></div>
+      <div class="stat"><b id="nGhost" style="color:#ff8a8f">0</b><span>Ghosted</span></div>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Stage</th><th class="n">Personal</th><th class="n">Template</th><th class="n">Ghosted</th></tr></thead>
+      <tbody id="tbl"></tbody>
+    </table></div>
+    <p id="hmLine"></p>
+    <div class="eyebrow">Riley's takeaways</div>
+    <ul class="lessons">
+      <li><b>Match the effort to the stage.</b> A clear template is fine after an application. After an interview, people have earned a few personal lines.</li>
+      <li><b>Automate the early stage, not the hard conversations.</b> Use bulk tools to buy time for the people who've met the team.</li>
+      <li><b>Closing without a message is still ghosting.</b> If a tool offers to "clean up" your pipeline, check whether anyone hears back.</li>
+    </ul>
+    <button class="btn" id="againBtn" type="button">Play again</button>
+    <p class="foot">Recruiter Mode prototype · Ghosted by the Machine</p>
+  </section>
+</div>
+
+<div class="riley" id="riley" hidden role="status" aria-live="polite" title="Tap to dismiss"><div class="av">R</div><div><b>Riley</b><p id="rileyTxt"></p></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const STAGE={app:{label:"Applied",cls:"s-app",pc:3,pp:5,tp:3,gp:-4},phone:{label:"Phone screen",cls:"s-phone",pc:4,pp:8,tp:2,gp:-8},final:{label:"Final round",cls:"s-final",pc:6,pp:12,tp:-2,gp:-15}};
+const BEST=106; // bulk template applied + personal notes for phone and final + shortlist fits in 60 min
+const PEOPLE=[
+ ["Dana R.","final","Met the whole team last week. Still really excited about this one!",9],
+ ["Marcus T.","app","Just checking on my application. Thanks!",6],
+ ["Priya S.","phone","Loved our call Tuesday. Any word on next steps?",4],
+ ["Alex K.","app","Applied 2 weeks ago. Is this role still open?",14],
+ ["Jamie L.","app","Hi! Following up on the coordinator role.",5],
+ ["Sam W.","phone","I have another offer pending. Can you share a timeline?",3],
+ ["Chris O.","final","Thank you for the final interview. I turned down another process to stay in yours.",12],
+ ["Taylor B.","app","Is there anything else I can send you?",8],
+ ["Morgan E.","app","Hello, just making sure my résumé came through.",3],
+ ["Riya P.","phone","Thanks for the chat! Happy to do a skills test if that helps.",7],
+ ["Jordan M.","app","I'm very interested and available immediately.",10],
+ ["Casey N.","final","Haven't heard anything in a week. Should I keep waiting?",6],
+ ["Drew H.","app","Following up. I know you must be busy!",11],
+ ["Avery G.","phone","Just checking in after our phone screen.",9],
+ ["Quinn F.","app","Any update? Even a no would help.",13],
+ ["Reese C.","app","Hi there, checking on status.",4],
+ ["Logan V.","phone","Excited to hear about the next round!",5],
+ ["Skyler D.","app","Wanted to share my updated portfolio.",2]
+];
+let S;
+function fresh(){return{left:60,human:0,hm:50,shortlist:null,eventShown:false,said:{},c:PEOPLE.map((p,i)=>({id:i,name:p[0],st:p[1],msg:p[2],days:p[3],res:null}))};}
+function clockTxt(){const m=60-S.left;return "4:"+String(m).padStart(2,"0");}
+function pct(){return Math.max(0,Math.min(100,Math.round(S.human/BEST*100)));}
+function hud(){
+  $("clock").firstChild.nodeValue=S.left<=0?"5:00":clockTxt();
+  $("left").textContent=Math.max(0,S.left)+" min left";
+  $("humanTxt").textContent=pct()+"%";$("humanFill").style.width=pct()+"%";
+  $("hmFill").style.width=S.hm+"%";$("hmTxt").textContent=S.hm>=85?"Happy":S.hm>=50?"OK":"Annoyed";
+  const w=S.c.filter(c=>!c.res).length;$("waiting").textContent=w+" waiting";
+  const apps=S.c.filter(c=>!c.res&&c.st==="app").length;
+  $("bulkBtn").disabled=!apps||S.left<5;$("autoBtn").disabled=!apps;
+  if(!S.eventShown&&S.left<=44){S.eventShown=true;$("event").hidden=false;}
+  if(S.shortlist===null&&S.eventShown){$("slSend").disabled=S.left<8;$("slDefer").disabled=S.left<1;}
+}
+let rileyT;$("riley").onclick=()=>{$("riley").hidden=true;};
+function riley(key,txt){if(key&&S.said[key])return;if(key)S.said[key]=1;$("rileyTxt").textContent=txt;$("riley").hidden=false;clearTimeout(rileyT);rileyT=setTimeout(()=>$("riley").hidden=true,5200);}
+function render(){
+  const box=$("inbox");box.innerHTML="";
+  S.c.forEach(c=>{const st=STAGE[c.st];const el=document.createElement("article");el.className="card"+(c.st==="final"?" final":"")+(c.res?" done":"");
+    el.innerHTML=`<div class="top"><span class="who"></span><span class="chip ${st.cls}">${st.label}</span></div><p class="msg"></p>`+
+     (c.res?`<div class="result ${c.res==="pers"?"r-pers":c.res==="temp"?"r-temp":"r-ghost"}">${c.res==="pers"?"✓ Personal note sent":c.res==="temp"?"✓ Template sent":"✕ Ghosted"}</div>`:
+     `<div class="wait">Waiting ${c.days} days</div><div class="acts"><button class="pers" type="button" ${S.left<st.pc?"disabled":""}>Personal · ${st.pc} min</button><button type="button" ${S.left<1?"disabled":""}>Template · 1 min</button></div>`);
+    el.querySelector(".who").textContent=c.name;el.querySelector(".msg").textContent="“"+c.msg+"”";
+    if(!c.res){const b=el.querySelectorAll(".acts button");b[0].onclick=()=>reply(c,"pers");b[1].onclick=()=>reply(c,"temp");}
+    box.appendChild(el);});
+  hud();
+}
+function spend(m){S.left-=m;}
+function reply(c,kind){
+  const st=STAGE[c.st];
+  if(kind==="pers"){spend(st.pc);S.human+=st.pp;c.res="pers";
+    if(c.st==="app")riley("pa","Kind, but expensive. A personal note at the application stage costs time you'll need for the people who interviewed.");
+    else if(c.st==="final")riley("pf","That's the one they'll remember. Short, specific, and a real next step or a real reason.");
+    else riley("pp","Nice. After a phone screen, a couple of personal lines keeps a good candidate warm.");}
+  else{spend(1);S.human+=st.tp;c.res="temp";
+    if(c.st==="final")riley("tf","Ouch. After four rounds, a form letter stings. Final-round candidates deserve a few personal lines.");
+    else if(c.st==="app")riley("ta","Good call. At the application stage, a clear, kind template beats silence every time.");
+    else riley("tp","Better than nothing. Add one line about the call if you have a minute.");}
+  check();
+}
+function check(){render();if(S.left<=0)finish();}
+$("bulkBtn").onclick=()=>{let n=0;S.c.forEach(c=>{if(!c.res&&c.st==="app"){c.res="temp";S.human+=STAGE.app.tp;n++;}});spend(5);riley("bulk","Smart. "+n+" people just got a clear answer in 5 minutes. Automate the early stage so you have time for the people who interviewed.");check();};
+$("autoBtn").onclick=()=>{let n=0;S.c.forEach(c=>{if(!c.res&&c.st==="app"){c.res="ghost";S.human+=STAGE.app.gp;n++;}});riley(null,"That “saved time” just ghosted "+n+" people. Closing an application with no message is still ghosting. Check what a tool sends before you click.");check();};
+$("slSend").onclick=()=>{spend(8);S.shortlist="sent";S.hm=100;$("event").hidden=true;riley("sl","Hiring manager's happy. Keeping them in the loop buys you room to push back later.");check();};
+$("slDefer").onclick=()=>{spend(1);S.shortlist="defer";S.hm=70;$("event").hidden=true;riley("sd","Fair. A clear time beats going quiet. Just make sure Monday at 10 actually happens.");check();};
+$("endBtn").onclick=()=>finish();
+function finish(){
+  S.left=Math.max(0,S.left);
+  S.c.forEach(c=>{if(!c.res){c.res="ghost";S.human+=STAGE[c.st].gp;}});
+  if(S.shortlist===null)S.hm=25;
+  $("game").hidden=true;$("riley").hidden=true;$("results").hidden=false;
+  const p=pct();$("finalScore").textContent=p+"%";
+  const count=k=>S.c.filter(c=>c.res===k).length;
+  $("nPers").textContent=count("pers");$("nTemp").textContent=count("temp");$("nGhost").textContent=count("ghost");
+  $("tbl").innerHTML=["app","phone","final"].map(s=>{const f=k=>S.c.filter(c=>c.st===s&&c.res===k).length;return `<tr><td><span class="chip ${STAGE[s].cls}">${STAGE[s].label}</span></td><td class="n">${f("pers")}</td><td class="n">${f("temp")}</td><td class="n">${f("ghost")}</td></tr>`;}).join("");
+  const gf=S.c.filter(c=>c.st==="final"&&c.res==="ghost").length;
+  const rank=p>=80?"Human-Centered Hiring Hero":p>=55?"Solid Recruiter, Busy Friday":p>=30?"Accidental Ghost":"Part of the Machine";
+  $("rank").textContent=rank;
+  $("verdict").textContent=gf?`You ghosted ${gf} final-round candidate${gf>1?"s":""}. Those are the people most likely to tell friends about it.`:
+    p>=80?"Everyone heard back, and the people who met the team heard from you personally. That's the job.":
+    "Nobody from the final round got ghosted. Next time, try saving more time early for the people who interviewed.";
+  $("hmLine").innerHTML="<b>Hiring manager:</b> "+(S.shortlist==="sent"?"Got the shortlist. Happy weekend.":S.shortlist==="defer"?"Monday at 10 works. Expects it on time.":"Never heard back about the shortlist. You'll hear about it Monday.");
+  window.scrollTo(0,0);
+}
+function start(saved){S=saved&&saved.c?saved:fresh();$("intro").hidden=!!(saved&&saved.c);$("game").hidden=!(saved&&saved.c);$("results").hidden=true;render();}
+$("startBtn").onclick=()=>{S=fresh();$("intro").hidden=true;$("game").hidden=false;render();riley(null,"Hey, it's Riley. Same rule as always: silence is the worst answer. Start with whoever has waited longest after meeting the team.");};
+$("againBtn").onclick=()=>{S=fresh();$("results").hidden=true;$("game").hidden=false;render();window.scrollTo(0,0);};
+window.claude?.hot?.snapshot?.(()=>($("game").hidden?{}:S));
+window.claude?.hot?.ready?window.claude.hot.ready(d=>start(d)):start(window.claude?.hot?.data??{});
+</script>
+</body></html>
