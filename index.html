@@ -72,6 +72,7 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
 .hook{font-family:var(--f-head);font-weight:700;font-size:22px;margin:8px 0 0;text-wrap:balance}
 .sub{color:var(--mute);margin:0;max-width:34ch}
 .pack{margin:0;display:inline-block;background:var(--warm);color:#2a2008;border-radius:999px;padding:4px 12px;font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.btn.podBtn{background:var(--panel);color:var(--ink);border:2px solid var(--warm);box-shadow:none;text-decoration:none;font-size:17px}
 .iosHelp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:#d6d0d6;font-size:14px;text-align:center}
 
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:15px 18px;
@@ -374,6 +375,7 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
     <div class="share" id="shareText"></div>
     <button class="btn" id="copyBtn">Copy for LinkedIn</button>
     <button class="btn ghosty" id="shareScoreBtn" type="button">📲 Challenge a friend</button>
+    <a class="btn podBtn" id="podBtn" href="https://ghostedbythemachine.com" target="_blank" rel="noopener">🎧 Listen to the podcast</a>
     <div class="fbInline"><p>You’re one of our first players. How was it?</p><button id="fbEnd" type="button">Rate it</button></div>
     <button class="btn ghosty" id="againBtn">Play again</button>
     <div class="foot">Let's make hiring human again</div>
@@ -773,6 +775,8 @@ async function shareGame(btn,text,src,label){
 }
 $("shareAppBtn").onclick=e=>shareGame(e.currentTarget,"Can you beat the hiring machine? A free 5-minute game about the modern job search. New: Recruiter Mode lets recruiters, TA and HR play the other side of the desk.","title","🔗 Share the game");
 $("shareScoreBtn").onclick=e=>{const b=$("badgeName").textContent;shareGame(e.currentTarget,`I scored ${S.hp.toLocaleString("en-US")} Human Points and earned "${b}" in Ghosted by the Machine: The Game. Can you beat me? Work in hiring? Try the new Recruiter Mode.`,"end","📲 Challenge a friend");};
+
+$("podBtn").addEventListener("click",()=>track("podcast-click"));
 
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}
