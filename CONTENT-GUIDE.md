@@ -1,6 +1,6 @@
 # Weekly content guide
 
-All questions live in **`content.js`**. The game draws **3 at random** from each list every time someone plays, so every question you add makes replays more varied. You never need to touch `index.html` to add questions.
+All job seeker questions live in **`content.js`**. (Recruiter Mode's scenarios are built into `recruiter.html`; ask Claude to update those.) The game draws **3 at random** from each list every time someone plays, so every question you add makes replays more varied. You never need to touch `index.html` to add questions.
 
 ## The weekly routine (about 15 minutes)
 

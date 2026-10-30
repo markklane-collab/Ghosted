@@ -18,7 +18,7 @@ No download, no sign-up. Works on phone and desktop. About 5 minutes from start 
 
 ---
 
-## The five levels
+## Job seeker mode: the five levels
 
 | Level | Name | What you do |
 | ----- | ---- | ----------- |
@@ -34,9 +34,27 @@ At the end, you get a badge and a ready-to-post LinkedIn summary of your results
 
 ---
 
+## New: Recruiter Mode
+
+**Same machine, other side of the desk.** Recruiter Mode is for recruiters, talent acquisition, and HR. You follow one Marketing Coordinator hire from the first meeting to the offer, without ghosting anyone.
+
+Play it from the title screen, or go straight to **[Recruiter Mode](https://markklane-collab.github.io/Ghosted/recruiter.html)**.
+
+| Level | Name | What you do |
+| ----- | ---- | ----------- |
+| 1 | The Intake Meeting | The hiring manager wants a unicorn. Turn their wish list into a job real people can apply for |
+| 2 | Screener Settings | Set the AI screener's rules before it runs, then see who it threw out |
+| 3 | The Inbox Avalanche | It's Friday at 4:00 PM and 18 candidates are waiting. Answer them before 5:00 or they get ghosted |
+| 4 | Red Flag or Real Talent? | Spot fake video interviews without rejecting real people who just look different on paper |
+| 5 | The Offer Call | Your top candidate has a competing offer, a pay question, and wants to know how the AI scored them |
+
+Two scores pull against each other: **Human Score** (how candidates feel) and **Hiring Manager** (how your boss feels). Each level can be played timed or untimed.
+
+---
+
 ## How it's built
 
-- `index.html` is the game. `content.js` holds the questions. Plain HTML, CSS, and JavaScript.
+- `index.html` is the job seeker game. `recruiter.html` is Recruiter Mode. `content.js` holds the job seeker questions. Plain HTML, CSS, and JavaScript.
 - No frameworks, no build step, no database. Privacy-friendly analytics (GoatCounter), no cookies.
 - Fonts load from Google Fonts. Everything else is self-contained.
 
