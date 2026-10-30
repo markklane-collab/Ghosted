@@ -682,7 +682,7 @@ function end(){
   $("eOffer").textContent=S.salary?money(S.salary).replace(",000","K"):"Passed";
   $("badgeName").textContent=E.badge;$("badgeDesc").textContent=E.desc;$("medal").textContent=Math.round(S.hp/100)/10+"K HP";
   const out=S.salary?`landed a ${money(S.salary)} offer`:"turned down an offer that wasn't right";
-  $("shareText").textContent=`I just played Ghosted by the Machine: The Game.\n\nI sent 3 applications, got past the ATS ${S.l1pass} ${S.l1pass===1?"time":"times"}, survived an AI interviewer, caught ${S.replies} real replies through ${rej} rejections, spotted ${S.flags}/3 red flags, and ${out}.\n\nFinal score: ${S.hp.toLocaleString("en-US")} Human Points. Badge: ${E.badge}.\n\nCan you beat the hiring machine? #MakeHiringHumanAgain`;
+  $("shareText").textContent=`I just played Ghosted by the Machine: The Game.\n\nI sent 3 applications, got past the ATS ${S.l1pass} ${S.l1pass===1?"time":"times"}, survived an AI interviewer, caught ${S.replies} real replies through ${rej} rejections, spotted ${S.flags}/3 red flags, and ${out}.\n\nFinal score: ${S.hp.toLocaleString("en-US")} Human Points. Badge: ${E.badge}.\n\nCan you beat the hiring machine? And if you work in hiring, try the new Recruiter Mode and play the other side of the desk. #MakeHiringHumanAgain`;
   $("copyBtn").textContent="Copy for LinkedIn";track("game-finished");track("ending-"+(S.ending||"quick"));yay();show("s-end");
 }
 $("copyBtn").onclick=async()=>{track("share-copied");try{await navigator.clipboard.writeText($("shareText").textContent);$("copyBtn").textContent="Copied ✓";}catch(e){const s=window.getSelection(),rg=document.createRange();rg.selectNodeContents($("shareText"));s.removeAllRanges();s.addRange(rg);$("copyBtn").textContent="Text selected, press copy";}};
@@ -771,8 +771,8 @@ async function shareGame(btn,text,src,label){
   catch(e){btn.textContent=GAME_URL;}
   setTimeout(()=>{btn.textContent=label;},2600);
 }
-$("shareAppBtn").onclick=e=>shareGame(e.currentTarget,"Can you beat the hiring machine? A free 5-minute game about the modern job search.","title","🔗 Share the game");
-$("shareScoreBtn").onclick=e=>{const b=$("badgeName").textContent;shareGame(e.currentTarget,`I scored ${S.hp.toLocaleString("en-US")} Human Points and earned "${b}" in Ghosted by the Machine: The Game. Can you beat me?`,"end","📲 Challenge a friend");};
+$("shareAppBtn").onclick=e=>shareGame(e.currentTarget,"Can you beat the hiring machine? A free 5-minute game about the modern job search. New: Recruiter Mode lets recruiters, TA and HR play the other side of the desk.","title","🔗 Share the game");
+$("shareScoreBtn").onclick=e=>{const b=$("badgeName").textContent;shareGame(e.currentTarget,`I scored ${S.hp.toLocaleString("en-US")} Human Points and earned "${b}" in Ghosted by the Machine: The Game. Can you beat me? Work in hiring? Try the new Recruiter Mode.`,"end","📲 Challenge a friend");};
 
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}
