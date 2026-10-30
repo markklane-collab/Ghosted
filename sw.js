@@ -1,8 +1,8 @@
 /* Ghosted by the Machine: offline support.
    Game files: try the network first so weekly updates show up right away,
    fall back to the saved copy when offline. Fonts: saved after first load. */
-const CACHE = "ghosted-v1";
-const CORE = ["./", "./index.html", "./content.js", "./manifest.webmanifest",
+const CACHE = "ghosted-v2";
+const CORE = ["./", "./index.html", "./recruiter.html", "./content.js", "./manifest.webmanifest",
   "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./share.png"];
 
 self.addEventListener("install", e => {

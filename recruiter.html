@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recruiter Mode · Ghosted by the Machine</title>
+<meta name="description" content="You're the recruiter now. Five timed levels from the Ghosted by the Machine podcast: fill the role without ghosting anyone.">
+<meta property="og:title" content="Ghosted by the Machine: Recruiter Mode">
+<meta property="og:description" content="You're the recruiter now. Tame the intake meeting, set the AI screener, survive the inbox, spot fake candidates, and close the offer.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://markklane-collab.github.io/Ghosted/recruiter.html">
+<meta property="og:image" content="https://markklane-collab.github.io/Ghosted/share.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b0a0c">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ghosted">
+<script data-goatcounter="https://ghostgame.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: the Ghosted arcade cabinet, recruiter side. One phone-width cabinet; the inbox scrolls inside it. Single dark look by design. */
+:root{
+  --void:#0b0a0c; --cab:#151316; --panel:#1f1c20; --line:#332e34;
+  --ink:#f4f1f2; --mute:#a39ba3; --red:#e3131b; --good:#3ccf7a; --warm:#f2c14e; --glow:#3b5bff;
+  --f-display:"Bungee","Impact","Arial Black",sans-serif;
+  --f-head:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+html,body{min-height:100%}
+body{background:var(--void);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px;
+  background-image:radial-gradient(ellipse at 50% -10%,rgba(59,91,255,.22),transparent 60%);background-attachment:fixed}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+button:disabled{opacity:.35;cursor:not-allowed}
+.cab{max-width:480px;margin:0 auto;background:var(--cab);border:1px solid var(--line);border-radius:22px;overflow:hidden;
+  box-shadow:0 0 0 1px #000,0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(59,91,255,.14)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);
+  font-family:var(--f-head);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:14px}
+.bar b{color:var(--red)}
+.tag{font-size:12px;color:var(--mute);letter-spacing:.1em}
+.screen{padding:20px 18px 24px;display:flex;flex-direction:column;gap:16px}
+.eyebrow{font-family:var(--f-head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--glow)}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,9vw,42px);line-height:1;margin:0;text-wrap:balance;color:var(--ink)}
+h1 span{color:var(--red)}
+p{margin:0}
+.lede{color:var(--mute);font-size:16px}
+.rules{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.rules li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.chip{display:inline-block;font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:11.5px;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.s-app{background:#26232a;color:var(--mute);border:1px solid var(--line)}
+.s-phone{background:rgba(59,91,255,.18);color:#aab8ff;border:1px solid rgba(59,91,255,.45)}
+.s-final{background:rgba(242,193,78,.16);color:var(--warm);border:1px solid rgba(242,193,78,.5)}
+.btn{border:0;border-radius:14px;padding:15px 18px;font-family:var(--f-head);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:19px;background:var(--red);color:#fff;box-shadow:0 4px 0 #8f0c11}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #8f0c11}
+.ghostbtn{background:none;border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-family:var(--f-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:var(--mute)}
+
+/* HUD */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:#100e11;border-bottom:1px solid var(--line);padding:10px 16px;display:grid;grid-template-columns:auto 1fr 1fr;gap:14px;align-items:center}
+.clock{font-family:var(--f-display);font-size:24px;line-height:1;font-variant-numeric:tabular-nums;color:var(--warm)}
+.clock small{display:block;font-family:var(--f-head);font-weight:700;font-size:11px;letter-spacing:.1em;color:var(--mute);margin-top:4px;text-transform:uppercase}
+.meter{display:grid;gap:5px;min-width:0}
+.meter label{font-family:var(--f-head);font-weight:700;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between;gap:6px}
+.meter label b{color:var(--ink);font-variant-numeric:tabular-nums}
+.track{height:8px;border-radius:99px;background:#2a262b;overflow:hidden}
+.fill{height:100%;border-radius:99px;transition:width .35s ease}
+.clock.late{color:var(--red)}
+.mode{font-family:var(--f-head);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+#humanFill{background:var(--good)} #hmFill{background:var(--glow)}
+
+/* Tools + event */
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tool{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:left;display:grid;gap:3px}
+.tool strong{font-family:var(--f-head);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase}
+.tool span{font-size:12.5px;color:var(--mute);line-height:1.3}
+.tool.trap strong{color:#ff8a8f}
+.event{border:1px solid rgba(59,91,255,.6);background:rgba(59,91,255,.1);border-radius:14px;padding:12px;display:grid;gap:10px}
+.event p{font-size:14.5px}
+.event .row{display:flex;gap:8px;flex-wrap:wrap}
+.event button{flex:1 1 140px;border-radius:10px;padding:9px 10px;font-family:var(--f-head);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:14px;border:1px solid var(--line);background:var(--panel)}
+.event button.pri{background:var(--glow);border-color:var(--glow);color:#fff}
+
+/* Inbox */
+.inboxHead{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--f-head);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:13px;color:var(--mute)}
+.inbox{display:grid;gap:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:8px;transition:opacity .3s}
+.card.final{border-color:rgba(242,193,78,.45)}
+.card .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card .who{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .msg{color:var(--mute);font-size:14px;line-height:1.35}
+.card .wait{font-family:var(--f-head);font-weight:700;font-size:12px;letter-spacing:.06em;color:var(--mute);text-transform:uppercase}
+.card .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.card .acts button{border-radius:10px;padding:8px;font-family:var(--f-head);font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:13.5px;border:1px solid var(--line);background:#2a262b}
+.card .acts .pers{background:rgba(60,207,122,.14);border-color:rgba(60,207,122,.5);color:#9ff0c2}
+.card.done{opacity:.55}
+.card .result{font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.r-pers{color:var(--good)} .r-temp{color:var(--mute)} .r-ghost{color:#ff8a8f}
+.wrap{display:flex;justify-content:center;padding-bottom:96px}
+
+/* Riley */
+.riley{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;width:min(448px,calc(100% - 32px));
+  background:#fffaf0;color:#1d1a1e;border-radius:16px;padding:12px 14px;box-shadow:0 12px 40px rgba(0,0,0,.6);display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.riley .av{width:36px;height:36px;border-radius:50%;background:var(--warm);display:grid;place-items:center;font-family:var(--f-display);color:#2a2008;font-size:16px}
+.riley b{font-family:var(--f-head);letter-spacing:.08em;text-transform:uppercase;font-size:13px;display:block}
+.riley p{font-size:14.5px;line-height:1.35}
+@media (prefers-reduced-motion:no-preference){.riley{animation:pop .25s ease-out}@keyframes pop{from{opacity:0;transform:translate(-50%,12px)}}}
+
+/* Results */
+.score{font-family:var(--f-display);font-size:64px;line-height:1;color:var(--good);font-variant-numeric:tabular-nums}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:2px}
+.stat b{font-family:var(--f-display);font-weight:400;font-size:24px;font-variant-numeric:tabular-nums}
+.stat span{font-family:var(--f-head);font-weight:700;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+th{font-family:var(--f-head);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:var(--mute)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.lessons{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.lessons li{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14.5px}
+.levels{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.lvl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:8px}
+.lvl.soon{opacity:.6;border-style:dashed}
+.lvl .lt{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lvl h2{font-family:var(--f-head);font-weight:800;font-size:20px;letter-spacing:.03em;text-transform:uppercase;margin:0}
+.lvl .num{font-family:var(--f-display);color:var(--glow);font-size:14px}
+.lvl p{color:var(--mute);font-size:14px}
+.lvl .row{display:flex;gap:8px;flex-wrap:wrap}
+.lvl .row button{flex:1 1 130px;border-radius:10px;padding:10px;font-family:var(--f-head);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:14px;border:1px solid var(--line);background:#2a262b}
+.lvl .row .go{background:var(--red);border-color:var(--red);color:#fff}
+.back{align-self:flex-start;background:none;border:0;padding:0;font-family:var(--f-head);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:13px;color:var(--mute)}
+.mgr{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.mgr .face{width:44px;height:44px;border-radius:50%;background:var(--glow);display:grid;place-items:center;font-family:var(--f-display);color:#fff;font-size:18px}
+.bubble{background:var(--panel);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:17px;font-weight:600;line-height:1.35}
+.who2{font-family:var(--f-head);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:#2a262b;border:1px solid var(--line);border-radius:12px;padding:11px 12px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:15px}
+.opt .cost{font-family:var(--f-head);font-weight:800;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--warm);white-space:nowrap}
+.opt:disabled{opacity:.5}
+.opt.pick{border-color:var(--good);opacity:1}.opt.pick.bad{border-color:#ff8a8f}
+.fbk{background:#fffaf0;color:#1d1a1e;border-radius:14px;padding:12px 14px;display:grid;gap:8px}
+.fbk b{font-family:var(--f-head);letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.fbk .delta{font-family:var(--f-head);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;display:flex;gap:12px;flex-wrap:wrap}
+.up{color:#14833f}.dn{color:#c0141b}
+.posting{background:#f7f5f0;color:#1d1a1e;border-radius:12px;padding:16px;display:grid;gap:8px;font-size:14.5px}
+.posting h3{margin:0;font-family:var(--f-head);font-weight:800;font-size:22px;letter-spacing:.02em}
+.posting .co{color:#6b646b;font-size:13px;margin-top:-4px}
+.posting dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px}
+.posting dt{font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:#6b646b;padding-top:2px}
+.posting dd{margin:0;min-width:0}
+.posting dd.bad{color:#c0141b}
+.progress{font-family:var(--f-head);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:12px;color:var(--mute)}
+.scoreRow{display:flex;align-items:end;gap:14px;flex-wrap:wrap}
+.rank{font-size:26px}
+.endRow{display:flex;gap:8px;flex-wrap:wrap}.endRow>*{flex:1 1 160px}
+.hud2{grid-template-columns:auto 1fr}
+.pile{display:flex;align-items:center;gap:10px;justify-content:flex-end;text-align:right;font-family:var(--f-head);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);line-height:1.25}
+.pile b{font-family:var(--f-display);font-weight:400;font-size:30px;font-variant-numeric:tabular-nums}
+.pile.ok b{color:var(--good)}.pile.over b{color:var(--red)}
+.rules2{display:grid;gap:8px}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;font-size:15px}
+.rule input{width:22px;height:22px;accent-color:var(--glow);margin:0}
+.rule:has(input:checked){border-color:var(--glow);background:rgba(59,91,255,.12)}
+.apps{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.app{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:grid;gap:4px}
+.app .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.app p{color:var(--mute);font-size:14px}
+.app .why{font-family:var(--f-head);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.app.in .why{color:var(--good)}.app.out .why{color:#ff8a8f}
+.app.star.out{border-color:rgba(227,19,27,.6)}
+.vid{background:#0e0d10;border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px;background-image:linear-gradient(180deg,rgba(59,91,255,.12),transparent 60%)}
+.vidTop{display:flex;justify-content:space-between}
+.rec{font-family:var(--f-head);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--red)}
+.vid h2{font-family:var(--f-display);font-weight:400;font-size:26px;margin:0}
+.vid ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:15px}
+.verTxt{background:rgba(242,193,78,.12);border:1px solid rgba(242,193,78,.5);border-radius:12px;padding:10px 12px;font-size:14.5px}
+.rActs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rActs button{border-radius:12px;padding:12px;font-family:var(--f-head);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:15px;border:1px solid var(--line);background:#2a262b}
+.rActs .adv{background:rgba(60,207,122,.16);border-color:rgba(60,207,122,.55);color:#9ff0c2}
+.rActs .flag{background:rgba(227,19,27,.16);border-color:rgba(227,19,27,.55);color:#ff8a8f}
+.rActs .ver{grid-column:1/-1;color:var(--warm);border-color:rgba(242,193,78,.5)}
+.foot{text-align:center;font-family:var(--f-head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--mute)}
+</style>
+
+</head>
+<body>
+<div class="cab">
+  <div class="bar"><span>Ghosted by the <b>Machine</b></span><a class="tag" href="./" style="color:var(--mute);text-decoration:none">← Candidate game</a></div>
+
+  <!-- Hub -->
+  <section class="screen" id="hub">
+    <div class="eyebrow">Recruiter Mode</div>
+    <h1>You're the <span>recruiter</span> now.</h1>
+    <p class="lede">Same machine, other side of the desk. Follow one Marketing Coordinator hire from the first meeting to the offer, without ghosting anyone.</p>
+    <ul class="levels">
+      <li class="lvl"><div class="lt"><h2>The Intake Meeting</h2><span class="num">01</span></div><p>The hiring manager wants a unicorn. You have 30 minutes to turn their wish list into a job real people can apply for.</p><div class="row"><button class="go" type="button" id="iTimed">Play timed</button><button type="button" id="iRelax">No timer</button></div></li>
+      <li class="lvl"><div class="lt"><h2>Screener Settings</h2><span class="num">02</span></div><p>Set the AI screener's rules before it runs at 9:00. Then see who it threw out.</p><div class="row"><button class="go" type="button" id="sTimed">Play timed</button><button type="button" id="sRelax">No timer</button></div></li>
+      <li class="lvl"><div class="lt"><h2>The Inbox Avalanche</h2><span class="num">03</span></div><p>Friday, 4:00 PM. 18 candidates are waiting. Anyone you don't answer by 5:00 gets ghosted. Personal notes take 3–6 minutes, templates take 1.</p><div class="row"><button class="go" type="button" id="aTimed">Play timed</button><button type="button" id="aRelax">No timer</button></div></li>
+      <li class="lvl"><div class="lt"><h2>Red Flag or Real Talent?</h2><span class="num">04</span></div><p>Eight video interviews. Some are fakes. Catch them without rejecting real people who just look different on paper.</p><div class="row"><button class="go" type="button" id="rTimed">Play timed</button><button type="button" id="rRelax">No timer</button></div></li>
+      <li class="lvl"><div class="lt"><h2>The Offer Call</h2><span class="num">05</span></div><p>Your top candidate has a competing offer, a pay question, and wants to know how the AI scored them.</p><div class="row"><button class="go" type="button" id="oTimed">Play timed</button><button type="button" id="oRelax">No timer</button></div></li>
+    </ul>
+    <a class="ghostbtn" href="./" style="text-align:center;text-decoration:none">← Back to the candidate game</a>
+    <p class="foot">Let's make hiring human again</p>
+  </section>
+
+  <!-- Dialogue levels (1 and 5) -->
+  <div id="dlg" hidden>
+    <div class="hud">
+      <div class="clock" id="dClock">4:00<small id="dLeft">30 min left</small></div>
+      <div class="meter"><label id="dALabel">A <b id="dATxt">0</b></label><div class="track"><div class="fill" id="dAFill"></div></div></div>
+      <div class="meter"><label id="dBLabel">B <b id="dBTxt">0</b></label><div class="track"><div class="fill" id="dBFill"></div></div></div>
+    </div>
+    <section class="screen">
+      <button class="back" type="button" data-hub>← All levels</button>
+      <div class="progress" id="dProg"></div>
+      <div class="mgr"><div class="face" id="dFace">P</div><div><div class="who2" id="dWho"></div><div class="bubble" id="dAsk"></div></div></div>
+      <div class="opts" id="dOpts"></div>
+      <div class="fbk" id="dFb" hidden><b>Riley</b><p id="dFbTxt"></p><div class="delta" id="dDelta"></div><button class="btn" id="dNext" type="button" style="font-size:16px;padding:12px">Next →</button></div>
+    </section>
+  </div>
+  <section class="screen" id="dRes" hidden>
+    <div class="eyebrow" id="dEnd"></div>
+    <div class="scoreRow"><div class="score" id="dScore">0%</div><div><div class="eyebrow" style="color:var(--good)">Score</div><h1 id="dRank" class="rank">—</h1></div></div>
+    <p class="lede" id="dVerdict"></p>
+    <div class="eyebrow" id="dDocTitle"></div>
+    <div class="posting"><h3 id="dDocHead"></h3><div class="co" id="dDocSub"></div><dl id="dDoc"></dl></div>
+    <div class="eyebrow">Riley's takeaways</div>
+    <ul class="lessons" id="dTake"></ul>
+    <div class="endRow"><button class="btn" id="dAgain" type="button">Play again</button><button class="ghostbtn" type="button" data-hub>All levels</button></div>
+  </section>
+
+  <!-- Level 2: Screener -->
+  <div id="scr" hidden>
+    <div class="hud hud2">
+      <div class="clock" id="sClock">8:45<small id="sLeft">15 min to run</small></div>
+      <div class="pile" id="sPile"><b id="sCount">12</b><span>of 12 get through<br><span id="sPileTxt"></span></span></div>
+    </div>
+    <section class="screen">
+      <button class="back" type="button" data-hub>← All levels</button>
+      <p class="lede" style="font-size:15px">12 people applied. The screener runs at 9:00 AM. Pat has time to review <b style="color:var(--ink)">6 at most</b>. Pick the rules. You'll only see numbers until it runs, just like the real thing.</p>
+      <div class="rules2" id="sRules"></div>
+      <button class="btn" id="sRun" type="button">Run the screener →</button>
+    </section>
+  </div>
+  <section class="screen" id="sRes" hidden>
+    <div class="eyebrow" id="sEnd"></div>
+    <div class="scoreRow"><div class="score" id="sScore">0%</div><div><div class="eyebrow" style="color:var(--good)">Screener Score</div><h1 id="sRank" class="rank">—</h1></div></div>
+    <p class="lede" id="sVerdict"></p>
+    <div class="eyebrow">Who the machine kept, and who it threw out</div>
+    <ul class="apps" id="sList"></ul>
+    <div class="eyebrow">Riley on your rules</div>
+    <ul class="lessons" id="sTips"></ul>
+    <div class="endRow"><button class="btn" id="sAgain" type="button">Play again</button><button class="ghostbtn" type="button" data-hub>All levels</button></div>
+  </section>
+
+  <!-- Level 4: Red flag -->
+  <div id="rf" hidden>
+    <div class="hud hud2">
+      <div class="clock" id="rClock">1:00<small id="rLeft">16 min left</small></div>
+      <div class="progress" id="rProg" style="text-align:right">Candidate 1 of 8</div>
+    </div>
+    <section class="screen">
+      <button class="back" type="button" data-hub>← All levels</button>
+      <div class="vid"><div class="vidTop"><span class="rec">● Live interview</span></div><h2 id="rName"></h2><ul id="rClues"></ul></div>
+      <p class="verTxt" id="rVerTxt" hidden></p>
+      <div class="rActs" id="rActs">
+        <button type="button" class="adv" id="rAdv">Real. Advance</button>
+        <button type="button" class="flag" id="rFlag">Fake. Flag it</button>
+        <button type="button" class="ver" id="rVerify">Verify first · 3 min</button>
+      </div>
+      <div class="fbk" id="rFb" hidden><b id="rFbHead"></b><p id="rFbTxt"></p><button class="btn" id="rNext" type="button" style="font-size:16px;padding:12px">Next candidate →</button></div>
+    </section>
+  </div>
+  <section class="screen" id="rRes" hidden>
+    <div class="eyebrow" id="rEnd"></div>
+    <div class="scoreRow"><div class="score" id="rScore">0%</div><div><div class="eyebrow" style="color:var(--good)">Judgment Score</div><h1 id="rRank" class="rank">—</h1></div></div>
+    <p class="lede" id="rVerdict"></p>
+    <ul class="apps" id="rList"></ul>
+    <div class="eyebrow">Riley's takeaways</div>
+    <ul class="lessons">
+      <li><b>Different isn't fake.</b> Accents, gaps, captions and bad internet are people, not red flags.</li>
+      <li><b>Look for mismatches, not quirks.</b> Copied résumés, shared phone numbers, a new shipping address, and skipping paperwork are real warning signs.</li>
+      <li><b>Verify with a process, not a hunch.</b> An ID check and a live skills exercise protect you and treat everyone the same.</li>
+    </ul>
+    <div class="endRow"><button class="btn" id="rAgain" type="button">Play again</button><button class="ghostbtn" type="button" data-hub>All levels</button></div>
+  </section>
+
+  <!-- Intro -->
+  <section class="screen" id="intro" hidden>
+    <button class="back" type="button" data-hub>← All levels</button>
+    <div class="eyebrow">Level 3 · The Inbox Avalanche</div>
+    <h1>You're the <span>recruiter</span> now.</h1>
+    <p class="lede">It's Friday, 4:00 PM. You have one hour before the weekend. 18 candidates are waiting to hear from you. Anyone you don't answer by 5:00 gets ghosted.</p>
+    <ul class="rules">
+      <li><span class="chip s-pers" style="background:rgba(60,207,122,.14);color:#9ff0c2;border:1px solid rgba(60,207,122,.5)">Personal</span><span>A real note. Takes 3–6 minutes. Means the most to people who've met the team.</span></li>
+      <li><span class="chip s-app">Template</span><span>A kind, clear form reply. Takes 1 minute.</span></li>
+      <li><span class="chip s-final">Watch</span><span>The hiring manager will want something from you too.</span></li>
+      <li><span class="chip" style="background:rgba(227,19,27,.16);color:#ff8a8f;border:1px solid rgba(227,19,27,.5)">Clock</span><span>In timed mode the clock keeps moving while you read. Every 3 seconds is a minute of your Friday.</span></li>
+    </ul>
+    <p class="lede" style="font-size:15px">Two meters: <b style="color:var(--good)">Human Score</b> (how candidates feel) and <b style="color:#aab8ff">Hiring Manager</b> (how your boss feels). You can't max both by accident.</p>
+    <button class="btn" id="startBtn" type="button">Play timed →</button>
+    <button class="ghostbtn" id="relaxBtn" type="button">Play without the timer</button>
+    <p class="foot">Let's make hiring human again</p>
+  </section>
+
+  <!-- Game -->
+  <div id="game" hidden>
+    <div class="hud">
+      <div class="clock" id="clock">4:00<small id="left">60 min left</small></div>
+      <div class="meter"><label>Human <b id="humanTxt">0%</b></label><div class="track"><div class="fill" id="humanFill" style="width:0%"></div></div></div>
+      <div class="meter"><label>Hiring Mgr <b id="hmTxt">OK</b></label><div class="track"><div class="fill" id="hmFill" style="width:50%"></div></div></div>
+    </div>
+    <section class="screen">
+      <div class="tools" id="tools">
+        <button class="tool" id="bulkBtn" type="button"><strong>Bulk update</strong><span>Template to every "Applied" candidate · 3 min</span></button>
+        <button class="tool trap" id="autoBtn" type="button"><strong>Auto-close</strong><span>Close stale applications. No message sent · 0 min</span></button>
+      </div>
+      <div class="event" id="event" hidden>
+        <p><b>Hiring manager:</b> "Can you send me the shortlist before you log off? I want to read it this weekend."</p>
+        <div class="row"><button class="pri" id="slSend" type="button">Send shortlist · 6 min</button><button id="slDefer" type="button">"Monday at 10?" · 1 min</button></div>
+      </div>
+      <div class="inboxHead"><span>Inbox</span><span id="waiting">18 waiting</span></div>
+      <div class="inbox" id="inbox"></div>
+      <div class="wrap" style="gap:8px;flex-wrap:wrap"><button class="ghostbtn" id="endBtn" type="button">Log off for the weekend</button><button class="ghostbtn" data-hub type="button">Quit to levels</button></div>
+    </section>
+  </div>
+
+  <!-- Results -->
+  <section class="screen" id="results" hidden>
+    <div class="eyebrow">5:00 PM · Laptop closed</div>
+    <div style="display:flex;align-items:end;gap:14px;flex-wrap:wrap"><div class="score" id="finalScore">0%</div><div><div class="eyebrow" style="color:var(--good)">Human Score</div><h1 id="rank" style="font-size:26px">—</h1></div></div>
+    <p class="lede" id="verdict"></p>
+    <div class="grid3">
+      <div class="stat"><b id="nPers">0</b><span>Personal notes</span></div>
+      <div class="stat"><b id="nTemp">0</b><span>Templates</span></div>
+      <div class="stat"><b id="nGhost" style="color:#ff8a8f">0</b><span>Ghosted</span></div>
+    </div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Stage</th><th class="n">Personal</th><th class="n">Template</th><th class="n">Ghosted</th></tr></thead>
+      <tbody id="tbl"></tbody>
+    </table></div>
+    <p id="hmLine"></p>
+    <div class="eyebrow">Riley's takeaways</div>
+    <ul class="lessons">
+      <li><b>Match the effort to the stage.</b> A clear template is fine after an application. After an interview, people have earned a few personal lines.</li>
+      <li><b>Automate the early stage, not the hard conversations.</b> Use bulk tools to buy time for the people who've met the team.</li>
+      <li><b>Closing without a message is still ghosting.</b> If a tool offers to "clean up" your pipeline, check whether anyone hears back.</li>
+    </ul>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="againBtn" type="button" style="flex:1 1 160px">Play again</button><button class="ghostbtn" data-hub type="button" style="flex:1 1 160px">All levels</button></div>
+    <p class="foot">Recruiter Mode prototype · Ghosted by the Machine</p>
+  </section>
+</div>
+
+<div class="riley" id="riley" hidden role="status" aria-live="polite" title="Tap to dismiss"><div class="av">R</div><div><b>Riley</b><p id="rileyTxt"></p></div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const STAGE={app:{label:"Applied",cls:"s-app",pc:3,pp:5,tp:3,gp:-4},phone:{label:"Phone screen",cls:"s-phone",pc:4,pp:8,tp:2,gp:-8},final:{label:"Final round",cls:"s-final",pc:6,pp:12,tp:-2,gp:-15}};
+const BEST=106; // bulk template applied + personal notes for phone and final + shortlist fits in 60 min
+const PEOPLE=[
+ ["Dana R.","final","Met the whole team last week. Still really excited about this one!",9],
+ ["Marcus T.","app","Just checking on my application. Thanks!",6],
+ ["Priya S.","phone","Loved our call Tuesday. Any word on next steps?",4],
+ ["Alex K.","app","Applied 2 weeks ago. Is this role still open?",14],
+ ["Jamie L.","app","Hi! Following up on the coordinator role.",5],
+ ["Sam W.","phone","I have another offer pending. Can you share a timeline?",3],
+ ["Chris O.","final","Thank you for the final interview. I turned down another process to stay in yours.",12],
+ ["Taylor B.","app","Is there anything else I can send you?",8],
+ ["Morgan E.","app","Hello, just making sure my résumé came through.",3],
+ ["Riya P.","phone","Thanks for the chat! Happy to do a skills test if that helps.",7],
+ ["Jordan M.","app","I'm very interested and available immediately.",10],
+ ["Casey N.","final","Haven't heard anything in a week. Should I keep waiting?",6],
+ ["Drew H.","app","Following up. I know you must be busy!",11],
+ ["Avery G.","phone","Just checking in after our phone screen.",9],
+ ["Quinn F.","app","Any update? Even a no would help.",13],
+ ["Reese C.","app","Hi there, checking on status.",4],
+ ["Logan V.","phone","Excited to hear about the next round!",5],
+ ["Skyler D.","app","Wanted to share my updated portfolio.",2]
+];
+let S;
+function fresh(timed){return{timed:!!timed,left:60,human:0,hm:50,shortlist:null,eventShown:false,said:{},c:PEOPLE.map((p,i)=>({id:i,name:p[0],st:p[1],msg:p[2],days:p[3],res:null}))};}
+function clockTxt(){const m=60-S.left;return "4:"+String(m).padStart(2,"0");}
+function pct(){return Math.max(0,Math.min(100,Math.round(S.human/BEST*100)));}
+function hud(){
+  $("clock").firstChild.nodeValue=S.left<=0?"5:00":clockTxt();
+  $("left").textContent=Math.max(0,S.left)+" min left"+(S.timed?" · live":"");$("clock").classList.toggle("late",S.left<=10);
+  $("humanTxt").textContent=pct()+"%";$("humanFill").style.width=pct()+"%";
+  $("hmFill").style.width=S.hm+"%";$("hmTxt").textContent=S.hm>=85?"Happy":S.hm>=50?"OK":"Annoyed";
+  const w=S.c.filter(c=>!c.res).length;$("waiting").textContent=w+" waiting";
+  const apps=S.c.filter(c=>!c.res&&c.st==="app").length;
+  $("bulkBtn").disabled=!apps||S.left<3;$("autoBtn").disabled=!apps;
+  if(!S.eventShown&&S.left<=44){S.eventShown=true;$("event").hidden=false;}
+  if(S.shortlist===null&&S.eventShown){$("slSend").disabled=S.left<6;$("slDefer").disabled=S.left<1;}
+}
+let rileyT;$("riley").onclick=()=>{$("riley").hidden=true;};
+function riley(key,txt){if(key&&S.said[key])return;if(key)S.said[key]=1;$("rileyTxt").textContent=txt;$("riley").hidden=false;clearTimeout(rileyT);rileyT=setTimeout(()=>$("riley").hidden=true,5200);}
+function render(){
+  const box=$("inbox");box.innerHTML="";
+  S.c.forEach(c=>{const st=STAGE[c.st];const el=document.createElement("article");el.className="card"+(c.st==="final"?" final":"")+(c.res?" done":"");
+    el.innerHTML=`<div class="top"><span class="who"></span><span class="chip ${st.cls}">${st.label}</span></div><p class="msg"></p>`+
+     (c.res?`<div class="result ${c.res==="pers"?"r-pers":c.res==="temp"?"r-temp":"r-ghost"}">${c.res==="pers"?"✓ Personal note sent":c.res==="temp"?"✓ Template sent":"✕ Ghosted"}</div>`:
+     `<div class="wait">Waiting ${c.days} days</div><div class="acts"><button class="pers" type="button" ${S.left<st.pc?"disabled":""}>Personal · ${st.pc} min</button><button type="button" ${S.left<1?"disabled":""}>Template · 1 min</button></div>`);
+    el.querySelector(".who").textContent=c.name;el.querySelector(".msg").textContent="“"+c.msg+"”";
+    if(!c.res){const b=el.querySelectorAll(".acts button");b[0].onclick=()=>reply(c,"pers");b[1].onclick=()=>reply(c,"temp");}
+    box.appendChild(el);});
+  hud();
+}
+function spend(m){S.left-=m;}
+function reply(c,kind){
+  const st=STAGE[c.st];
+  if(kind==="pers"){spend(st.pc);S.human+=st.pp;c.res="pers";
+    if(c.st==="app")riley("pa","Kind, but expensive. A personal note at the application stage costs time you'll need for the people who interviewed.");
+    else if(c.st==="final")riley("pf","That's the one they'll remember. Short, specific, and a real next step or a real reason.");
+    else riley("pp","Nice. After a phone screen, a couple of personal lines keeps a good candidate warm.");}
+  else{spend(1);S.human+=st.tp;c.res="temp";
+    if(c.st==="final")riley("tf","Ouch. After four rounds, a form letter stings. Final-round candidates deserve a few personal lines.");
+    else if(c.st==="app")riley("ta","Good call. At the application stage, a clear, kind template beats silence every time.");
+    else riley("tp","Better than nothing. Add one line about the call if you have a minute.");}
+  check();
+}
+function check(){render();if(S.left<=0)finish();}
+$("bulkBtn").onclick=()=>{let n=0;S.c.forEach(c=>{if(!c.res&&c.st==="app"){c.res="temp";S.human+=STAGE.app.tp;n++;}});spend(3);riley("bulk","Smart. "+n+" people just got a clear answer in 3 minutes. Automate the early stage so you have time for the people who interviewed.");check();};
+$("autoBtn").onclick=()=>{let n=0;S.c.forEach(c=>{if(!c.res&&c.st==="app"){c.res="ghost";S.human+=STAGE.app.gp;n++;}});riley(null,"That “saved time” just ghosted "+n+" people. Closing an application with no message is still ghosting. Check what a tool sends before you click.");check();};
+$("slSend").onclick=()=>{spend(6);S.shortlist="sent";S.hm=100;$("event").hidden=true;riley("sl","Hiring manager's happy. Keeping them in the loop buys you room to push back later.");check();};
+$("slDefer").onclick=()=>{spend(1);S.shortlist="defer";S.hm=70;$("event").hidden=true;riley("sd","Fair. A clear time beats going quiet. Just make sure Monday at 10 actually happens.");check();};
+$("endBtn").onclick=()=>finish();
+function finish(){
+  stopTick();if(!$("results").hidden)return;
+  S.left=Math.max(0,S.left);
+  S.c.forEach(c=>{if(!c.res){c.res="ghost";S.human+=STAGE[c.st].gp;}});
+  if(S.shortlist===null)S.hm=25;
+  $("game").hidden=true;$("riley").hidden=true;$("results").hidden=false;
+  const p=pct();$("finalScore").textContent=p+"%";
+  const count=k=>S.c.filter(c=>c.res===k).length;
+  $("nPers").textContent=count("pers");$("nTemp").textContent=count("temp");$("nGhost").textContent=count("ghost");
+  $("tbl").innerHTML=["app","phone","final"].map(s=>{const f=k=>S.c.filter(c=>c.st===s&&c.res===k).length;return `<tr><td><span class="chip ${STAGE[s].cls}">${STAGE[s].label}</span></td><td class="n">${f("pers")}</td><td class="n">${f("temp")}</td><td class="n">${f("ghost")}</td></tr>`;}).join("");
+  const gf=S.c.filter(c=>c.st==="final"&&c.res==="ghost").length;
+  const rank=p>=80?"Human-Centered Hiring Hero":p>=55?"Solid Recruiter, Busy Friday":p>=30?"Accidental Ghost":"Part of the Machine";
+  $("rank").textContent=rank;
+  $("verdict").textContent=gf?`You ghosted ${gf} final-round candidate${gf>1?"s":""}. Those are the people most likely to tell friends about it.`:
+    p>=80?"Everyone heard back, and the people who met the team heard from you personally. That's the job.":
+    "Nobody from the final round got ghosted. Next time, try saving more time early for the people who interviewed.";
+  $("hmLine").innerHTML="<b>Hiring manager:</b> "+(S.shortlist==="sent"?"Got the shortlist. Happy weekend.":S.shortlist==="defer"?"Monday at 10 works. Expects it on time.":"Never heard back about the shortlist. You'll hear about it Monday.");
+  window.scrollTo(0,0);
+}
+let tick=null;
+function stopTick(){clearInterval(tick);tick=null;}
+function startTick(){stopTick();if(!S.timed)return;tick=setInterval(()=>{if(document.hidden)return;S.left-=1;if(S.left<=0){render();finish();}else hud();},3000);}
+function begin(timed){S=fresh(timed);$("intro").hidden=true;$("results").hidden=true;$("game").hidden=false;render();startTick();window.scrollTo(0,0);
+  riley(null,timed?"Hey, it's Riley. The clock's running, so don't overthink it. Silence is the worst answer. Start with whoever has waited longest after meeting the team.":"Hey, it's Riley. Same rule as always: silence is the worst answer. Start with whoever has waited longest after meeting the team.");}
+function start(saved){const live=saved&&saved.c;S=live?saved:fresh(true);$("intro").hidden=!!live;$("game").hidden=!live;$("results").hidden=true;render();if(live)startTick();}
+$("startBtn").onclick=()=>begin(true);
+$("relaxBtn").onclick=()=>begin(false);
+$("againBtn").onclick=()=>begin(S.timed);
+/* ---------- navigation ---------- */
+const SCREENS=["hub","dlg","dRes","intro","game","results","scr","sRes","rf","rRes"];
+function show(id){SCREENS.forEach(x=>$(x).hidden=x!==id);$("riley").hidden=true;window.scrollTo(0,0);}
+function toHub(){stopTick();dStop();sStop();rStop();show("hub");}
+$("aTimed").onclick=()=>begin(true);
+$("aRelax").onclick=()=>begin(false);
+$("startBtn").onclick=()=>begin(true);
+$("relaxBtn").onclick=()=>begin(false);
+$("againBtn").onclick=()=>begin(S.timed);
+document.querySelectorAll("[data-hub]").forEach(b=>b.onclick=toHub);
+const _begin=begin;begin=function(t){show("game");_begin(t);};
+const clamp=v=>Math.max(0,Math.min(100,Math.round(v)));
+const pad=n=>String(n).padStart(2,"0");
+function clockAt(h,m0,used){const t=m0+used;return (h+Math.floor(t/60))+":"+pad(t%60);}
+function startClock(cfg,isPaused,onTick,onEnd){let id=setInterval(()=>{if(document.hidden||isPaused())return;onTick();if(onEnd())clearInterval(id);},cfg);return ()=>clearInterval(id);}
+
+/* =====================================================================
+   Dialogue levels: 1 The Intake Meeting, 5 The Offer Call
+   ===================================================================== */
+const DIALOGS={
+intake:{
+  len:30,tick:4000,h:4,m0:0,who:"Pat · Hiring Manager",face:"P",faceBg:"var(--glow)",prog:"Marketing Coordinator",
+  a:{label:"Real Role",v:40,color:"var(--good)"},b:{label:"Mgr Trust",v:50,color:"var(--glow)"},
+  docTitle:"The job posting your meeting produced",docHead:"Marketing Coordinator",docSub:"Lanternfish Labs · Hybrid",
+  timeout:"Out of time. Pat posted the rest as-is.",
+  rank:s=>s>=85?"Unicorn Tamer":s>=65?"Trusted Partner":s>=45?"Order Taker":"Posting Roulette",
+  verdict:(a,b)=>a<50?"Candidates will read this posting and wonder if the job is real.":b<50?"The posting is solid, but Pat feels steamrolled. Next time, bring the data into the room.":"Pat feels heard, and the posting describes a job real people can do.",
+  takeaways:[["Push back in the room, with data.","The intake meeting is the cheapest place to fix a bad job."],["Every vague line becomes a ghosted candidate later.","Clear must-haves, real pay and a real timeline protect the people who apply."],["Define “fit” before you screen for it.","Write down the behaviors, then score everyone the same way."]],
+  asks:[
+  {ask:"“It's an entry-level role. But I want at least 5 years of experience.”",field:"Experience",o:[
+   {t:"“Sure, I'll post it like that.”",m:1,a:-15,b:5,post:"Entry-level. 5+ years required.",fb:"Now the posting contradicts itself. Strong junior people won't apply, and experienced people won't take junior pay."},
+   {t:"“Those don't fit together. Is this junior or mid-level? I can show you what each one pays.”",m:4,a:20,b:8,best:1,post:"0–2 years of experience. We'll train you.",fb:"You turned a wish into a decision, with data. That's the whole job of an intake meeting."},
+   {t:"“Let's call it mid-level, 3–5 years, with mid-level pay.”",m:3,a:12,b:4,post:"3–5 years of experience (mid-level).",fb:"An honest fix. Just make sure the budget moves up with the title."},
+   {t:"Nod, then quietly change it after the meeting.",m:0,a:10,b:-15,post:"0–2 years of experience.",fb:"The posting is better, but the manager will notice. Push back in the room, not behind their back."}]},
+  {ask:"“They need to know all 12 tools on this list. Day one.”",field:"Skills",o:[
+   {t:"Post all 12 as requirements.",m:1,a:-15,b:4,post:"Required: all 12 tools on the list.",fb:"A long must-have list scares off good people who match most of it. The screener will reject them too."},
+   {t:"“Which 3 do they need on day one? The rest can be nice-to-have or learned on the job.”",m:3,a:18,b:6,best:1,post:"Must have: 3 core tools. Nice to have: the rest. We'll teach you.",fb:"A short must-have list and honest nice-to-haves. More qualified people apply, and the screener has fewer reasons to throw them out."},
+   {t:"“Let's drop the tool list. We'll train on everything.”",m:2,a:4,b:-6,post:"No specific tools required.",fb:"Generous, but the manager does need some skills on day one. Overcorrecting costs you their trust."},
+   {t:"Ask an AI tool to write the requirements.",m:1,a:-10,b:0,post:"Required: synergy-driven self-starter, plus 14 tools.",fb:"It added two more tools and the word “synergy.” Use AI for a first draft, then cut it to what the job needs."}]},
+  {ask:"“Let's not post the salary. We'll see what people ask for.”",field:"Pay",o:[
+   {t:"“Sounds good.”",m:1,a:-15,b:4,post:"Competitive.",fb:"“Competitive” tells candidates nothing. In one 2026 survey, about 6 in 10 job seekers said they wouldn't apply to a posting with no salary info."},
+   {t:"“Let's post a real range. It saves everyone time, and some places require it anyway.”",m:3,a:18,b:6,best:1,post:"$52,000–$60,000.",fb:"A real range brings in people who can say yes, and cuts awkward surprises at the offer stage."},
+   {t:"Post a huge range: $35,000 to $120,000.",m:1,a:-5,b:2,post:"$35,000–$120,000.",fb:"Technically a range. Candidates can tell when a range is too wide to mean anything."},
+   {t:"“Let's pay whatever the algorithm says is market.”",m:2,a:0,b:-2,post:"To be decided by an algorithm.",fb:"Market data helps. You still need to agree on a budget and post it."}]},
+  {ask:"“I need this filled in two weeks. Also, I'm out next week.”",field:"Process",o:[
+   {t:"“No problem.”",m:1,a:-10,b:4,post:"Fast. Somehow.",fb:"Saying yes to an impossible timeline is how candidates get ghosted. Nobody is around to interview them."},
+   {t:"“Let's block interview times on your calendar now, and agree on when candidates hear back.”",m:3,a:15,b:10,best:1,post:"2 interviews over 3 weeks. You'll hear back within 5 business days of each step.",fb:"Booking calendars now is the best anti-ghosting tool you have. And you can promise candidates a real timeline."},
+   {t:"Tell candidates to be available “anytime.”",m:1,a:-10,b:2,post:"Be available anytime.",fb:"Candidates have jobs and lives. “Anytime” reads as “we're disorganized.”"},
+   {t:"Quietly plan for six weeks instead.",m:0,a:5,b:-8,post:"6 weeks (the manager thinks 2).",fb:"Realistic, but the manager still expects two weeks. Say the real timeline out loud."}]},
+  {ask:"“Most of all, I want a culture fit. Someone like us.”",field:"Fit",o:[
+   {t:"“Got it. I'll screen for good vibes.”",m:1,a:-15,b:4,post:"Must be a culture fit. (Vibes to be determined.)",fb:"“Vibes” usually means “like me.” That's how great people get screened out for no clear reason."},
+   {t:"“Let's write down what that means: 3 behaviors that matter in this job. Then we score everyone on the same ones.”",m:4,a:20,b:8,best:1,post:"You'll do well here if you share work early, ask for help, and follow through.",fb:"Now “fit” is something you can see in an interview and score fairly. Candidates can see it in the posting too."},
+   {t:"“Should we just clone you?”",m:1,a:0,b:-4,post:"Must be exactly like the hiring manager.",fb:"Funny, and a little too real. Turn it into a real talk about what the team is missing."},
+   {t:"“Let's drop fit from the process entirely.”",m:2,a:5,b:-6,post:"Not discussed.",fb:"Teams do need to work together. The fix is defining fit clearly, not ignoring it."}]}
+  ]},
+offer:{
+  len:20,tick:4000,h:2,m0:0,who:"Jordan · Your top candidate",face:"J",faceBg:"var(--good)",prog:"Offer call",
+  a:{label:"Their Trust",v:50,color:"var(--good)"},b:{label:"Budget",v:100,color:"var(--warm)"},
+  docTitle:"Your call notes",docHead:"Offer call: Jordan",docSub:"Marketing Coordinator · Range $52,000–$60,000",
+  timeout:"The call ran long. Jordan hung up with questions you never answered.",
+  rank:s=>s>=85?"Closer With a Conscience":s>=65?"Solid Offer":s>=45?"Shaky Close":"Offer Declined",
+  verdict:(a,b)=>a>=70&&b>=50?"Jordan accepted. They trust you, and you stayed inside the budget.":a>=70?"Jordan accepted, but you blew the budget. Finance will be calling.":"Jordan declined. Pay was close. Trust wasn't.",
+  takeaways:[["Ask what matters besides pay.","Start date, growth, flexibility and the manager often decide an offer as much as salary."],["Be open about how AI was used.","Say who made the decision, what the tools did, and what the team liked."],["Silence after an offer is still ghosting.","Set the next touchpoint before you hang up."]],
+  asks:[
+  {ask:"“I'm excited. But I have another offer that pays $6,000 more.”",field:"Competing offer",o:[
+   {t:"“We'll match it right now.”",m:1,a:8,b:-35,post:"Matched on the spot. $6,000 over budget.",fb:"Fast, but you blew the budget before learning what Jordan actually cares about."},
+   {t:"“Thanks for telling me. Besides pay, what matters most in your decision?”",m:3,a:18,b:0,best:1,post:"Asked what matters. Jordan wants growth and a manager who mentors.",fb:"Now you know what to talk about. Pay is rarely the only thing on the table."},
+   {t:"“This offer expires at 5:00 today.”",m:1,a:-20,b:0,post:"Gave an exploding offer.",fb:"Pressure works on paper and backfires in real life. People remember being rushed."},
+   {t:"“I'm sure that other company is fine. If you like chaos.”",m:1,a:-10,b:0,post:"Trash-talked the other company.",fb:"Never knock the other offer. It makes you look worried, not confident."}]},
+  {ask:"“Quick question. How did the AI score my interview?”",field:"AI question",o:[
+   {t:"“Sorry, that's confidential.”",m:1,a:-15,b:0,post:"Refused to explain how AI was used.",fb:"Hiding the process makes people assume the worst. Share what you can."},
+   {t:"“People made the decision. AI helped with scheduling and note summaries. Here's what the team liked about you.”",m:3,a:18,b:0,best:1,post:"Explained the AI's role and shared real feedback.",fb:"Clear, honest and personal. Candidates mostly want to know a person looked at them."},
+   {t:"Forward the raw AI report with no context.",m:1,a:-5,b:0,post:"Sent an AI report with no context.",fb:"Raw scores without context confuse people. Explain it in plain words."},
+   {t:"“What AI?”",m:0,a:-10,b:0,post:"Dodged the AI question.",fb:"Funny until Jordan finds the AI notetaker in the calendar invite."}]},
+  {ask:"“Is the salary negotiable?”",field:"Pay",o:[
+   {t:"“No.”",m:0,a:-12,b:0,post:"Flat no on pay.",fb:"Even if pay is fixed, explain why, and what else can move."},
+   {t:"“The range is $52,000 to $60,000. Here's where you are and why. Start date, title and a learning budget can also flex.”",m:4,a:16,b:-10,best:1,post:"Explained the range. Moved to $58,000 plus a learning budget.",fb:"Open about the range, specific about the reasons, creative on the rest. That's a fair negotiation."},
+   {t:"“For you? Anything.”",m:1,a:6,b:-35,post:"Went way over the range.",fb:"Jordan's happy. Finance isn't, and neither is the teammate doing the same job for less."},
+   {t:"“Let me check,” and then don't follow up.",m:1,a:-25,b:0,post:"Promised to check. Never did.",fb:"Mid-offer ghosting. The fastest way to lose a candidate who wanted to say yes."}]},
+  {ask:"“Can I have a week to decide?”",field:"Next step",o:[
+   {t:"“Of course. Let's talk Thursday at noon. And here's the manager's number if you want to ask about mentoring.”",m:3,a:16,b:0,best:1,post:"Set a Thursday check-in and connected Jordan with the manager.",fb:"A clear next step and a real connection to the person they'd work for. That's how offers get accepted."},
+   {t:"“Sure.” Then wait for them to call.",m:0,a:-10,b:0,post:"No next step set.",fb:"A week of silence feels like a week of doubt. Set the next touchpoint."},
+   {t:"Send a reminder email every day.",m:1,a:-8,b:0,post:"Daily reminder emails.",fb:"Following up is good. Daily is pressure wearing a smile."},
+   {t:"“A week? We need an answer tomorrow.”",m:1,a:-15,b:0,post:"Demanded an answer tomorrow.",fb:"Rushing a big life decision makes people say no to protect themselves."}]}
+  ]}
+};
+let D=null,dCfg=null,dStopFn=()=>{};
+function dStop(){dStopFn();dStopFn=()=>{};}
+function dHud(){
+  const c=dCfg,used=c.len-Math.max(0,D.left);
+  $("dClock").firstChild.nodeValue=clockAt(c.h,c.m0,used);
+  $("dLeft").textContent=Math.max(0,D.left)+" min left"+(D.timed?" · live":"");$("dClock").classList.toggle("late",D.left<=5);
+  $("dATxt").textContent=clamp(D.a);$("dAFill").style.width=clamp(D.a)+"%";
+  $("dBTxt").textContent=clamp(D.b);$("dBFill").style.width=clamp(D.b)+"%";
+}
+function dStart(key,timed){
+  dCfg=DIALOGS[key];const c=dCfg;
+  D={key,timed,left:c.len,a:c.a.v,b:c.b.v,q:0,picks:[],paused:false,timedOut:false};
+  $("dALabel").firstChild.nodeValue=c.a.label+" ";$("dBLabel").firstChild.nodeValue=c.b.label+" ";
+  $("dAFill").style.background=c.a.color;$("dBFill").style.background=c.b.color;
+  $("dFace").textContent=c.face;$("dFace").style.background=c.faceBg;$("dWho").textContent=c.who;
+  show("dlg");dShow();dHud();dStop();
+  if(timed)dStopFn=startClock(c.tick,()=>D.paused,()=>{D.left--;dHud();},()=>{if(D.left<=0){dTimeout();return true;}return false;});
+}
+function dShow(){
+  const Q=dCfg.asks[D.q];D.paused=false;
+  $("dProg").textContent=`${D.q+1} of ${dCfg.asks.length} · ${dCfg.prog}`;
+  $("dAsk").textContent=Q.ask;$("dFb").hidden=true;
+  const box=$("dOpts");box.innerHTML="";
+  Q.o.forEach((o,k)=>{const b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=`<span></span><span class="cost">${o.m} min</span>`;b.firstChild.textContent=o.t;
+    b.disabled=o.m>D.left;b.onclick=()=>dPick(k,b);box.appendChild(b);});
+}
+function dPick(k,btn){
+  const o=dCfg.asks[D.q].o[k];D.paused=true;
+  D.left-=o.m;D.a+=o.a;D.b+=o.b;D.picks[D.q]=k;
+  [...$("dOpts").children].forEach(b=>b.disabled=true);btn.classList.add("pick");if(!o.best)btn.classList.add("bad");
+  const d=(n,l)=>n?`<span class="${n>0?"up":"dn"}">${l} ${n>0?"+":""}${n}</span>`:"";
+  $("dFbTxt").textContent=(o.best?"Best move. ":"")+o.fb;
+  $("dDelta").innerHTML=d(o.a,dCfg.a.label)+d(o.b,dCfg.b.label)+`<span>−${o.m} min</span>`;
+  const last=D.q>=dCfg.asks.length-1;
+  if(D.left<=0&&!last){D.timedOut=true;$("dNext").textContent="Out of time →";}else $("dNext").textContent=last?"Wrap up →":"Next →";
+  $("dFb").hidden=false;dHud();$("dFb").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+$("dNext").onclick=()=>{if(D.timedOut){dTimeout();return;}D.q++;if(D.q>=dCfg.asks.length)dFinish();else dShow();};
+function dTimeout(){
+  dStop();D.timedOut=true;
+  dCfg.asks.forEach((Q,q)=>{if(D.picks[q]===undefined){const o=Q.o[0];D.a+=o.a;D.b+=o.b;D.picks[q]=0;}});
+  dFinish();
+}
+function dFinish(){
+  dStop();show("dRes");const c=dCfg;
+  const a=clamp(D.a),b=clamp(D.b),sc=Math.round((a+b)/2);
+  $("dScore").textContent=sc+"%";$("dRank").textContent=c.rank(sc);
+  $("dEnd").textContent=D.timedOut?c.timeout:"Done at "+clockAt(c.h,c.m0,c.len-Math.max(0,D.left));
+  const bestN=D.picks.filter((k,q)=>c.asks[q].o[k].best).length;
+  $("dVerdict").textContent=`Best call on ${bestN} of ${c.asks.length}. ${c.a.label}: ${a}. ${c.b.label}: ${b}. `+c.verdict(a,b);
+  $("dDocTitle").textContent=c.docTitle;$("dDocHead").textContent=c.docHead;$("dDocSub").textContent=c.docSub;
+  $("dDoc").innerHTML="";
+  c.asks.forEach((Q,q)=>{const o=Q.o[D.picks[q]];const dt=document.createElement("dt");dt.textContent=Q.field;const dd=document.createElement("dd");dd.textContent=o.post;if(!o.best&&(o.a<0||o.b<-20))dd.className="bad";$("dDoc").append(dt,dd);});
+  $("dTake").innerHTML="";c.takeaways.forEach(([h,t])=>{const li=document.createElement("li");li.innerHTML="<b></b> ";li.firstChild.textContent=h;li.append(t);$("dTake").appendChild(li);});
+}
+$("iTimed").onclick=()=>dStart("intake",true);
+$("iRelax").onclick=()=>dStart("intake",false);
+$("oTimed").onclick=()=>dStart("offer",true);
+$("oRelax").onclick=()=>dStart("offer",false);
+$("dAgain").onclick=()=>dStart(D.key,D.timed);
+
+/* =====================================================================
+   Level 2: Screener Settings
+   ===================================================================== */
+const RULES=[
+ {id:"tools",name:"Has the 3 core tools",good:1,why:"Matches the must-haves you agreed on in the intake meeting."},
+ {id:"port",name:"Includes work samples or a portfolio",good:1,why:"For a marketing role, real work beats adjectives."},
+ {id:"answer",name:"Answered the screening question",good:1,why:"One real question filters out spray-and-pray applications fast."},
+ {id:"degree",name:"Has a 4-year degree",why:"Screens out skilled people from bootcamps and other paths."},
+ {id:"gap",name:"No employment gap over 6 months",why:"Gaps happen for caregiving, health and layoffs. They say little about skill."},
+ {id:"phrase",name:"Uses the exact phrase “content strategy”",why:"Exact-phrase rules reject people who say the same thing in different words."},
+ {id:"employed",name:"Currently employed",why:"Rejects people who were laid off. That's a lot of good people right now."},
+ {id:"recent",name:"Graduated in the last 10 years",why:"That's a stand-in for age. Rules like this can get employers into legal trouble."}
+];
+// q: 2 strong, 1 ok, 0 weak. Each value says whether they PASS that rule.
+const APPS=[
+ {n:"Maya R.",q:2,story:"Took a year off for family caregiving. Built a standout portfolio before and after.",p:{tools:1,port:1,answer:1,degree:1,gap:0,phrase:1,employed:0,recent:1}},
+ {n:"Leo T.",q:2,story:"Bootcamp grad. Calls it “content planning.” Ran campaigns for three local businesses.",p:{tools:1,port:1,answer:1,degree:0,gap:1,phrase:0,employed:1,recent:1}},
+ {n:"Ines K.",q:2,story:"Laid off in a company-wide cut last month. Excellent work samples.",p:{tools:1,port:1,answer:1,degree:1,gap:1,phrase:1,employed:0,recent:1}},
+ {n:"Ray M.",q:2,story:"Career changer with 25 years in teaching. Writes clearly and runs a popular school newsletter.",p:{tools:1,port:1,answer:1,degree:1,gap:1,phrase:1,employed:1,recent:0}},
+ {n:"Tess A.",q:2,story:"The classic résumé. Strong, and the only one the old rules were built for.",p:{tools:1,port:1,answer:1,degree:1,gap:1,phrase:1,employed:1,recent:1}},
+ {n:"Ben O.",q:1,story:"Has the tools, but sent no samples. Worth a look later.",p:{tools:1,port:0,answer:1,degree:1,gap:1,phrase:1,employed:1,recent:1}},
+ {n:"Nora S.",q:1,story:"Solid fit on paper. No samples yet.",p:{tools:1,port:0,answer:1,degree:0,gap:1,phrase:0,employed:1,recent:1}},
+ {n:"Kai W.",q:1,story:"Good answer to the question. Missing one core tool.",p:{tools:0,port:1,answer:1,degree:0,gap:1,phrase:1,employed:1,recent:1}},
+ {n:"Sasha P.",q:0,story:"Hid every keyword in white text. Left the screening question blank.",p:{tools:1,port:0,answer:0,degree:1,gap:1,phrase:1,employed:1,recent:1}},
+ {n:"Quinn D.",q:0,story:"Applied to 300 jobs today. Answered the question with “N/A.”",p:{tools:0,port:0,answer:0,degree:0,gap:1,phrase:0,employed:1,recent:1}},
+ {n:"Dev H.",q:0,story:"Great accountant. Wrong job.",p:{tools:0,port:0,answer:1,degree:1,gap:1,phrase:0,employed:1,recent:1}},
+ {n:"Jules F.",q:0,story:"AI-written application that names the wrong company twice.",p:{tools:1,port:0,answer:0,degree:1,gap:1,phrase:1,employed:1,recent:1}}
+];
+const S_LEN=15,S_TICK=3000,S_MAX=6;
+let SC=null,sStopFn=()=>{};
+function sStop(){sStopFn();sStopFn=()=>{};}
+function sPassing(){return APPS.filter(a=>RULES.every(r=>!SC.on[r.id]||a.p[r.id]));}
+function sHud(){
+  $("sClock").firstChild.nodeValue=clockAt(8,45,S_LEN-Math.max(0,SC.left));
+  $("sLeft").textContent=Math.max(0,SC.left)+" min to run"+(SC.timed?" · live":"");$("sClock").classList.toggle("late",SC.left<=4);
+  const n=sPassing().length;$("sCount").textContent=n;
+  $("sPile").className="pile "+(n>S_MAX?"over":n===0?"over":"ok");
+  $("sPileTxt").textContent=n>S_MAX?`Too many. Pat only has time for ${S_MAX}.`:n===0?"Nobody gets through.":"Fits Pat's review time.";
+}
+function sStart(timed){
+  SC={timed,left:S_LEN,on:{}};show("scr");
+  const box=$("sRules");box.innerHTML="";
+  RULES.forEach(r=>{const l=document.createElement("label");l.className="rule";l.innerHTML=`<input type="checkbox" id="rule-${r.id}"><span></span>`;
+    l.querySelector("span").textContent=r.name;l.querySelector("input").onchange=e=>{SC.on[r.id]=e.target.checked;sHud();};box.appendChild(l);});
+  sHud();sStop();
+  if(timed)sStopFn=startClock(S_TICK,()=>false,()=>{SC.left--;sHud();},()=>{if(SC.left<=0){sRun(true);return true;}return false;});
+}
+function sRun(auto){
+  sStop();show("sRes");
+  const pass=new Set(sPassing());
+  const kept=APPS.filter(a=>a.q===2&&pass.has(a)).length,lost=5-kept;
+  const junk=APPS.filter(a=>a.q===0&&pass.has(a)).length,okP=APPS.filter(a=>a.q===1&&pass.has(a)).length;
+  const over=pass.size>S_MAX;
+  const sc=clamp(kept*20-junk*15-okP*3-(over?20:0)-(pass.size===0?20:0));
+  $("sScore").textContent=sc+"%";
+  $("sEnd").textContent=(auto?"9:00 AM · The screener ran on your settings":"Screener ran at "+clockAt(8,45,S_LEN-Math.max(0,SC.left))+" AM");
+  $("sRank").textContent=sc>=90?"Machine Whisperer":sc>=65?"Careful Calibrator":sc>=40?"Filter Happy":"The Machine Won";
+  const badOn=RULES.filter(r=>!r.good&&SC.on[r.id]),goodOff=RULES.filter(r=>r.good&&!SC.on[r.id]);
+  $("sVerdict").textContent=`${pass.size} got through. You kept ${kept} of 5 great candidates`+(junk?` and let ${junk} weak application${junk>1?"s":""} slip by.`:".")+(lost?` Your rules threw out ${lost} people you'd have wanted to meet.`:" Nobody great was lost.");
+  const list=$("sList");list.innerHTML="";
+  APPS.slice().sort((x,y)=>y.q-x.q).forEach(a=>{
+    const killer=RULES.find(r=>SC.on[r.id]&&!a.p[r.id]);
+    const li=document.createElement("li");li.className="app "+(pass.has(a)?"in":"out")+(a.q===2?" star":"");
+    li.innerHTML=`<div class="top"><b></b><span class="chip ${a.q===2?"s-final":a.q===1?"s-phone":"s-app"}">${a.q===2?"Great fit":a.q===1?"Maybe":"Weak"}</span></div><p></p><div class="why"></div>`;
+    li.querySelector("b").textContent=a.n;li.querySelector("p").textContent=a.story;
+    li.querySelector(".why").textContent=pass.has(a)?"✓ Passed to Pat":"✕ Rejected by: "+(killer?killer.name:"—");
+    list.appendChild(li);});
+  const tips=$("sTips");tips.innerHTML="";
+  const add=(h,t)=>{const li=document.createElement("li");li.innerHTML="<b></b> ";li.firstChild.textContent=h;li.append(t);tips.appendChild(li);};
+  badOn.forEach(r=>add(r.name+":",r.why));
+  goodOff.forEach(r=>add("You skipped “"+r.name+".”",r.why));
+  if(!badOn.length&&!goodOff.length)add("Clean settings.","Every rule you used ties back to the job. Still, have a person spot-check the rejects now and then.");
+  add("Check who the machine throws out.","A screener never tells you about the great person it rejected. You have to go look.");
+}
+$("sRun").onclick=()=>sRun(false);
+$("sTimed").onclick=()=>sStart(true);
+$("sRelax").onclick=()=>sStart(false);
+$("sAgain").onclick=()=>sStart(SC.timed);
+
+/* =====================================================================
+   Level 4: Red Flag or Real Talent?
+   ===================================================================== */
+const SUSPECTS=[
+ {n:"Alex V.",fake:0,clues:["Camera is grainy and the audio lags a little","Lives in a rural area","Answers are specific and detailed"],truth:"Real. Slow rural internet. Bad bandwidth isn't a red flag."},
+ {n:"“Chris Morgan”",fake:1,clues:["Lips don't quite match the words","Won't turn their head when asked","Same résumé as two other applicants, same phone number"],truth:"Fake. A face-swap video plus a copied résumé. The matching phone number gave it away."},
+ {n:"Priya N.",fake:0,clues:["Career changer from nursing","Short answers at first, then opens up","Asks lots of questions about the team"],truth:"Real. Nervous at first. Career changers often bring the best questions."},
+ {n:"Sam K.",fake:0,clues:["Uses live captions and asks you to repeat a question","Online profile is brand new","Strong work samples"],truth:"Real. Hard of hearing, and new to that site. Needing captions is an accommodation, not a clue."},
+ {n:"“Taylor Brooks”",fake:1,clues:["Says they can start without any paperwork","Asks for the laptop to ship to a different address","Pauses before every answer, then reads perfectly"],truth:"Fake. Changing the shipping address and skipping paperwork are classic signs of a hiring scam."},
+ {n:"Marco D.",fake:0,clues:["Strong accent","Ten short freelance gigs in four years","References check out"],truth:"Real. A freelancer. Lots of short gigs is normal for that path."},
+ {n:"“Jamie Ellis”",fake:1,clues:["Can't name a single coworker from their “last job”","Video freezes only when asked an unscripted question","Email was created this week"],truth:"Fake. Freezing only on unscripted questions points to a scripted or AI-driven interview."},
+ {n:"Robin L.",fake:0,clues:["Seven-year gap on the résumé","Explains it in one calm sentence","Live skills exercise goes great"],truth:"Real. Raised kids, then retrained. The skills exercise proved it."}
+];
+const R_LEN=16,R_TICK=3000,R_VER=3;
+let RF=null,rStopFn=()=>{};
+function rStop(){rStopFn();rStopFn=()=>{};}
+function rHud(){
+  $("rClock").firstChild.nodeValue=clockAt(1,0,R_LEN-Math.max(0,RF.left));
+  $("rLeft").textContent=Math.max(0,RF.left)+" min left"+(RF.timed?" · live":"");$("rClock").classList.toggle("late",RF.left<=4);
+  $("rProg").textContent=`Candidate ${Math.min(RF.i+1,SUSPECTS.length)} of ${SUSPECTS.length}`;
+}
+function rStart(timed){
+  RF={timed,left:R_LEN,i:0,calls:[],paused:false};show("rf");rCard();rHud();rStop();
+  if(timed)rStopFn=startClock(R_TICK,()=>RF.paused,()=>{RF.left--;rHud();},()=>{if(RF.left<=0){rFinish(true);return true;}return false;});
+}
+function rCard(){
+  const c=SUSPECTS[RF.i];RF.paused=false;RF.verified=false;
+  $("rName").textContent=c.n;$("rClues").innerHTML="";c.clues.forEach(t=>{const li=document.createElement("li");li.textContent=t;$("rClues").appendChild(li);});
+  $("rFb").hidden=true;$("rActs").hidden=false;$("rVerify").disabled=RF.left<R_VER;$("rVerify").textContent=`Verify first · ${R_VER} min`;$("rVerTxt").hidden=true;
+}
+$("rVerify").onclick=()=>{const c=SUSPECTS[RF.i];RF.left-=R_VER;RF.verified=true;rHud();$("rVerify").disabled=true;
+  $("rVerTxt").textContent=c.fake?"ID check and a live skills test: they couldn't get through either. This one's fake.":"ID check and a live skills test: all clear. This is a real person.";$("rVerTxt").hidden=false;
+  if(RF.left<=0)rFinish(true);};
+function rCall(fake){
+  const c=SUSPECTS[RF.i];RF.paused=true;const ok=!!c.fake===fake;RF.calls.push({c,fake,ok,ver:RF.verified});
+  $("rActs").hidden=true;$("rFb").hidden=false;
+  $("rFbHead").textContent=ok?(fake?"Good catch.":"Right call."):(fake?"That was a real person.":"That was a fake.");
+  $("rFbHead").className=ok?"up":"dn";
+  $("rFbTxt").textContent=c.truth+(!ok&&fake?" Flagging them just ghosted a real candidate.":"")+(!ok&&!fake?" When unsure, verify with a process, not a hunch.":"");
+  $("rNext").textContent=RF.i<SUSPECTS.length-1?"Next candidate →":"See results →";
+}
+$("rAdv").onclick=()=>rCall(false);
+$("rFlag").onclick=()=>rCall(true);
+$("rNext").onclick=()=>{RF.i++;if(RF.i>=SUSPECTS.length)rFinish(false);else{rCard();rHud();}};
+function rFinish(timeUp){
+  rStop();show("rRes");
+  const right=RF.calls.filter(x=>x.ok).length,realFlag=RF.calls.filter(x=>!x.ok&&x.fake).length,fakeIn=RF.calls.filter(x=>!x.ok&&!x.fake).length;
+  const skipped=SUSPECTS.length-RF.calls.length;
+  const sc=clamp(right/SUSPECTS.length*100-realFlag*10-skipped*5);
+  $("rScore").textContent=sc+"%";
+  $("rEnd").textContent=timeUp?`Out of time. ${skipped} candidate${skipped===1?"":"s"} never got a decision.`:"All candidates reviewed";
+  $("rRank").textContent=sc>=90?"Fraud Spotter, Fair Judge":sc>=65?"Good Instincts":sc>=40?"Jumpy Filter":"Fooled Both Ways";
+  $("rVerdict").textContent=`${right} of ${SUSPECTS.length} right. You flagged ${realFlag} real ${realFlag===1?"person":"people"} as fake and let ${fakeIn} fake${fakeIn===1?"":"s"} through.`;
+  const list=$("rList");list.innerHTML="";
+  SUSPECTS.forEach(c=>{const call=RF.calls.find(x=>x.c===c);const li=document.createElement("li");li.className="app "+(call?(call.ok?"in":"out"):"out");
+    li.innerHTML=`<div class="top"><b></b><span class="chip ${c.fake?"s-app":"s-final"}">${c.fake?"Fake":"Real"}</span></div><p></p><div class="why"></div>`;
+    li.querySelector("b").textContent=c.n;li.querySelector("p").textContent=c.truth;
+    li.querySelector(".why").textContent=!call?"No decision":(call.ok?"✓ ":"✕ ")+(call.fake?"You flagged":"You advanced")+(call.ver?" (verified)":"");list.appendChild(li);});
+}
+$("rTimed").onclick=()=>rStart(true);
+$("rRelax").onclick=()=>rStart(false);
+$("rAgain").onclick=()=>rStart(RF.timed);
+
+show("hub");
+</script>
+
+<script>if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
+</body>
+</html>
