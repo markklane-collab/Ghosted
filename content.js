@@ -4,7 +4,8 @@
  * every time someone plays, so adding more questions adds variety.
  *
  * To update: change "week", then add, edit, or remove items below.
- * Keep at least 3 items in each list. See CONTENT-GUIDE.md for templates.
+ * Keep at least 3 items in each job seeker list. The "recruiter" lists add to
+ * Recruiter Mode and can start empty. See CONTENT-GUIDE.md for templates.
  */
 window.GAME_CONTENT = {
   "week": "Nov 2",
@@ -475,5 +476,9 @@ window.GAME_CONTENT = {
         }
       ]
     }
-  ]
+  ],
+  "recruiter": {
+    "suspects": [],
+    "offer": []
+  }
 };

@@ -360,6 +360,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 
 <div class="riley" id="riley" hidden role="status" aria-live="polite" title="Tap to dismiss"><div class="av">R</div><div><b>Riley</b><p id="rileyTxt"></p></div></div>
 
+<script src="content.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const STAGE={app:{label:"Applied",cls:"s-app",pc:3,pp:5,tp:3,gp:-4},phone:{label:"Phone screen",cls:"s-phone",pc:4,pp:8,tp:2,gp:-8},final:{label:"Final round",cls:"s-final",pc:6,pp:12,tp:-2,gp:-15}};
@@ -554,8 +555,15 @@ function dHud(){
   $("dATxt").textContent=clamp(D.a);$("dAFill").style.width=clamp(D.a)+"%";
   $("dBTxt").textContent=clamp(D.b);$("dBFill").style.width=clamp(D.b)+"%";
 }
+/* Weekly content: extra scenarios from content.js (window.GAME_CONTENT.recruiter) */
+function rShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function weekly(k){const r=window.GAME_CONTENT&&GAME_CONTENT.recruiter;return r&&Array.isArray(r[k])?r[k]:[];}
+const okAsk=Q=>Q&&typeof Q.ask==="string"&&typeof Q.field==="string"&&Array.isArray(Q.o)&&Q.o.length===4&&Q.o.filter(o=>o.best).length===1&&Q.o.every(o=>typeof o.t==="string"&&typeof o.post==="string"&&typeof o.fb==="string"&&[o.m,o.a,o.b].every(n=>typeof n==="number"));
+const okSuspect=c=>c&&typeof c.n==="string"&&Array.isArray(c.clues)&&c.clues.length===3&&typeof c.truth==="string";
 function dStart(key,timed){
-  dCfg=DIALOGS[key];const c=dCfg;
+  dCfg=DIALOGS[key];
+  if(key==="offer"){const pool=DIALOGS.offer.asks.concat(weekly("offer").filter(okAsk));if(pool.length>4)dCfg=Object.assign({},DIALOGS.offer,{asks:rShuffle(pool).slice(0,4)});}
+  const c=dCfg;
   D={key,timed,left:c.len,a:c.a.v,b:c.b.v,q:0,picks:[],paused:false,timedOut:false};
   $("dALabel").firstChild.nodeValue=c.a.label+" ";$("dBLabel").firstChild.nodeValue=c.b.label+" ";
   $("dAFill").style.background=c.a.color;$("dBFill").style.background=c.b.color;
@@ -689,7 +697,7 @@ $("sAgain").onclick=()=>sStart(SC.timed);
 /* =====================================================================
    Level 4: Red Flag or Real Talent?
    ===================================================================== */
-const SUSPECTS=[
+const SUSPECTS_BASE=[
  {n:"Alex V.",fake:0,clues:["Camera is grainy and the audio lags a little","Lives in a rural area","Answers are specific and detailed"],truth:"Real. Slow rural internet. Bad bandwidth isn't a red flag."},
  {n:"“Chris Morgan”",fake:1,clues:["Lips don't quite match the words","Won't turn their head when asked","Same résumé as two other applicants, same phone number"],truth:"Fake. A face-swap video plus a copied résumé. The matching phone number gave it away."},
  {n:"Priya N.",fake:0,clues:["Career changer from nursing","Short answers at first, then opens up","Asks lots of questions about the team"],truth:"Real. Nervous at first. Career changers often bring the best questions."},
@@ -699,6 +707,10 @@ const SUSPECTS=[
  {n:"“Jamie Ellis”",fake:1,clues:["Can't name a single coworker from their “last job”","Video freezes only when asked an unscripted question","Email was created this week"],truth:"Fake. Freezing only on unscripted questions points to a scripted or AI-driven interview."},
  {n:"Robin L.",fake:0,clues:["Seven-year gap on the résumé","Explains it in one calm sentence","Live skills exercise goes great"],truth:"Real. Raised kids, then retrained. The skills exercise proved it."}
 ];
+let SUSPECTS=SUSPECTS_BASE.slice();
+function drawSuspects(){const pool=SUSPECTS_BASE.concat(weekly("suspects").filter(okSuspect));
+  const fakes=rShuffle(pool.filter(c=>c.fake)).slice(0,3),reals=rShuffle(pool.filter(c=>!c.fake)).slice(0,5);
+  return rShuffle(fakes.concat(reals));}
 const R_LEN=16,R_TICK=3000,R_VER=3;
 let RF=null,rStopFn=()=>{};
 function rStop(){rStopFn();rStopFn=()=>{};}
@@ -708,6 +720,7 @@ function rHud(){
   $("rProg").textContent=`Candidate ${Math.min(RF.i+1,SUSPECTS.length)} of ${SUSPECTS.length}`;
 }
 function rStart(timed){
+  SUSPECTS=drawSuspects();
   RF={timed,left:R_LEN,i:0,calls:[],paused:false};show("rf");rCard();rHud();rStop();
   if(timed)rStopFn=startClock(R_TICK,()=>RF.paused,()=>{RF.left--;rHud();},()=>{if(RF.left<=0){rFinish(true);return true;}return false;});
 }

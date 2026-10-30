@@ -1,6 +1,6 @@
 # Weekly content guide
 
-All job seeker questions live in **`content.js`**. (Recruiter Mode's scenarios are built into `recruiter.html`; ask Claude to update those.) The game draws **3 at random** from each list every time someone plays, so every question you add makes replays more varied. You never need to touch `index.html` to add questions.
+All weekly questions live in **`content.js`**, for both job seeker mode and Recruiter Mode. The game draws **3 at random** from each list every time someone plays, so every question you add makes replays more varied. You never need to touch `index.html` to add questions.
 
 ## The weekly routine (about 15 minutes)
 
@@ -13,7 +13,7 @@ Or simply send the theme or episode notes to Claude and ask it to write, test, a
 
 ## Rules that keep the game working
 
-- Keep **at least 3 items** in each list (`resumes`, `interview`, `circus`).
+- Keep **at least 3 items** in each job seeker list (`resumes`, `interview`, `circus`). The Recruiter Mode lists (`recruiter.suspects`, `recruiter.offer`) add to the built-in scenarios, so they can start empty.
 - Every quiz question needs **exactly one** answer with `"best": true`.
 - Put a backslash before quotation marks inside text: `\"like this\"`.
 - Keep the commas between items. A missing comma breaks the file. The game then falls back to its built-in questions, so it keeps working, but your new ones won't show.
@@ -62,6 +62,40 @@ Or simply send the theme or episode notes to Claude and ask it to write, test, a
 ```
 
 The `right` list must use the same words as the bracketed keywords in `jd`.
+
+## Recruiter Mode templates (the `recruiter` section)
+
+Recruiter Mode has built-in scenarios, and anything you add here joins the pool. Each play of **Red Flag or Real Talent?** draws 8 candidates (always 3 fakes and 5 real people). Each play of **The Offer Call** draws 4 questions.
+
+### Red Flag or Real Talent? candidate (`recruiter.suspects`)
+
+```js
+{
+  "n": "Candidate name",
+  "fake": 0,
+  "clues": ["Clue one", "Clue two", "Clue three"],
+  "truth": "Real. Why the clues that look suspicious are actually normal."
+}
+```
+
+Use `"fake": 1` for a fake candidate. Put fake candidates' names in quotation marks, like `"“Jordan Lee”"`, to match the built-in ones. Exactly 3 clues. Real candidates should teach fairness: gaps, accents, career changes, disabilities, and bad internet are not red flags.
+
+### Offer Call question (`recruiter.offer`)
+
+```js
+{
+  "ask": "“What the candidate says.”",
+  "field": "Short topic label",
+  "o": [
+    { "t": "Weak reply", "m": 1, "a": -10, "b": 0, "post": "What ends up in the offer", "fb": "Why it falls flat." },
+    { "t": "Best reply", "m": 3, "a": 15, "b": 5, "best": 1, "post": "What ends up in the offer", "fb": "Why it works." },
+    { "t": "OK reply", "m": 2, "a": 5, "b": 2, "post": "What ends up in the offer", "fb": "What's good, and what's missing." },
+    { "t": "Risky reply", "m": 1, "a": 5, "b": -10, "post": "What ends up in the offer", "fb": "The trade-off." }
+  ]
+}
+```
+
+`m` = minutes the reply takes on the call (the call lasts 20). `a` = candidate trust. `b` = hiring manager trust. Exactly 4 replies, one with `"best": 1`.
 
 ## Voice
 
