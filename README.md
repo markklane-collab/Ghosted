@@ -90,7 +90,7 @@ Played it? We'd love to hear what made you laugh, what felt too real, and what y
 
 *Ghosted by the Machine* explores AI in hiring, candidate experience, and how to make hiring more human.
 
-**[add your podcast link here]**
+Watch on **[YouTube](https://www.youtube.com/@GhostedbytheMachine)** · More at **[ghostedbythemachine.com](https://ghostedbythemachine.com)**
 
 ---
 
