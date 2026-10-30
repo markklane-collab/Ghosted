@@ -1,9 +1,8 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
-<title>Inbox Avalanche</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style></head><body>
+<title>Ghosted Recruiter Mode</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
-</head><body>
 <style>
 /* Layout: the Ghosted arcade cabinet, recruiter side. One phone-width cabinet; the inbox scrolls inside it. Single dark look by design. */
 :root{
@@ -53,6 +52,8 @@ p{margin:0}
 .meter label b{color:var(--ink);font-variant-numeric:tabular-nums}
 .track{height:8px;border-radius:99px;background:#2a262b;overflow:hidden}
 .fill{height:100%;border-radius:99px;transition:width .35s ease}
+.clock.late{color:var(--red)}
+.mode{font-family:var(--f-head);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
 #humanFill{background:var(--good)} #hmFill{background:var(--glow)}
 
 /* Tools + event */
@@ -104,14 +105,94 @@ th{font-family:var(--f-head);font-weight:700;letter-spacing:.08em;text-transform
 td.n{text-align:right;font-variant-numeric:tabular-nums}
 .lessons{display:grid;gap:8px;margin:0;padding:0;list-style:none}
 .lessons li{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14.5px}
+.levels{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.lvl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:8px}
+.lvl.soon{opacity:.6;border-style:dashed}
+.lvl .lt{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lvl h2{font-family:var(--f-head);font-weight:800;font-size:20px;letter-spacing:.03em;text-transform:uppercase;margin:0}
+.lvl .num{font-family:var(--f-display);color:var(--glow);font-size:14px}
+.lvl p{color:var(--mute);font-size:14px}
+.lvl .row{display:flex;gap:8px;flex-wrap:wrap}
+.lvl .row button{flex:1 1 130px;border-radius:10px;padding:10px;font-family:var(--f-head);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:14px;border:1px solid var(--line);background:#2a262b}
+.lvl .row .go{background:var(--red);border-color:var(--red);color:#fff}
+.back{align-self:flex-start;background:none;border:0;padding:0;font-family:var(--f-head);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:13px;color:var(--mute)}
+.mgr{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.mgr .face{width:44px;height:44px;border-radius:50%;background:var(--glow);display:grid;place-items:center;font-family:var(--f-display);color:#fff;font-size:18px}
+.bubble{background:var(--panel);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 14px;font-size:17px;font-weight:600;line-height:1.35}
+.who2{font-family:var(--f-head);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:#2a262b;border:1px solid var(--line);border-radius:12px;padding:11px 12px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:15px}
+.opt .cost{font-family:var(--f-head);font-weight:800;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--warm);white-space:nowrap}
+.opt:disabled{opacity:.5}
+.opt.pick{border-color:var(--good);opacity:1}.opt.pick.bad{border-color:#ff8a8f}
+.fbk{background:#fffaf0;color:#1d1a1e;border-radius:14px;padding:12px 14px;display:grid;gap:8px}
+.fbk b{font-family:var(--f-head);letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.fbk .delta{font-family:var(--f-head);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;display:flex;gap:12px;flex-wrap:wrap}
+.up{color:#14833f}.dn{color:#c0141b}
+.posting{background:#f7f5f0;color:#1d1a1e;border-radius:12px;padding:16px;display:grid;gap:8px;font-size:14.5px}
+.posting h3{margin:0;font-family:var(--f-head);font-weight:800;font-size:22px;letter-spacing:.02em}
+.posting .co{color:#6b646b;font-size:13px;margin-top:-4px}
+.posting dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px}
+.posting dt{font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:#6b646b;padding-top:2px}
+.posting dd{margin:0;min-width:0}
+.posting dd.bad{color:#c0141b}
+.progress{font-family:var(--f-head);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:12px;color:var(--mute)}
 .foot{text-align:center;font-family:var(--f-head);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--mute)}
 </style>
 
 <div class="cab">
   <div class="bar"><span>Ghosted by the <b>Machine</b></span><span class="tag">Recruiter Mode</span></div>
 
+  <!-- Hub -->
+  <section class="screen" id="hub">
+    <div class="eyebrow">Recruiter Mode</div>
+    <h1>You're the <span>recruiter</span> now.</h1>
+    <p class="lede">Same machine, other side of the desk. Fill the role without ghosting anyone, and keep your hiring manager on board.</p>
+    <ul class="levels">
+      <li class="lvl"><div class="lt"><h2>The Intake Meeting</h2><span class="num">01</span></div><p>The hiring manager wants a unicorn. You have 30 minutes to turn their wish list into a job real people can apply for.</p><div class="row"><button class="go" type="button" id="iTimed">Play timed</button><button type="button" id="iRelax">No timer</button></div></li>
+      <li class="lvl soon"><div class="lt"><h2>Screener Settings</h2><span class="num">02</span></div><p>Set the AI screener's knockout rules. Then see who it threw out. Coming soon.</p></li>
+      <li class="lvl"><div class="lt"><h2>The Inbox Avalanche</h2><span class="num">03</span></div><p>Friday, 4:00 PM. 18 candidates are waiting. Anyone you don't answer by 5:00 gets ghosted. Personal notes take 3–6 minutes, templates take 1.</p><div class="row"><button class="go" type="button" id="aTimed">Play timed</button><button type="button" id="aRelax">No timer</button></div></li>
+      <li class="lvl soon"><div class="lt"><h2>Red Flag or Real Talent?</h2><span class="num">04</span></div><p>Spot fake candidates without rejecting real people with unusual paths. Coming soon.</p></li>
+      <li class="lvl soon"><div class="lt"><h2>The Offer Call</h2><span class="num">05</span></div><p>A competing offer, a pay question, and "how did the AI score me?" Coming soon.</p></li>
+    </ul>
+    <p class="foot">Let's make hiring human again</p>
+  </section>
+
+  <!-- Intake meeting -->
+  <div id="intake" hidden>
+    <div class="hud">
+      <div class="clock" id="iClock">4:00<small id="iLeft">30 min left</small></div>
+      <div class="meter"><label>Real Role <b id="iRealTxt">40</b></label><div class="track"><div class="fill" id="iRealFill" style="width:40%;background:var(--good)"></div></div></div>
+      <div class="meter"><label>Mgr Trust <b id="iTrustTxt">50</b></label><div class="track"><div class="fill" id="iTrustFill" style="width:50%;background:var(--glow)"></div></div></div>
+    </div>
+    <section class="screen">
+      <button class="back" type="button" id="iQuit">← All levels</button>
+      <div class="progress" id="iProg">Ask 1 of 5 · Marketing Coordinator</div>
+      <div class="mgr"><div class="face">P</div><div><div class="who2">Pat · Hiring Manager</div><div class="bubble" id="iAsk"></div></div></div>
+      <div class="opts" id="iOpts"></div>
+      <div class="fbk" id="iFb" hidden><b>Riley</b><p id="iFbTxt"></p><div class="delta" id="iDelta"></div><button class="btn" id="iNext" type="button" style="font-size:16px;padding:12px">Next ask →</button></div>
+    </section>
+  </div>
+
+  <!-- Intake results -->
+  <section class="screen" id="iResults" hidden>
+    <div class="eyebrow" id="iEnd">Meeting over</div>
+    <div style="display:flex;align-items:end;gap:14px;flex-wrap:wrap"><div class="score" id="iScore">0%</div><div><div class="eyebrow" style="color:var(--good)">Intake Score</div><h1 id="iRank" style="font-size:26px">—</h1></div></div>
+    <p class="lede" id="iVerdict"></p>
+    <div class="eyebrow">The job posting your meeting produced</div>
+    <div class="posting"><h3>Marketing Coordinator</h3><div class="co">Lanternfish Labs · Hybrid</div><dl id="iPost"></dl></div>
+    <div class="eyebrow">Riley's takeaways</div>
+    <ul class="lessons">
+      <li><b>Push back in the room, with data.</b> The intake meeting is the cheapest place to fix a bad job.</li>
+      <li><b>Every vague line becomes a ghosted candidate later.</b> Clear must-haves, real pay and a real timeline protect the people who apply.</li>
+      <li><b>Define "fit" before you screen for it.</b> Write down the behaviors, then score everyone the same way.</li>
+    </ul>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="iAgain" type="button" style="flex:1 1 160px">Play again</button><button class="ghostbtn" id="iHub" type="button" style="flex:1 1 160px">All levels</button></div>
+  </section>
+
   <!-- Intro -->
-  <section class="screen" id="intro">
+  <section class="screen" id="intro" hidden>
+    <button class="back" type="button" id="introBack">← All levels</button>
     <div class="eyebrow">Level 3 · The Inbox Avalanche</div>
     <h1>You're the <span>recruiter</span> now.</h1>
     <p class="lede">It's Friday, 4:00 PM. You have one hour before the weekend. 18 candidates are waiting to hear from you. Anyone you don't answer by 5:00 gets ghosted.</p>
@@ -119,9 +200,11 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
       <li><span class="chip s-pers" style="background:rgba(60,207,122,.14);color:#9ff0c2;border:1px solid rgba(60,207,122,.5)">Personal</span><span>A real note. Takes 3–6 minutes. Means the most to people who've met the team.</span></li>
       <li><span class="chip s-app">Template</span><span>A kind, clear form reply. Takes 1 minute.</span></li>
       <li><span class="chip s-final">Watch</span><span>The hiring manager will want something from you too.</span></li>
+      <li><span class="chip" style="background:rgba(227,19,27,.16);color:#ff8a8f;border:1px solid rgba(227,19,27,.5)">Clock</span><span>In timed mode the clock keeps moving while you read. Every 3 seconds is a minute of your Friday.</span></li>
     </ul>
     <p class="lede" style="font-size:15px">Two meters: <b style="color:var(--good)">Human Score</b> (how candidates feel) and <b style="color:#aab8ff">Hiring Manager</b> (how your boss feels). You can't max both by accident.</p>
-    <button class="btn" id="startBtn" type="button">Open the inbox →</button>
+    <button class="btn" id="startBtn" type="button">Play timed →</button>
+    <button class="ghostbtn" id="relaxBtn" type="button">Play without the timer</button>
     <p class="foot">Let's make hiring human again</p>
   </section>
 
@@ -134,16 +217,16 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
     </div>
     <section class="screen">
       <div class="tools" id="tools">
-        <button class="tool" id="bulkBtn" type="button"><strong>Bulk update</strong><span>Template to every "Applied" candidate · 5 min</span></button>
+        <button class="tool" id="bulkBtn" type="button"><strong>Bulk update</strong><span>Template to every "Applied" candidate · 3 min</span></button>
         <button class="tool trap" id="autoBtn" type="button"><strong>Auto-close</strong><span>Close stale applications. No message sent · 0 min</span></button>
       </div>
       <div class="event" id="event" hidden>
         <p><b>Hiring manager:</b> "Can you send me the shortlist before you log off? I want to read it this weekend."</p>
-        <div class="row"><button class="pri" id="slSend" type="button">Send shortlist · 8 min</button><button id="slDefer" type="button">"Monday at 10?" · 1 min</button></div>
+        <div class="row"><button class="pri" id="slSend" type="button">Send shortlist · 6 min</button><button id="slDefer" type="button">"Monday at 10?" · 1 min</button></div>
       </div>
       <div class="inboxHead"><span>Inbox</span><span id="waiting">18 waiting</span></div>
       <div class="inbox" id="inbox"></div>
-      <div class="wrap"><button class="ghostbtn" id="endBtn" type="button">Log off for the weekend</button></div>
+      <div class="wrap" style="gap:8px;flex-wrap:wrap"><button class="ghostbtn" id="endBtn" type="button">Log off for the weekend</button><button class="ghostbtn" id="gameHub" type="button">Quit to levels</button></div>
     </section>
   </div>
 
@@ -168,7 +251,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
       <li><b>Automate the early stage, not the hard conversations.</b> Use bulk tools to buy time for the people who've met the team.</li>
       <li><b>Closing without a message is still ghosting.</b> If a tool offers to "clean up" your pipeline, check whether anyone hears back.</li>
     </ul>
-    <button class="btn" id="againBtn" type="button">Play again</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="againBtn" type="button" style="flex:1 1 160px">Play again</button><button class="ghostbtn" id="resHub" type="button" style="flex:1 1 160px">All levels</button></div>
     <p class="foot">Recruiter Mode prototype · Ghosted by the Machine</p>
   </section>
 </div>
@@ -200,19 +283,19 @@ const PEOPLE=[
  ["Skyler D.","app","Wanted to share my updated portfolio.",2]
 ];
 let S;
-function fresh(){return{left:60,human:0,hm:50,shortlist:null,eventShown:false,said:{},c:PEOPLE.map((p,i)=>({id:i,name:p[0],st:p[1],msg:p[2],days:p[3],res:null}))};}
+function fresh(timed){return{timed:!!timed,left:60,human:0,hm:50,shortlist:null,eventShown:false,said:{},c:PEOPLE.map((p,i)=>({id:i,name:p[0],st:p[1],msg:p[2],days:p[3],res:null}))};}
 function clockTxt(){const m=60-S.left;return "4:"+String(m).padStart(2,"0");}
 function pct(){return Math.max(0,Math.min(100,Math.round(S.human/BEST*100)));}
 function hud(){
   $("clock").firstChild.nodeValue=S.left<=0?"5:00":clockTxt();
-  $("left").textContent=Math.max(0,S.left)+" min left";
+  $("left").textContent=Math.max(0,S.left)+" min left"+(S.timed?" · live":"");$("clock").classList.toggle("late",S.left<=10);
   $("humanTxt").textContent=pct()+"%";$("humanFill").style.width=pct()+"%";
   $("hmFill").style.width=S.hm+"%";$("hmTxt").textContent=S.hm>=85?"Happy":S.hm>=50?"OK":"Annoyed";
   const w=S.c.filter(c=>!c.res).length;$("waiting").textContent=w+" waiting";
   const apps=S.c.filter(c=>!c.res&&c.st==="app").length;
-  $("bulkBtn").disabled=!apps||S.left<5;$("autoBtn").disabled=!apps;
+  $("bulkBtn").disabled=!apps||S.left<3;$("autoBtn").disabled=!apps;
   if(!S.eventShown&&S.left<=44){S.eventShown=true;$("event").hidden=false;}
-  if(S.shortlist===null&&S.eventShown){$("slSend").disabled=S.left<8;$("slDefer").disabled=S.left<1;}
+  if(S.shortlist===null&&S.eventShown){$("slSend").disabled=S.left<6;$("slDefer").disabled=S.left<1;}
 }
 let rileyT;$("riley").onclick=()=>{$("riley").hidden=true;};
 function riley(key,txt){if(key&&S.said[key])return;if(key)S.said[key]=1;$("rileyTxt").textContent=txt;$("riley").hidden=false;clearTimeout(rileyT);rileyT=setTimeout(()=>$("riley").hidden=true,5200);}
@@ -241,12 +324,13 @@ function reply(c,kind){
   check();
 }
 function check(){render();if(S.left<=0)finish();}
-$("bulkBtn").onclick=()=>{let n=0;S.c.forEach(c=>{if(!c.res&&c.st==="app"){c.res="temp";S.human+=STAGE.app.tp;n++;}});spend(5);riley("bulk","Smart. "+n+" people just got a clear answer in 5 minutes. Automate the early stage so you have time for the people who interviewed.");check();};
+$("bulkBtn").onclick=()=>{let n=0;S.c.forEach(c=>{if(!c.res&&c.st==="app"){c.res="temp";S.human+=STAGE.app.tp;n++;}});spend(3);riley("bulk","Smart. "+n+" people just got a clear answer in 3 minutes. Automate the early stage so you have time for the people who interviewed.");check();};
 $("autoBtn").onclick=()=>{let n=0;S.c.forEach(c=>{if(!c.res&&c.st==="app"){c.res="ghost";S.human+=STAGE.app.gp;n++;}});riley(null,"That “saved time” just ghosted "+n+" people. Closing an application with no message is still ghosting. Check what a tool sends before you click.");check();};
-$("slSend").onclick=()=>{spend(8);S.shortlist="sent";S.hm=100;$("event").hidden=true;riley("sl","Hiring manager's happy. Keeping them in the loop buys you room to push back later.");check();};
+$("slSend").onclick=()=>{spend(6);S.shortlist="sent";S.hm=100;$("event").hidden=true;riley("sl","Hiring manager's happy. Keeping them in the loop buys you room to push back later.");check();};
 $("slDefer").onclick=()=>{spend(1);S.shortlist="defer";S.hm=70;$("event").hidden=true;riley("sd","Fair. A clear time beats going quiet. Just make sure Monday at 10 actually happens.");check();};
 $("endBtn").onclick=()=>finish();
 function finish(){
+  stopTick();if(!$("results").hidden)return;
   S.left=Math.max(0,S.left);
   S.c.forEach(c=>{if(!c.res){c.res="ghost";S.human+=STAGE[c.st].gp;}});
   if(S.shortlist===null)S.hm=25;
@@ -264,10 +348,109 @@ function finish(){
   $("hmLine").innerHTML="<b>Hiring manager:</b> "+(S.shortlist==="sent"?"Got the shortlist. Happy weekend.":S.shortlist==="defer"?"Monday at 10 works. Expects it on time.":"Never heard back about the shortlist. You'll hear about it Monday.");
   window.scrollTo(0,0);
 }
-function start(saved){S=saved&&saved.c?saved:fresh();$("intro").hidden=!!(saved&&saved.c);$("game").hidden=!(saved&&saved.c);$("results").hidden=true;render();}
-$("startBtn").onclick=()=>{S=fresh();$("intro").hidden=true;$("game").hidden=false;render();riley(null,"Hey, it's Riley. Same rule as always: silence is the worst answer. Start with whoever has waited longest after meeting the team.");};
-$("againBtn").onclick=()=>{S=fresh();$("results").hidden=true;$("game").hidden=false;render();window.scrollTo(0,0);};
-window.claude?.hot?.snapshot?.(()=>($("game").hidden?{}:S));
-window.claude?.hot?.ready?window.claude.hot.ready(d=>start(d)):start(window.claude?.hot?.data??{});
+let tick=null;
+function stopTick(){clearInterval(tick);tick=null;}
+function startTick(){stopTick();if(!S.timed)return;tick=setInterval(()=>{if(document.hidden)return;S.left-=1;if(S.left<=0){render();finish();}else hud();},3000);}
+function begin(timed){S=fresh(timed);$("intro").hidden=true;$("results").hidden=true;$("game").hidden=false;render();startTick();window.scrollTo(0,0);
+  riley(null,timed?"Hey, it's Riley. The clock's running, so don't overthink it. Silence is the worst answer. Start with whoever has waited longest after meeting the team.":"Hey, it's Riley. Same rule as always: silence is the worst answer. Start with whoever has waited longest after meeting the team.");}
+function start(saved){const live=saved&&saved.c;S=live?saved:fresh(true);$("intro").hidden=!!live;$("game").hidden=!live;$("results").hidden=true;render();if(live)startTick();}
+$("startBtn").onclick=()=>begin(true);
+$("relaxBtn").onclick=()=>begin(false);
+$("againBtn").onclick=()=>begin(S.timed);
+/* ---------- navigation ---------- */
+const SCREENS=["hub","intake","iResults","intro","game","results"];
+function show(id){SCREENS.forEach(x=>$(x).hidden=x!==id);$("riley").hidden=true;window.scrollTo(0,0);}
+function toHub(){stopTick();iStop();show("hub");}
+$("aTimed").onclick=()=>begin(true);
+$("aRelax").onclick=()=>begin(false);
+$("startBtn").onclick=()=>begin(true);
+$("relaxBtn").onclick=()=>begin(false);
+$("againBtn").onclick=()=>begin(S.timed);
+["introBack","resHub","gameHub","iHub","iQuit"].forEach(id=>$(id).onclick=toHub);
+const _begin=begin;begin=function(t){show("game");_begin(t);};
+
+/* ---------- Level 1: The Intake Meeting ---------- */
+const INTAKE=[
+{ask:"“It's an entry-level role. But I want at least 5 years of experience.”",field:"Experience",o:[
+ {t:"“Sure, I'll post it like that.”",m:1,r:-15,tr:5,post:"Entry-level. 5+ years required.",fb:"Now the posting contradicts itself. Strong junior people won't apply, and experienced people won't take junior pay."},
+ {t:"“Those don't fit together. Is this junior or mid-level? I can show you what each one pays.”",m:4,r:20,tr:8,best:1,post:"0–2 years of experience. We'll train you.",fb:"You turned a wish into a decision, with data. That's the whole job of an intake meeting."},
+ {t:"“Let's call it mid-level, 3–5 years, with mid-level pay.”",m:3,r:12,tr:4,post:"3–5 years of experience (mid-level).",fb:"An honest fix. Just make sure the budget moves up with the title."},
+ {t:"Nod, then quietly change it after the meeting.",m:0,r:10,tr:-15,post:"0–2 years of experience.",fb:"The posting is better, but the manager will notice. Push back in the room, not behind their back."}]},
+{ask:"“They need to know all 12 tools on this list. Day one.”",field:"Skills",o:[
+ {t:"Post all 12 as requirements.",m:1,r:-15,tr:4,post:"Required: all 12 tools on the list.",fb:"A long must-have list scares off good people who match most of it. The screener will reject them too."},
+ {t:"“Which 3 do they need on day one? The rest can be nice-to-have or learned on the job.”",m:3,r:18,tr:6,best:1,post:"Must have: 3 core tools. Nice to have: the rest. We'll teach you.",fb:"A short must-have list and honest nice-to-haves. More qualified people apply, and the screener has fewer reasons to throw them out."},
+ {t:"“Let's drop the tool list. We'll train on everything.”",m:2,r:4,tr:-6,post:"No specific tools required.",fb:"Generous, but the manager does need some skills on day one. Overcorrecting costs you their trust."},
+ {t:"Ask an AI tool to write the requirements.",m:1,r:-10,tr:0,post:"Required: synergy-driven self-starter, plus 14 tools.",fb:"It added two more tools and the word “synergy.” Use AI for a first draft, then cut it to what the job needs."}]},
+{ask:"“Let's not post the salary. We'll see what people ask for.”",field:"Pay",o:[
+ {t:"“Sounds good.”",m:1,r:-15,tr:4,post:"Competitive.",fb:"“Competitive” tells candidates nothing. In one 2026 survey, about 6 in 10 job seekers said they wouldn't apply to a posting with no salary info."},
+ {t:"“Let's post a real range. It saves everyone time, and some places require it anyway.”",m:3,r:18,tr:6,best:1,post:"$52,000–$60,000.",fb:"A real range brings in people who can say yes, and cuts awkward surprises at the offer stage."},
+ {t:"Post a huge range: $35,000 to $120,000.",m:1,r:-5,tr:2,post:"$35,000–$120,000.",fb:"Technically a range. Candidates can tell when a range is too wide to mean anything."},
+ {t:"“Let's pay whatever the algorithm says is market.”",m:2,r:0,tr:-2,post:"To be decided by an algorithm.",fb:"Market data helps. You still need to agree on a budget and post it."}]},
+{ask:"“I need this filled in two weeks. Also, I'm out next week.”",field:"Process",o:[
+ {t:"“No problem.”",m:1,r:-10,tr:4,post:"Fast. Somehow.",fb:"Saying yes to an impossible timeline is how candidates get ghosted. Nobody is around to interview them."},
+ {t:"“Let's block interview times on your calendar now, and agree on when candidates hear back.”",m:3,r:15,tr:10,best:1,post:"2 interviews over 3 weeks. You'll hear back within 5 business days of each step.",fb:"Booking calendars now is the best anti-ghosting tool you have. And you can promise candidates a real timeline."},
+ {t:"Tell candidates to be available “anytime.”",m:1,r:-10,tr:2,post:"Be available anytime.",fb:"Candidates have jobs and lives. “Anytime” reads as “we're disorganized.”"},
+ {t:"Quietly plan for six weeks instead.",m:0,r:5,tr:-8,post:"6 weeks (the manager thinks 2).",fb:"Realistic, but the manager still expects two weeks. Say the real timeline out loud."}]},
+{ask:"“Most of all, I want a culture fit. Someone like us.”",field:"Fit",o:[
+ {t:"“Got it. I'll screen for good vibes.”",m:1,r:-15,tr:4,post:"Must be a culture fit. (Vibes to be determined.)",fb:"“Vibes” usually means “like me.” That's how great people get screened out for no clear reason."},
+ {t:"“Let's write down what that means: 3 behaviors that matter in this job. Then we score everyone on the same ones.”",m:4,r:20,tr:8,best:1,post:"You'll do well here if you share work early, ask for help, and follow through.",fb:"Now “fit” is something you can see in an interview and score fairly. Candidates can see it in the posting too."},
+ {t:"“Should we just clone you?”",m:1,r:0,tr:-4,post:"Must be exactly like the hiring manager.",fb:"Funny, and a little too real. Turn it into a real talk about what the team is missing."},
+ {t:"“Let's drop fit from the process entirely.”",m:2,r:5,tr:-6,post:"Not discussed.",fb:"Teams do need to work together. The fix is defining fit clearly, not ignoring it."}]}
+];
+const I_LEN=30, I_TICK=4000;
+let I=null,iTick=null;
+const clamp=v=>Math.max(0,Math.min(100,v));
+function iStop(){clearInterval(iTick);iTick=null;}
+function iRun(){iStop();if(!I.timed)return;iTick=setInterval(()=>{if(document.hidden||I.paused)return;I.left-=1;iHud();if(I.left<=0)iTimeout();},I_TICK);}
+function iHud(){
+  const m=I_LEN-Math.max(0,I.left);$("iClock").firstChild.nodeValue="4:"+String(m).padStart(2,"0");
+  $("iLeft").textContent=Math.max(0,I.left)+" min left"+(I.timed?" · live":"");$("iClock").classList.toggle("late",I.left<=6);
+  $("iRealTxt").textContent=clamp(I.real);$("iRealFill").style.width=clamp(I.real)+"%";
+  $("iTrustTxt").textContent=clamp(I.trust);$("iTrustFill").style.width=clamp(I.trust)+"%";
+}
+function iStart(timed){I={timed,left:I_LEN,real:40,trust:50,q:0,picks:[],paused:false,timedOut:false};show("intake");iShow();iHud();iRun();}
+function iShow(){
+  const Q=INTAKE[I.q];I.paused=false;
+  $("iProg").textContent=`Ask ${I.q+1} of ${INTAKE.length} · Marketing Coordinator`;
+  $("iAsk").textContent=Q.ask;$("iFb").hidden=true;
+  const box=$("iOpts");box.innerHTML="";
+  Q.o.forEach((o,k)=>{const b=document.createElement("button");b.type="button";b.className="opt";
+    b.innerHTML=`<span></span><span class="cost">${o.m?o.m+" min":"0 min"}</span>`;b.firstChild.textContent=o.t;
+    b.disabled=o.m>I.left;b.onclick=()=>iPick(k,b);box.appendChild(b);});
+}
+function iPick(k,btn){
+  const o=INTAKE[I.q].o[k];I.paused=true;
+  I.left-=o.m;I.real+=o.r;I.trust+=o.tr;I.picks[I.q]=k;
+  [...$("iOpts").children].forEach(b=>b.disabled=true);btn.classList.add("pick");if(!o.best)btn.classList.add("bad");
+  const d=(n,l)=>`<span class="${n>=0?"up":"dn"}">${l} ${n>=0?"+":""}${n}</span>`;
+  $("iFbTxt").textContent=(o.best?"Best move. ":"")+o.fb;
+  $("iDelta").innerHTML=d(o.r,"Real role")+d(o.tr,"Trust")+`<span>−${o.m} min</span>`;
+  $("iNext").textContent=I.q<INTAKE.length-1?"Next ask →":"Wrap up the meeting →";
+  $("iFb").hidden=false;iHud();$("iFb").scrollIntoView({behavior:"smooth",block:"nearest"});
+  if(I.left<=0&&I.q<INTAKE.length-1){I.timedOut=true;$("iNext").textContent="Out of time →";}
+}
+$("iNext").onclick=()=>{if(I.timedOut){iTimeout();return;}I.q++;if(I.q>=INTAKE.length)iFinish();else iShow();};
+function iTimeout(){
+  iStop();I.timedOut=true;
+  for(let q=0;q<INTAKE.length;q++)if(I.picks[q]===undefined){const o=INTAKE[q].o[0];I.real+=o.r;I.trust+=o.tr;I.picks[q]=0;}
+  iFinish();
+}
+function iFinish(){
+  iStop();show("iResults");
+  const real=clamp(I.real),trust=clamp(I.trust),sc=Math.round((real+trust)/2);
+  $("iScore").textContent=sc+"%";
+  $("iEnd").textContent=I.timedOut?"4:30 PM · Out of time. Pat posted the rest as-is.":"Meeting over at 4:"+String(I_LEN-Math.max(0,I.left)).padStart(2,"0")+" PM";
+  const bestN=I.picks.filter((k,q)=>INTAKE[q].o[k].best).length;
+  $("iRank").textContent=sc>=85?"Unicorn Tamer":sc>=65?"Trusted Partner":sc>=45?"Order Taker":"Posting Roulette";
+  $("iVerdict").textContent=`You made the best call on ${bestN} of 5 asks. Real role: ${real}. Manager trust: ${trust}. `+
+    (real<50?"Candidates will read this posting and wonder if the job is real.":trust<50?"The posting is solid, but Pat feels steamrolled. Next time, bring the data into the room.":"Pat feels heard, and the posting describes a job real people can do.");
+  $("iPost").innerHTML="";
+  INTAKE.forEach((Q,q)=>{const o=Q.o[I.picks[q]];const dt=document.createElement("dt");dt.textContent=Q.field;const dd=document.createElement("dd");dd.textContent=o.post;if(o.r<0)dd.className="bad";$("iPost").append(dt,dd);});
+}
+$("iTimed").onclick=()=>iStart(true);
+$("iRelax").onclick=()=>iStart(false);
+$("iAgain").onclick=()=>iStart(I.timed);
+
+show("hub");
 </script>
 </body></html>
