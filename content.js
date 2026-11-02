@@ -104,6 +104,25 @@ window.GAME_CONTENT = {
         "Good vibes only"
       ],
       "tip": "\"People person\" matters, but it doesn't match anything. Translate it into the posting's language, like \"client onboarding,\" and add a result: \"onboarded 40 clients in one quarter.\""
+    },
+    {
+      "title": "People Operations Coordinator",
+      "co": "Fernhill Foods · Hybrid",
+      "jd": "You'll handle [new hire onboarding], [benefits enrollment], [HRIS data entry], and [compliance reporting] for a 300-person team. You'll also write our [employee communications].",
+      "right": [
+        "New hire onboarding",
+        "Benefits enrollment",
+        "HRIS data entry",
+        "Compliance reporting",
+        "Employee communications"
+      ],
+      "wrong": [
+        "Motivated",
+        "Hardworking",
+        "Follows directions",
+        "Owns a laptop"
+      ],
+      "tip": "A posting this specific is a gift, because it tells you what the job actually is. \"Motivated\" tells me nothing. \"Ran benefits enrollment for 300 people\" tells me you can do the work."
     }
   ],
   "interview": [
@@ -317,6 +336,36 @@ window.GAME_CONTENT = {
           "fb": "The AI paused for 11 seconds. Points for courage."
         }
       ]
+    },
+    {
+      "q": "Before we begin, please hold your ID up to the camera and slowly turn your head.",
+      "o": [
+        {
+          "t": "Hold up your passport right away and ask if they need your bank details too.",
+          "hp": -15,
+          "c": -4,
+          "fb": "Helpful to a fault. Find out who's asking and where your ID goes before you share it."
+        },
+        {
+          "t": "Happily verify, but first ask who sees your ID, how long it's kept, and whether there's a secure company portal for it.",
+          "hp": 60,
+          "c": 8,
+          "best": true,
+          "fb": "With fake applicants around, some employers check IDs earlier, so the request may be real. A real process can answer these questions. Check any portal link against the company's own website."
+        },
+        {
+          "t": "Turn your head, but say you'd rather show ID once there's an offer.",
+          "hp": 20,
+          "c": 3,
+          "fb": "A fair boundary, but some employers now check early. Ask how their process works before you decide."
+        },
+        {
+          "t": "\"You first, Interviewer.exe. Turn your head.\"",
+          "hp": 10,
+          "c": 2,
+          "fb": "It buffered for a while. Good instinct, though. You're allowed to check that they're real too."
+        }
+      ]
     }
   ],
   "circus": [
@@ -475,10 +524,87 @@ window.GAME_CONTENT = {
           "fb": "Spooky. Very on-brand for this podcast."
         }
       ]
+    },
+    {
+      "q": "A \"recruiter\" texts you out of nowhere: remote \"online assessor,\" great daily pay, reply YES. Then a check arrives, and they ask you to send part of it back for equipment. What's your move?",
+      "o": [
+        {
+          "t": "Deposit it, wait until it looks like it cleared, then send the money",
+          "hp": -15,
+          "fb": "This is the trap. Sending money back is how the scam gets paid, and you could be the one left short."
+        },
+        {
+          "t": "Reply \"INTERESTED\" and see what happens next",
+          "hp": -10,
+          "fb": "Curiosity is human. It also tells them your number works and you're listening."
+        },
+        {
+          "t": "Stop, send nothing, and look up the company yourself. In the US, report it at ReportFraud.ftc.gov.",
+          "hp": 50,
+          "best": true,
+          "fb": "The FTC calls paying to get a job or to get paid a sure sign of a scam. Real employers don't need your money to hire you."
+        },
+        {
+          "t": "Ask if they could send a smaller check",
+          "hp": 5,
+          "fb": "Great negotiating instinct. Wrong negotiation. The size of the check was never the problem."
+        }
+      ]
     }
   ],
   "recruiter": {
-    "suspects": [],
-    "offer": []
+    "suspects": [
+      {
+        "n": "Dana W.",
+        "fake": 0,
+        "clues": [
+          "Automated ID check failed twice",
+          "Name on the résumé doesn't match the ID",
+          "Past employers confirm the work under both names"
+        ],
+        "truth": "Real. Changed their name, and the ID hasn't caught up. A failed scan is a reason for a person to take a look, not a reason to reject."
+      }
+    ],
+    "offer": [
+      {
+        "ask": "“I'm thrilled. But the last company went silent after a verbal offer. Can I get this in writing?”",
+        "field": "Written offer",
+        "o": [
+          {
+            "t": "“Let's get your verbal yes first. The paperwork comes later.”",
+            "m": 1,
+            "a": -15,
+            "b": 0,
+            "post": "Asked for a yes before any paperwork.",
+            "fb": "They just told you what scares them, and you asked them to do it again. Give the paper before you ask for the commitment."
+          },
+          {
+            "t": "“Completely fair. I'll confirm the approvals today and send it by noon tomorrow. If anything slips, I'll call you myself.”",
+            "m": 3,
+            "a": 16,
+            "b": 0,
+            "best": 1,
+            "post": "Promised the written offer by noon tomorrow, with a call if it slips.",
+            "fb": "A date, an owner, and a plan if it slips. That's how you earn trust that someone else's silence broke. Then keep the promise."
+          },
+          {
+            "t": "“It should come through this week. I'll keep chasing it.”",
+            "m": 2,
+            "a": 3,
+            "b": 0,
+            "post": "Said the offer should come “this week.”",
+            "fb": "Friendly and honest, but “should” and “this week” are what silence sounds like at the start. Give a real date."
+          },
+          {
+            "t": "“I'll email you the numbers right now, before approvals finish.”",
+            "m": 1,
+            "a": 8,
+            "b": -20,
+            "post": "Emailed numbers that aren't approved yet.",
+            "fb": "Fast and kind, until a number changes. Then you've created the exact broken promise they feared. Get approval, then send."
+          }
+        ]
+      }
+    ]
   }
 };
