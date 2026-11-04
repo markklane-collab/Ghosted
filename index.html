@@ -72,6 +72,14 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
 .hook{font-family:var(--f-head);font-weight:700;font-size:22px;margin:8px 0 0;text-wrap:balance}
 .sub{color:var(--mute);margin:0;max-width:34ch}
 .pack{margin:0;display:inline-block;background:var(--warm);color:#2a2008;border-radius:999px;padding:4px 12px;font-family:var(--f-head);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px}
+.joinCard{display:grid;gap:10px;border:2px solid var(--warm);background:#1d1910;border-radius:14px;padding:14px 16px}
+.joinCard h4{margin:0;font-family:var(--f-head);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;color:var(--warm)}
+.joinCard p{margin:2px 0 0;color:#efe6cf;font-size:14.5px}
+.btn.joinBtn{background:var(--warm);color:#2a2008;box-shadow:0 4px 0 #a8811f;text-decoration:none;font-size:18px}
+.joinCard small{color:#c9b98a;font-size:12.5px;text-align:center}
+.joinCard small a{color:#efe6cf}
+.joinLink{display:block;text-align:center;color:var(--warm);font-family:var(--f-head);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:14px;text-decoration:none;padding:6px}
+.joinLink:hover{text-decoration:underline}
 .btn.podBtn{background:var(--panel);color:var(--ink);border:2px solid var(--warm);box-shadow:none;text-decoration:none;font-size:17px}
 .iosHelp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:#d6d0d6;font-size:14px;text-align:center}
 
@@ -269,6 +277,7 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
     <p class="meta" style="text-align:center">🎧 Tap Sound for the soundtrack</p>
     <button class="btn ghosty" id="installBtn" type="button" hidden>📲 Install the app</button>
     <button class="btn ghosty" id="shareAppBtn" type="button">🔗 Share the game</button>
+    <a class="joinLink" id="joinBtnTop" href="https://docs.google.com/forms/d/e/1FAIpQLSdspf2VHjNycTNxRJFZ39BWhtHaDW9JyiXxADa8mbU7ovVvpA/viewform" target="_blank" rel="noopener">📬 Get new levels by email</a>
     <a class="btn podBtn" id="podBtnTop" href="https://www.youtube.com/@GhostedbytheMachine" target="_blank" rel="noopener">🎧 Watch the podcast on YouTube</a>
     <div class="iosHelp" id="iosHelp" hidden>On iPhone: tap the <b>Share</b> button <span aria-hidden="true">⬆︎</span> at the bottom of Safari, then <b>Add to Home Screen</b>.</div>
     <div class="foot">Let's make hiring human again</div>
@@ -374,6 +383,11 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
       <div class="stat"><strong id="eOffer">—</strong><span>Final offer</span></div>
     </div>
     <div class="badge"><div class="medal" id="medal">HP</div><div><h4 id="badgeName"></h4><p id="badgeDesc"></p></div></div>
+    <div class="joinCard">
+      <div><h4>📬 Want more?</h4><p>New levels, episode drops, and job search tips from Mark. No spam. No ghosting.</p></div>
+      <a class="btn joinBtn" id="joinBtnEnd" href="https://docs.google.com/forms/d/e/1FAIpQLSdspf2VHjNycTNxRJFZ39BWhtHaDW9JyiXxADa8mbU7ovVvpA/viewform" target="_blank" rel="noopener">Join the list</a>
+      <small>Unsubscribe anytime. We never sell your email. <a href="privacy.html">Privacy</a></small>
+    </div>
     <div class="label">Share your results</div>
     <div class="share" id="shareText"></div>
     <button class="btn" id="copyBtn">Copy for LinkedIn</button>
@@ -781,6 +795,8 @@ $("shareScoreBtn").onclick=e=>{const b=$("badgeName").textContent;shareGame(e.cu
 
 $("podBtn").addEventListener("click",()=>track("podcast-click-end"));
 $("podBtnTop").addEventListener("click",()=>track("podcast-click-title"));
+$("joinBtnEnd").addEventListener("click",()=>track("join-list-end"));
+$("joinBtnTop").addEventListener("click",()=>track("join-list-title"));
 
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}

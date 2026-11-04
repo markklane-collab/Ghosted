@@ -3,7 +3,7 @@
    fall back to the saved copy when offline. Fonts: saved after first load. */
 const CACHE = "ghosted-v2";
 const CORE = ["./", "./index.html", "./recruiter.html", "./content.js", "./manifest.webmanifest",
-  "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./share.png"];
+  "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./share.png", "./privacy.html"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
