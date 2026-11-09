@@ -8,7 +8,7 @@
  * Recruiter Mode and can start empty. See CONTENT-GUIDE.md for templates.
  */
 window.GAME_CONTENT = {
-  "week": "Nov 2",
+  "week": "Nov 9",
   "resumes": [
     {
       "title": "Marketing Communications Manager",
@@ -123,6 +123,25 @@ window.GAME_CONTENT = {
         "Owns a laptop"
       ],
       "tip": "A posting this specific is a gift, because it tells you what the job actually is. \"Motivated\" tells me nothing. \"Ran benefits enrollment for 300 people\" tells me you can do the work."
+    },
+    {
+      "title": "Talent Acquisition Coordinator",
+      "co": "Lanternway Credit Union · Hybrid",
+      "jd": "Coordinate [interview scheduling], [candidate communication], and [identity verification] for a growing team. You'll keep our [applicant tracking system] clean and help us improve [candidate experience].",
+      "right": [
+        "Interview scheduling",
+        "Candidate communication",
+        "Identity verification",
+        "Applicant tracking system",
+        "Candidate experience"
+      ],
+      "wrong": [
+        "Calendar Tetris champion",
+        "Spots fakes by vibe",
+        "Fast typer",
+        "Reached inbox zero once"
+      ],
+      "tip": "See \"identity verification\" in a recruiting job? That's newer, and it's there because fake applicants are a real headache now. If you've run background checks or ID steps, say so in those words. And write \"applicant tracking system (ATS)\" so you match whichever version the scanner looks for."
     }
   ],
   "interview": [
@@ -366,6 +385,36 @@ window.GAME_CONTENT = {
           "fb": "It buffered for a while. Good instinct, though. You're allowed to check that they're real too."
         }
       ]
+    },
+    {
+      "q": "So, why are you looking to leave your current job?",
+      "o": [
+        {
+          "t": "Walk through everything your current manager gets wrong.",
+          "hp": -20,
+          "c": -5,
+          "fb": "Interviewer.exe heard \"future complaint about us.\" Even if it's all true, keep it short and neutral."
+        },
+        {
+          "t": "What you've learned there, and the specific growth this role offers that your current one can't.",
+          "hp": 60,
+          "c": 8,
+          "best": true,
+          "fb": "You're moving toward something, not running from something. Name one concrete thing this role has, like scope, skills, or the team's mission."
+        },
+        {
+          "t": "\"Honestly? The money.\"",
+          "hp": 20,
+          "c": 3,
+          "fb": "Honest, and pay is a fair reason. Add what else draws you here so it doesn't sound like you'll leave for the next raise."
+        },
+        {
+          "t": "\"A recruiter DMed me out of nowhere and it sounded perfect.\"",
+          "hp": 10,
+          "c": 2,
+          "fb": "Relatable. It's also how fake interviews start. Before round two, check that the recruiter and the role are real on the company's own site."
+        }
+      ]
     }
   ],
   "circus": [
@@ -550,6 +599,32 @@ window.GAME_CONTENT = {
           "fb": "Great negotiating instinct. Wrong negotiation. The size of the check was never the problem."
         }
       ]
+    },
+    {
+      "q": "Round two for a remote dev job. The \"CEO\" moves you to a chat app and sends a file: \"Download this project and set it up before tomorrow.\" What's your move?",
+      "o": [
+        {
+          "t": "Run it on your work laptop. It's faster than your personal one.",
+          "hp": -15,
+          "fb": "Worst case for everyone. Never run a stranger's code on a work device. In one recent case, a fake interview like this was tied to a $6.3 billion crypto theft from the candidate's employer."
+        },
+        {
+          "t": "Don't run it. Look up the company yourself, call its main number to confirm the recruiter and the role, and ask for a test you can do in a browser or on a shared screen.",
+          "hp": 50,
+          "best": true,
+          "fb": "Verify through channels the recruiter didn't give you. A real company can confirm who's hiring. A real recruiter won't mind you checking."
+        },
+        {
+          "t": "Run it. The CEO seemed really nice on video.",
+          "hp": -10,
+          "fb": "Nice is the point. These scams build trust over several friendly rounds so the download feels routine."
+        },
+        {
+          "t": "Ask the CEO to turn their head on camera first.",
+          "hp": 5,
+          "fb": "Fun callback. But a convincing face proves nothing. Verify the company, not the video."
+        }
+      ]
     }
   ],
   "recruiter": {
@@ -563,6 +638,16 @@ window.GAME_CONTENT = {
           "Past employers confirm the work under both names"
         ],
         "truth": "Real. Changed their name, and the ID hasn't caught up. A failed scan is a reason for a person to take a look, not a reason to reject."
+      },
+      {
+        "n": "“Casey Thornton”",
+        "fake": 1,
+        "clues": [
+          "Applied to five of your engineering roles within one hour",
+          "Camera is \"broken\" for every interview, so it's always chat",
+          "First question is which code repos and admin tools they'd get on day one"
+        ],
+        "truth": "Fake. Fraud rings posing as remote workers apply widely (one group was reported applying to over 1,100 companies), and they're after system access. A broken camera alone isn't a red flag. All three together are."
       }
     ],
     "offer": [
@@ -602,6 +687,45 @@ window.GAME_CONTENT = {
             "b": -20,
             "post": "Emailed numbers that aren't approved yet.",
             "fb": "Fast and kind, until a number changes. Then you've created the exact broken promise they feared. Get approval, then send."
+          }
+        ]
+      },
+      {
+        "ask": "“Before I sign: a fake recruiter almost got me last month. How do I know this offer is really from you?”",
+        "field": "Proof it's real",
+        "o": [
+          {
+            "t": "“Ha, trust me, it's us. Just sign the PDF I emailed.”",
+            "m": 1,
+            "a": -15,
+            "b": 0,
+            "post": "Asked them to sign an emailed PDF with no way to verify it.",
+            "fb": "That's exactly what a scammer would say. “Trust me” isn't verification. Give them a way to check you."
+          },
+          {
+            "t": "“Smart question. Call our main number from our website and ask for me. The offer comes through our e-signature system from our company email, and we'll never ask you to pay for anything or install software.”",
+            "m": 3,
+            "a": 16,
+            "b": 3,
+            "best": 1,
+            "post": "Offer sent through the official e-signature system, with a way to verify by calling the main line.",
+            "fb": "Give them a way to check you that doesn't depend on you. Scams thrive on “just click this link.” Real employers can be verified through public channels."
+          },
+          {
+            "t": "“Totally get it. Here's my profile link so you can see I'm real.”",
+            "m": 2,
+            "a": 4,
+            "b": 0,
+            "post": "Shared a social profile as proof.",
+            "fb": "Kind, but profiles can be copied. Point them to things a scammer can't fake, like the main phone line and the careers page."
+          },
+          {
+            "t": "“Want to skip the portal? I'll text you the numbers now and we'll do paperwork later.”",
+            "m": 1,
+            "a": -5,
+            "b": -10,
+            "post": "Texted offer numbers with no paperwork.",
+            "fb": "Fast feels friendly, but a texted offer looks like the very scam they just described. And the hiring manager loses the paper trail."
           }
         ]
       }
