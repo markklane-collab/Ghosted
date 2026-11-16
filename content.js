@@ -8,7 +8,7 @@
  * Recruiter Mode and can start empty. See CONTENT-GUIDE.md for templates.
  */
 window.GAME_CONTENT = {
-  "week": "Nov 9",
+  "week": "Nov 16",
   "resumes": [
     {
       "title": "Marketing Communications Manager",
@@ -142,6 +142,25 @@ window.GAME_CONTENT = {
         "Reached inbox zero once"
       ],
       "tip": "See \"identity verification\" in a recruiting job? That's newer, and it's there because fake applicants are a real headache now. If you've run background checks or ID steps, say so in those words. And write \"applicant tracking system (ATS)\" so you match whichever version the scanner looks for."
+    },
+    {
+      "title": "Employee Communications Specialist",
+      "co": "Northbeam Utilities · Hybrid",
+      "jd": "We need a storyteller for our people. You will own [internal communications], [newsletter production], [intranet management], and [executive messaging], mostly through [Microsoft Teams].",
+      "right": [
+        "Internal communications",
+        "Newsletter production",
+        "Intranet management",
+        "Executive messaging",
+        "Microsoft Teams"
+      ],
+      "wrong": [
+        "Great writer",
+        "Email ninja",
+        "Word nerd",
+        "Loves a good memo"
+      ],
+      "tip": "“Great writer” is true, and invisible to the scanner. Name the actual work: newsletters, the intranet, executive messaging. Tools count too. If the posting says Microsoft Teams, write Microsoft Teams, not “chat tools.”"
     }
   ],
   "interview": [
@@ -415,6 +434,36 @@ window.GAME_CONTENT = {
           "fb": "Relatable. It's also how fake interviews start. Before round two, check that the recruiter and the role are real on the company's own site."
         }
       ]
+    },
+    {
+      "q": "Congratulations! You’ve advanced to Round 6 of 8. Any questions before we continue?",
+      "o": [
+        {
+          "t": "“No questions! Happy to do as many rounds as you need.”",
+          "hp": -5,
+          "c": -3,
+          "fb": "Eager is nice. But you could lose weeks without knowing where this is going."
+        },
+        {
+          "t": "“Thanks! Can you walk me through the remaining steps, who I’ll meet, and when you expect to decide?”",
+          "hp": 60,
+          "c": 8,
+          "best": true,
+          "fb": "Asking for the timeline is normal and smart. In one Greenhouse survey, 40% of candidates said two to four interviews is the most they’d do. You’re allowed to know where the finish line is."
+        },
+        {
+          "t": "“Is the salary also on round 6 of 8?”",
+          "hp": 10,
+          "c": 2,
+          "fb": "Funny, and honestly fair. Ask for the pay range directly, though. It’s a normal question."
+        },
+        {
+          "t": "Quietly stop replying and hope they get the hint.",
+          "hp": -15,
+          "c": -4,
+          "fb": "Ghosting is a two-way street. A two-line “I’m withdrawing, thank you” keeps the door open. Hiring people remember who did that."
+        }
+      ]
     }
   ],
   "circus": [
@@ -625,6 +674,32 @@ window.GAME_CONTENT = {
           "fb": "Fun callback. But a convincing face proves nothing. Verify the company, not the video."
         }
       ]
+    },
+    {
+      "q": "Seven weeks, three rounds, and a take-home later: “We’d love a 30-60-90 day plan presented to leadership.” Still no salary range and no decision date. What’s the red flag?",
+      "o": [
+        {
+          "t": "Being asked to present at all",
+          "hp": -5,
+          "fb": "Presentations can be normal for senior roles. That’s not the problem here."
+        },
+        {
+          "t": "Seven weeks in with no pay range and no timeline. Ask for both before doing more work.",
+          "hp": 50,
+          "best": true,
+          "fb": "A long process isn’t always bad. A long process with no pay range and no end date is. Try: “Before I prepare this, can you share the salary range and the decision timeline?”"
+        },
+        {
+          "t": "They want your ideas, so it’s a compliment",
+          "hp": 5,
+          "fb": "Maybe. Your ideas are also your work. Know what the job pays before you hand them over."
+        },
+        {
+          "t": "Leadership is involved, so it must be serious",
+          "hp": -10,
+          "fb": "Serious about the role, or serious about free strategy? The pay range and timeline tell you which."
+        }
+      ]
     }
   ],
   "recruiter": {
@@ -648,6 +723,16 @@ window.GAME_CONTENT = {
           "First question is which code repos and admin tools they'd get on day one"
         ],
         "truth": "Fake. Fraud rings posing as remote workers apply widely (one group was reported applying to over 1,100 companies), and they're after system access. A broken camera alone isn't a red flag. All three together are."
+      },
+      {
+        "n": "Maya O.",
+        "fake": 0,
+        "clues": [
+          "Long pauses before answering technical questions",
+          "Keeps glancing to one side of the screen",
+          "Blurred, generic office background"
+        ],
+        "truth": "Real. She uses a screen reader and live captions on a second monitor, so she looks to the side and takes a beat to process. Ask about accommodations. Don’t assume someone is feeding her answers."
       }
     ],
     "offer": [
@@ -726,6 +811,45 @@ window.GAME_CONTENT = {
             "b": -10,
             "post": "Texted offer numbers with no paperwork.",
             "fb": "Fast feels friendly, but a texted offer looks like the very scam they just described. And the hiring manager loses the paper trail."
+          }
+        ]
+      },
+      {
+        "ask": "“Honestly, I almost withdrew. Eight weeks and nobody told me where things stood. Why should I believe it’ll be different once I’m there?”",
+        "field": "Trust",
+        "o": [
+          {
+            "t": "“Hiring is just slow here. It’s different once you’re in.”",
+            "m": 1,
+            "a": -10,
+            "b": 0,
+            "post": "No change",
+            "fb": "Brushing it off confirms their worry. Silence was the problem, and this is more of it."
+          },
+          {
+            "t": "“You’re right, and I’m sorry. That’s on us. Here’s your manager, your first-week plan, and I’ll check in with you weekly until your start date.”",
+            "m": 3,
+            "a": 15,
+            "b": 5,
+            "best": 1,
+            "post": "Weekly check-ins until start, plus a first-week plan in writing",
+            "fb": "Own it, then prove the difference with specifics. Candidates who felt ghosted need actions, not reassurance."
+          },
+          {
+            "t": "“Let me have the hiring manager call you today.”",
+            "m": 2,
+            "a": 8,
+            "b": -3,
+            "post": "Hiring manager call today",
+            "fb": "A good gesture, but it hands off your own accountability. Pair it with a plan you own."
+          },
+          {
+            "t": "“A lot of candidates would love this offer.”",
+            "m": 1,
+            "a": -15,
+            "b": 3,
+            "post": "Offer unchanged",
+            "fb": "Pressure after silence feels like a threat. Strong candidates walk."
           }
         ]
       }
