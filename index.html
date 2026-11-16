@@ -430,7 +430,7 @@ function track(name){try{if(window.goatcounter&&window.goatcounter.count)window.
 const $=id=>document.getElementById(id);
 const S={hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]};
 const LEVELS=[
- {n:1,name:"The ATS Strikes Back",short:"Get past the résumé scanner",brief:"Three job postings, 25 seconds each. Tap up to 5 skills that match the posting's exact language. Hit 60% to reach a human."},
+ {n:1,name:"The ATS Strikes Back",short:"Get past the résumé scanner",brief:"Two job postings, 35 seconds for the first and 25 for the second. Tap up to 5 skills that match the posting's exact language. Hit 60% to reach a human."},
  {n:2,name:"Interview Impossible",short:"Survive the AI interviewer",brief:"Interviewer.exe has three questions. Some are real. Some are ridiculous. Answer like a human and keep your confidence up."},
  {n:3,name:"The Ghosting Zone",short:"Whack the ghosts before they vanish",brief:"25 seconds. Conversations pop up and start to fade. Tap them before they go silent to get a reply, and skip the no-reply bots. Get 10 replies to clear the level."},
  {n:4,name:"The Hiring Circus",short:"Spot the red flags",brief:"Three questions about job postings and hiring processes. Spot the red flags before they spot you."},
@@ -499,10 +499,11 @@ const fmtJD=t=>t.replace(/\[(.+?)\]/g,'<span class="kw">$1</span>');
 function match(){const R=ROUNDS[r];let g=0,b=0;picks.forEach(p=>R.right.includes(p)?g++:b++);return Math.max(0,Math.min(100,Math.round(g/R.right.length*100-b*15)));}
 function paint1(){const p=match();$("fill").style.width=p+"%";$("pct").textContent=p+"%";$("picked").textContent=picks.size+" / "+MAX+" picked";$("submitBtn").disabled=picks.size===0;
   document.querySelectorAll("#chips .chip").forEach(c=>c.setAttribute("aria-pressed",picks.has(c.dataset.s)));}
-function pickQ(k,fb){const b=window.GAME_CONTENT&&GAME_CONTENT[k];return shuffle(Array.isArray(b)&&b.length>=3?b:fb).slice(0,3);}
-function startL1(){ROUNDS.splice(0,ROUNDS.length,...pickQ("resumes",ROUNDS.slice()));r=0;S.l1pass=0;S.l1fail=0;startRound();}
+function pickQ(k,fb,n=3){const b=window.GAME_CONTENT&&GAME_CONTENT[k];return shuffle(Array.isArray(b)&&b.length>=3?b:fb).slice(0,n);}
+const L1_ROUNDS=2,T1_FIRST=35;
+function startL1(){ROUNDS.splice(0,ROUNDS.length,...pickQ("resumes",ROUNDS.slice(),L1_ROUNDS));r=0;S.l1pass=0;S.l1fail=0;startRound();}
 function startRound(){
-  const R=ROUNDS[r];picks=new Set();left=T1;
+  const R=ROUNDS[r];picks=new Set();left=r===0?T1_FIRST:T1;
   $("roundMeta").textContent=`Application ${r+1} of ${ROUNDS.length}`;
   $("jdTitle").textContent=R.title;$("jdCo").textContent=R.co;$("jdText").innerHTML=fmtJD(R.jd);
   order=shuffle([...R.right,...R.wrong]);$("chips").innerHTML="";
@@ -525,7 +526,7 @@ function submit1(){
   pass?yay():boo();show("s-verdict");
 }
 $("submitBtn").onclick=submit1;
-$("nextBtn").onclick=()=>{r++;if(r<ROUNDS.length)return startRound();S.done[0]=`${S.l1pass}/3 PASSED`;track("level-1-complete");showMap();};
+$("nextBtn").onclick=()=>{r++;if(r<ROUNDS.length)return startRound();S.done[0]=`${S.l1pass}/${ROUNDS.length} PASSED`;track("level-1-complete");showMap();};
 
 /* ---------- QUIZ ENGINE (L2 + L4) ---------- */
 const BOT_SVG=`<svg class="mark" style="width:42px;height:42px" viewBox="0 0 100 100"><use href="#gbtm"/></svg>`;
@@ -697,11 +698,11 @@ function finish(key,pts){
 function end(){
   const E=ENDINGS[S.ending||"quick"],rej=S.l1fail+S.hits;
   $("endTitle").innerHTML=E.title;$("eHP").textContent=S.hp.toLocaleString("en-US");
-  $("eHuman").textContent=S.l1pass;$("eGhost").textContent=rej;$("eReplies").textContent=S.replies;$("eFlags").textContent=S.flags+"/3";
+  $("eApps").textContent=ROUNDS.length;$("eHuman").textContent=S.l1pass;$("eGhost").textContent=rej;$("eReplies").textContent=S.replies;$("eFlags").textContent=S.flags+"/3";
   $("eOffer").textContent=S.salary?money(S.salary).replace(",000","K"):"Passed";
   $("badgeName").textContent=E.badge;$("badgeDesc").textContent=E.desc;$("medal").textContent=Math.round(S.hp/100)/10+"K HP";
   const out=S.salary?`landed a ${money(S.salary)} offer`:"turned down an offer that wasn't right";
-  $("shareText").textContent=`I just played Ghosted by the Machine: The Game.\n\nI sent 3 applications, got past the ATS ${S.l1pass} ${S.l1pass===1?"time":"times"}, survived an AI interviewer, caught ${S.replies} real replies through ${rej} rejections, spotted ${S.flags}/3 red flags, and ${out}.\n\nFinal score: ${S.hp.toLocaleString("en-US")} Human Points. Badge: ${E.badge}.\n\nCan you beat the hiring machine? And if you work in hiring, try the new Recruiter Mode and play the other side of the desk.\n\nPlay free: ${GAME_URL}\n\n#MakeHiringHumanAgain`;
+  $("shareText").textContent=`I just played Ghosted by the Machine: The Game.\n\nI sent ${ROUNDS.length} applications, got past the ATS ${S.l1pass} ${S.l1pass===1?"time":"times"}, survived an AI interviewer, caught ${S.replies} real replies through ${rej} rejections, spotted ${S.flags}/3 red flags, and ${out}.\n\nFinal score: ${S.hp.toLocaleString("en-US")} Human Points. Badge: ${E.badge}.\n\nCan you beat the hiring machine? And if you work in hiring, try the new Recruiter Mode and play the other side of the desk.\n\nPlay free: ${GAME_URL}\n\n#MakeHiringHumanAgain`;
   $("copyBtn").textContent="Copy for LinkedIn";track("game-finished");track("ending-"+(S.ending||"quick"));yay();show("s-end");
 }
 $("copyBtn").onclick=async()=>{track("share-copied");try{await navigator.clipboard.writeText($("shareText").textContent);$("copyBtn").textContent="Copied ✓";}catch(e){const s=window.getSelection(),rg=document.createRange();rg.selectNodeContents($("shareText"));s.removeAllRanges();s.addRange(rg);$("copyBtn").textContent="Text selected, press copy";}};
@@ -800,7 +801,7 @@ $("joinBtnTop").addEventListener("click",()=>track("join-list-title"));
 
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}
-$("startBtn").onclick=()=>{track("game-started");reset();beep(523);showMap();};
+$("startBtn").onclick=()=>{track("game-started");reset();beep(523);startL1();};
 $("againBtn").onclick=()=>{reset();show("s-title");};
 $("soundBtn").onclick=e=>{sound=!sound;e.currentTarget.textContent=sound?"♪ SOUND ON":"SOUND OFF";e.currentTarget.setAttribute("aria-pressed",sound);beep(700);sound?Music.start():Music.stop();};
 hud();
