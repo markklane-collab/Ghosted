@@ -81,6 +81,7 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
 .joinLink{display:block;text-align:center;color:var(--warm);font-family:var(--f-head);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:14px;text-decoration:none;padding:6px}
 .joinLink:hover{text-decoration:underline}
 .btn.podBtn{background:var(--panel);color:var(--ink);border:2px solid var(--warm);box-shadow:none;text-decoration:none;font-size:17px}
+.newTag{display:inline-block;margin-left:6px;background:var(--warm);color:#2a2008;border-radius:999px;padding:1px 9px;font-weight:800;letter-spacing:.06em;font-size:11.5px;vertical-align:1px}
 .iosHelp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:#d6d0d6;font-size:14px;text-align:center}
 
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:15px 18px;
@@ -499,12 +500,16 @@ const fmtJD=t=>t.replace(/\[(.+?)\]/g,'<span class="kw">$1</span>');
 function match(){const R=ROUNDS[r];let g=0,b=0;picks.forEach(p=>R.right.includes(p)?g++:b++);return Math.max(0,Math.min(100,Math.round(g/R.right.length*100-b*15)));}
 function paint1(){const p=match();$("fill").style.width=p+"%";$("pct").textContent=p+"%";$("picked").textContent=picks.size+" / "+MAX+" picked";$("submitBtn").disabled=picks.size===0;
   document.querySelectorAll("#chips .chip").forEach(c=>c.setAttribute("aria-pressed",picks.has(c.dataset.s)));}
-function pickQ(k,fb,n=3){const b=window.GAME_CONTENT&&GAME_CONTENT[k];return shuffle(Array.isArray(b)&&b.length>=3?b:fb).slice(0,n);}
+/* Every play includes the newest item from each weekly list, plus random others. */
+const NEW_ITEMS=new Set();
+function pickQ(k,fb,n=3){const b=window.GAME_CONTENT&&GAME_CONTENT[k];if(!(Array.isArray(b)&&b.length>=3))return shuffle(fb).slice(0,n);
+  const newest=b[b.length-1];NEW_ITEMS.add(newest);return shuffle([newest,...shuffle(b.slice(0,-1)).slice(0,n-1)]);}
+const newTag=it=>NEW_ITEMS.has(it)?' <span class="newTag">New this week</span>':"";
 const L1_ROUNDS=2,T1_FIRST=35;
 function startL1(){ROUNDS.splice(0,ROUNDS.length,...pickQ("resumes",ROUNDS.slice(),L1_ROUNDS));r=0;S.l1pass=0;S.l1fail=0;startRound();}
 function startRound(){
   const R=ROUNDS[r];picks=new Set();left=r===0?T1_FIRST:T1;
-  $("roundMeta").textContent=`Application ${r+1} of ${ROUNDS.length}`;
+  $("roundMeta").innerHTML=`Application ${r+1} of ${ROUNDS.length}`+newTag(ROUNDS[r]);
   $("jdTitle").textContent=R.title;$("jdCo").textContent=R.co;$("jdText").innerHTML=fmtJD(R.jd);
   order=shuffle([...R.right,...R.wrong]);$("chips").innerHTML="";
   order.forEach((s,i)=>{const b=document.createElement("button");b.className="chip";b.id="chip-"+r+"-"+i;b.dataset.s=s;b.textContent=s;b.setAttribute("aria-pressed","false");
@@ -535,7 +540,7 @@ let Q=null,qi=0,qScore=0;
 function runQuiz(cfg){Q=cfg;qi=0;qScore=0;askQ();show("s-quiz");}
 function askQ(){
   const it=Q.items[qi];
-  $("qMeta").textContent=`${Q.metaWord} ${qi+1} of ${Q.items.length}`;$("qLevel").innerHTML=Q.levelHTML;
+  $("qMeta").innerHTML=`${Q.metaWord} ${qi+1} of ${Q.items.length}`+newTag(Q.items[qi]);$("qLevel").innerHTML=Q.levelHTML;
   $("circus").hidden=!Q.circus;$("qAvatar").innerHTML=Q.avatar;$("qWho").textContent=Q.who;$("qText").textContent=it.q;
   $("qfb").hidden=true;$("qNext").hidden=true;$("opts").innerHTML="";
   it.o.forEach((o,i)=>{const b=document.createElement("button");b.className="opt"+(it.emoji?" big":"");b.id="opt-"+qi+"-"+i;

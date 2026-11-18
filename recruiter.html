@@ -562,7 +562,9 @@ const okAsk=Q=>Q&&typeof Q.ask==="string"&&typeof Q.field==="string"&&Array.isAr
 const okSuspect=c=>c&&typeof c.n==="string"&&Array.isArray(c.clues)&&c.clues.length===3&&typeof c.truth==="string";
 function dStart(key,timed){
   dCfg=DIALOGS[key];
-  if(key==="offer"){const pool=DIALOGS.offer.asks.concat(weekly("offer").filter(okAsk));if(pool.length>4)dCfg=Object.assign({},DIALOGS.offer,{asks:rShuffle(pool).slice(0,4)});}
+  if(key==="offer"){const extra=weekly("offer").filter(okAsk),newest=extra[extra.length-1],pool=DIALOGS.offer.asks.concat(extra);
+    /* Every play includes this week's newest offer-call question. */
+    if(pool.length>4)dCfg=Object.assign({},DIALOGS.offer,{asks:newest?rShuffle([newest,...rShuffle(pool.filter(q=>q!==newest)).slice(0,3)]):rShuffle(pool).slice(0,4)});}
   const c=dCfg;
   D={key,timed,left:c.len,a:c.a.v,b:c.b.v,q:0,picks:[],paused:false,timedOut:false};
   $("dALabel").firstChild.nodeValue=c.a.label+" ";$("dBLabel").firstChild.nodeValue=c.b.label+" ";
@@ -708,8 +710,11 @@ const SUSPECTS_BASE=[
  {n:"Robin L.",fake:0,clues:["Seven-year gap on the résumé","Explains it in one calm sentence","Live skills exercise goes great"],truth:"Real. Raised kids, then retrained. The skills exercise proved it."}
 ];
 let SUSPECTS=SUSPECTS_BASE.slice();
-function drawSuspects(){const pool=SUSPECTS_BASE.concat(weekly("suspects").filter(okSuspect));
-  const fakes=rShuffle(pool.filter(c=>c.fake)).slice(0,3),reals=rShuffle(pool.filter(c=>!c.fake)).slice(0,5);
+function drawSuspects(){const extra=weekly("suspects").filter(okSuspect),newest=extra[extra.length-1],pool=SUSPECTS_BASE.concat(extra);
+  /* Every play includes this week's newest candidate. */
+  const others=c=>c!==newest;
+  const fakes=newest&&newest.fake?[newest,...rShuffle(pool.filter(c=>c.fake&&others(c))).slice(0,2)]:rShuffle(pool.filter(c=>c.fake)).slice(0,3);
+  const reals=newest&&!newest.fake?[newest,...rShuffle(pool.filter(c=>!c.fake&&others(c))).slice(0,4)]:rShuffle(pool.filter(c=>!c.fake)).slice(0,5);
   return rShuffle(fakes.concat(reals));}
 const R_LEN=16,R_TICK=3000,R_VER=3;
 let RF=null,rStopFn=()=>{};
