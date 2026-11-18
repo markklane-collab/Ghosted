@@ -500,10 +500,13 @@ const fmtJD=t=>t.replace(/\[(.+?)\]/g,'<span class="kw">$1</span>');
 function match(){const R=ROUNDS[r];let g=0,b=0;picks.forEach(p=>R.right.includes(p)?g++:b++);return Math.max(0,Math.min(100,Math.round(g/R.right.length*100-b*15)));}
 function paint1(){const p=match();$("fill").style.width=p+"%";$("pct").textContent=p+"%";$("picked").textContent=picks.size+" / "+MAX+" picked";$("submitBtn").disabled=picks.size===0;
   document.querySelectorAll("#chips .chip").forEach(c=>c.setAttribute("aria-pressed",picks.has(c.dataset.s)));}
-/* Every play includes the newest item from each weekly list, plus random others. */
-const NEW_ITEMS=new Set();
+/* Every play includes the newest item from each weekly list, then leans on the
+   next most recent items (the last few weeks) before falling back to older ones. */
+const NEW_ITEMS=new Set(),RECENT=4;
 function pickQ(k,fb,n=3){const b=window.GAME_CONTENT&&GAME_CONTENT[k];if(!(Array.isArray(b)&&b.length>=3))return shuffle(fb).slice(0,n);
-  const newest=b[b.length-1];NEW_ITEMS.add(newest);return shuffle([newest,...shuffle(b.slice(0,-1)).slice(0,n-1)]);}
+  const newest=b[b.length-1];NEW_ITEMS.add(newest);
+  const recent=shuffle(b.slice(Math.max(0,b.length-1-RECENT),-1)),older=shuffle(b.slice(0,Math.max(0,b.length-1-RECENT)));
+  return shuffle([newest,...recent,...older].slice(0,n));}
 const newTag=it=>NEW_ITEMS.has(it)?' <span class="newTag">New this week</span>':"";
 const L1_ROUNDS=2,T1_FIRST=35;
 function startL1(){ROUNDS.splice(0,ROUNDS.length,...pickQ("resumes",ROUNDS.slice(),L1_ROUNDS));r=0;S.l1pass=0;S.l1fail=0;startRound();}

@@ -564,7 +564,8 @@ function dStart(key,timed){
   dCfg=DIALOGS[key];
   if(key==="offer"){const extra=weekly("offer").filter(okAsk),newest=extra[extra.length-1],pool=DIALOGS.offer.asks.concat(extra);
     /* Every play includes this week's newest offer-call question. */
-    if(pool.length>4)dCfg=Object.assign({},DIALOGS.offer,{asks:newest?rShuffle([newest,...rShuffle(pool.filter(q=>q!==newest)).slice(0,3)]):rShuffle(pool).slice(0,4)});}
+    if(pool.length>4){const recent=extra.slice(0,-1).reverse().slice(0,2),front=newest?[newest,...recent]:recent,rest=rShuffle(pool.filter(q=>!front.includes(q)));
+      dCfg=Object.assign({},DIALOGS.offer,{asks:rShuffle(front.concat(rest).slice(0,4))});}}
   const c=dCfg;
   D={key,timed,left:c.len,a:c.a.v,b:c.b.v,q:0,picks:[],paused:false,timedOut:false};
   $("dALabel").firstChild.nodeValue=c.a.label+" ";$("dBLabel").firstChild.nodeValue=c.b.label+" ";
@@ -712,9 +713,10 @@ const SUSPECTS_BASE=[
 let SUSPECTS=SUSPECTS_BASE.slice();
 function drawSuspects(){const extra=weekly("suspects").filter(okSuspect),newest=extra[extra.length-1],pool=SUSPECTS_BASE.concat(extra);
   /* Every play includes this week's newest candidate. */
-  const others=c=>c!==newest;
-  const fakes=newest&&newest.fake?[newest,...rShuffle(pool.filter(c=>c.fake&&others(c))).slice(0,2)]:rShuffle(pool.filter(c=>c.fake)).slice(0,3);
-  const reals=newest&&!newest.fake?[newest,...rShuffle(pool.filter(c=>!c.fake&&others(c))).slice(0,4)]:rShuffle(pool.filter(c=>!c.fake)).slice(0,5);
+  /* Then lean on the most recent weekly candidates before the built-in ones. */
+  const pick=(isFake,k)=>{const wk=extra.filter(c=>!!c.fake===isFake).reverse(),recent=wk.slice(0,2),rest=rShuffle(wk.slice(2).concat(SUSPECTS_BASE.filter(c=>!!c.fake===isFake)));
+    const front=newest&&!!newest.fake===isFake?[newest,...recent.filter(c=>c!==newest)]:recent;return front.concat(rest.filter(c=>!front.includes(c))).slice(0,k);};
+  const fakes=pick(true,3),reals=pick(false,5);
   return rShuffle(fakes.concat(reals));}
 const R_LEN=16,R_TICK=3000,R_VER=3;
 let RF=null,rStopFn=()=>{};

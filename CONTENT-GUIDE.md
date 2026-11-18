@@ -1,6 +1,6 @@
 # Weekly content guide
 
-All weekly questions live in **`content.js`**, for both job seeker mode and Recruiter Mode. The game draws **3 at random** from each list every time someone plays, so every question you add makes replays more varied. You never need to touch `index.html` to add questions.
+All weekly questions live in **`content.js`**, for both job seeker mode and Recruiter Mode. **The newest item in each list always appears in every play** (with a "New this week" tag in job seeker mode), and the rest of each play leans on the last few weeks of questions before older ones. Add new items to the **end** of each list.
 
 ## The weekly routine (about 15 minutes)
 

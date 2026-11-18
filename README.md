@@ -64,7 +64,7 @@ On iPhone, open the game in Safari, tap **Share**, then **Add to Home Screen**. 
 
 ### Adding new questions
 
-Weekly questions for both modes live in `content.js`. The game draws a fresh mix from them every time someone plays. See [CONTENT-GUIDE.md](CONTENT-GUIDE.md) for the weekly routine and copy-and-paste templates.
+Weekly questions for both modes live in `content.js`. Every play includes the newest questions and leans on the last few weeks of content. See [CONTENT-GUIDE.md](CONTENT-GUIDE.md) for the weekly routine and copy-and-paste templates.
 
 ### Run it locally
 
