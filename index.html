@@ -869,7 +869,7 @@ $("resumeBtn").onclick=()=>{const d=loadProgress();if(!d)return checkResume();re
 
 /* ---------- weekly leaderboard (Google Sheet + Apps Script) ---------- */
 /* Paste the Apps Script web app URL between the quotes to turn it on. */
-const LEADERBOARD_URL="";
+const LEADERBOARD_URL="https://script.google.com/macros/s/AKfycbwHbCNSvWf1nEuMC9eEQwWCxXWKSFM-DVpw8J69b9kazpw3QZFRGkozmhrycNR8bxruXA/exec";
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let lbSubmitted=false;
 async function lbCall(params){const r=await fetch(LEADERBOARD_URL+"?"+new URLSearchParams(params),{redirect:"follow"});if(!r.ok)throw new Error("http "+r.status);return r.json();}
