@@ -82,6 +82,30 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
 .joinLink:hover{text-decoration:underline}
 .btn.podBtn{background:var(--panel);color:var(--ink);border:2px solid var(--warm);box-shadow:none;text-decoration:none;font-size:17px}
 .newTag{display:inline-block;margin-left:6px;background:var(--warm);color:#2a2008;border-radius:999px;padding:1px 9px;font-weight:800;letter-spacing:.06em;font-size:11.5px;vertical-align:1px}
+.resumeCard{display:grid;gap:10px;border:2px solid var(--good);background:#10201a;border-radius:14px;padding:14px 16px}
+.resumeCard h4{margin:0;font-family:var(--f-head);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase;color:var(--good)}
+.resumeCard p{margin:2px 0 0;color:#d7efe3;font-size:14.5px}
+.btn.resumeBtn{background:var(--good);color:#06220f;box-shadow:0 4px 0 #23864d}
+.lbCard{display:grid;gap:10px;border:2px solid var(--line);background:var(--panel);border-radius:14px;padding:14px 16px}
+.lbCard h4{margin:0;font-family:var(--f-head);font-weight:800;font-size:20px;letter-spacing:.04em;text-transform:uppercase}
+.lbSub{margin:0;color:var(--mute);font-size:13px}
+.lbList{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.lbList li{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:baseline;padding:7px 10px;border-radius:8px;background:var(--cab);font-size:15px}
+.lbList li .rk{font-family:var(--f-head);font-weight:800;color:var(--mute)}
+.lbList li:nth-child(1) .rk{color:var(--warm)}
+.lbList li .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.lbList li .nm small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.lbList li .sc{font-family:var(--f-head);font-weight:800;font-variant-numeric:tabular-nums}
+.lbList li.me{outline:2px solid var(--warm);background:#2a2412}
+.lbEmpty{color:var(--mute);font-size:14px;text-align:center;padding:8px}
+.lbForm{display:grid;grid-template-columns:1fr auto;gap:8px}
+.lbForm input{min-width:0;font:inherit;font-size:16px;color:var(--ink);background:#000;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px}
+.lbForm input:focus-visible{outline:3px solid var(--warm);outline-offset:1px}
+.lbForm .btn{width:auto;font-size:16px;padding:10px 14px}
+.lbMsg{font-size:13px;color:var(--mute);text-align:center}
+.lbMsg.ok{color:var(--good);font-weight:600}
+.lbMsg.err{color:#ff8a8f}
+.lbMsg a{color:var(--ink)}
 .iosHelp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:#d6d0d6;font-size:14px;text-align:center}
 
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:15px 18px;
@@ -273,8 +297,13 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
       <p class="pack" id="packLabel" hidden></p>
       <p class="sub">Five levels. One very literal résumé scanner, an AI interviewer, a lot of silence, and one recruiter who's actually on your side. About 5 minutes.</p>
     </div>
+    <div class="resumeCard" id="resumeCard" hidden>
+      <div><h4>👋 Welcome back!</h4><p id="resumeText"></p></div>
+      <button class="btn resumeBtn" id="resumeBtn" type="button">Continue my game →</button>
+    </div>
     <button class="btn" id="startBtn">Start game →</button>
     <a class="btn ghosty" id="recruiterBtn" href="recruiter.html" style="text-decoration:none">🧑‍💼 New: Recruiter Mode</a>
+    <button class="btn ghosty" id="lbTopBtn" type="button" hidden>🏆 This week's top 10</button>
     <p class="meta" style="text-align:center">🎧 Tap Sound for the soundtrack</p>
     <button class="btn ghosty" id="installBtn" type="button" hidden>📲 Install the app</button>
     <button class="btn ghosty" id="shareAppBtn" type="button">🔗 Share the game</button>
@@ -371,6 +400,14 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
   </section>
 
   <!-- END -->
+  <section class="screen" id="s-lb" hidden>
+    <div><p class="meta">Resets Mondays at 8 AM ET</p><h2 class="lvl">🏆 This week's <em>top 10</em></h2></div>
+    <ol class="lbList" id="lbListTop"><li class="lbEmpty">Loading…</li></ol>
+    <p class="lbSub" style="text-align:center">Finish a game to add your score.</p>
+    <button class="btn" id="lbPlayBtn" type="button">Play now →</button>
+    <button class="btn ghosty" id="lbBackBtn" type="button">← Back</button>
+  </section>
+
   <section class="screen" id="s-end" hidden>
     <p class="meta" style="text-align:center">Game complete</p>
     <h2 class="big" id="endTitle"></h2>
@@ -384,6 +421,16 @@ button:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
       <div class="stat"><strong id="eOffer">—</strong><span>Final offer</span></div>
     </div>
     <div class="badge"><div class="medal" id="medal">HP</div><div><h4 id="badgeName"></h4><p id="badgeDesc"></p></div></div>
+    <div class="lbCard" id="lbEnd" hidden>
+      <h4>🏆 This week's leaderboard</h4>
+      <p class="lbSub">Resets Mondays at 8 AM ET with the new questions.</p>
+      <ol class="lbList" id="lbListEnd"><li class="lbEmpty">Loading…</li></ol>
+      <form class="lbForm" id="lbForm">
+        <input id="lbName" maxlength="16" autocomplete="nickname" placeholder="Nickname (first name or handle)" aria-label="Nickname">
+        <button class="btn" id="lbSubmit" type="submit">Add my score</button>
+      </form>
+      <div class="lbMsg" id="lbMsg">Your nickname and score show publicly until Monday's reset. <a href="privacy.html">Privacy</a></div>
+    </div>
     <div class="joinCard">
       <div><h4>📬 Want more?</h4><p>New levels, episode drops, and job search tips from Mark. No spam. No ghosting.</p></div>
       <a class="btn joinBtn" id="joinBtnEnd" href="https://docs.google.com/forms/d/e/1FAIpQLSdspf2VHjNycTNxRJFZ39BWhtHaDW9JyiXxADa8mbU7ovVvpA/viewform" target="_blank" rel="noopener">Join the list</a>
@@ -441,7 +488,7 @@ let sound=false,ac=null,cur=1;
 function beep(f=520,d=.08,type="square"){if(!sound)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.value=.05;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.stop(ac.currentTime+d);}catch(e){}}
 const yay=()=>{beep(660,.1);setTimeout(()=>beep(990,.15),110)};
 const boo=()=>{beep(220,.2,"sawtooth");setTimeout(()=>beep(140,.3,"sawtooth"),180)};
-function show(id){for(const s of document.querySelectorAll(".screen"))s.hidden=s.id!==id;$("hud").hidden=(id==="s-title"||id==="s-end");curScreen=id;Music.mode(id==="s-l1"||id==="s-l3"?"tense":"calm");$("fbBtn").hidden=(id==="s-l1"||id==="s-l3");window.scrollTo({top:0});}
+function show(id){for(const s of document.querySelectorAll(".screen"))s.hidden=s.id!==id;$("hud").hidden=(id==="s-title"||id==="s-end"||id==="s-lb");curScreen=id;Music.mode(id==="s-l1"||id==="s-l3"?"tense":"calm");$("fbBtn").hidden=(id==="s-l1"||id==="s-l3");window.scrollTo({top:0});}
 function hud(){$("confFill").style.width=S.conf+"%";$("confNum").textContent=S.conf;$("hpNum").textContent=S.hp;}
 function addHP(n){S.hp=Math.max(0,S.hp+n);hud();}
 function addConf(n){S.conf=Math.max(5,Math.min(100,S.conf+n));hud();}
@@ -450,6 +497,7 @@ const money=n=>"$"+n.toLocaleString("en-US");
 
 /* ---------- map ---------- */
 function showMap(){
+  saveProgress();
   cur=S.done.length+1;
   $("map").innerHTML="";
   LEVELS.forEach(L=>{
@@ -704,6 +752,7 @@ function finish(key,pts){
 
 /* ---------- END ---------- */
 function end(){
+  clearProgress();lbShowEnd();
   const E=ENDINGS[S.ending||"quick"],rej=S.l1fail+S.hits;
   $("endTitle").innerHTML=E.title;$("eHP").textContent=S.hp.toLocaleString("en-US");
   $("eApps").textContent=ROUNDS.length;$("eHuman").textContent=S.l1pass;$("eGhost").textContent=rej;$("eReplies").textContent=S.replies;$("eFlags").textContent=S.flags+"/3";
@@ -807,12 +856,55 @@ $("podBtnTop").addEventListener("click",()=>track("podcast-click-title"));
 $("joinBtnEnd").addEventListener("click",()=>track("join-list-end"));
 $("joinBtnTop").addEventListener("click",()=>track("join-list-title"));
 
+/* ---------- pause and continue (saved on this device only) ---------- */
+const SAVE_KEY="gbtm-progress-v1",SAVE_DAYS=30;
+function saveProgress(){try{if(S.done.length>=1&&S.done.length<5)localStorage.setItem(SAVE_KEY,JSON.stringify({t:Date.now(),S:{hp:S.hp,conf:S.conf,l1pass:S.l1pass,l1fail:S.l1fail,l2:S.l2,replies:S.replies,hits:S.hits,flags:S.flags,ending:S.ending,salary:S.salary,done:S.done.slice()}}));}catch(e){}}
+function clearProgress(){try{localStorage.removeItem(SAVE_KEY);}catch(e){}}
+function loadProgress(){try{const d=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");
+  if(!d||!d.S||!Array.isArray(d.S.done)||d.S.done.length<1||d.S.done.length>4||Date.now()-d.t>SAVE_DAYS*864e5)return null;return d;}catch(e){return null;}}
+function checkResume(){const d=loadProgress();$("resumeCard").hidden=!d;if(!d)return;
+  const n=d.S.done.length+1,L=LEVELS[n-1];
+  $("resumeText").textContent=`You're on Level ${n}: ${L.name}, with ${Number(d.S.hp).toLocaleString("en-US")} Human Points. Pick up where you left off.`;}
+$("resumeBtn").onclick=()=>{const d=loadProgress();if(!d)return checkResume();reset();Object.assign(S,d.S);hud();beep(523);track("game-resumed");$("resumeCard").hidden=true;showMap();};
+
+/* ---------- weekly leaderboard (Google Sheet + Apps Script) ---------- */
+/* Paste the Apps Script web app URL between the quotes to turn it on. */
+const LEADERBOARD_URL="";
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let lbSubmitted=false;
+async function lbCall(params){const r=await fetch(LEADERBOARD_URL+"?"+new URLSearchParams(params),{redirect:"follow"});if(!r.ok)throw new Error("http "+r.status);return r.json();}
+function lbRender(el,top,me){
+  if(!top||!top.length){el.innerHTML='<li class="lbEmpty">No scores yet this week. Be the first!</li>';return;}
+  el.innerHTML=top.map((r,i)=>`<li class="${me&&r.name.toLowerCase()===me.toLowerCase()?"me":""}"><span class="rk">${i+1}</span><span class="nm">${esc(r.name)}${r.badge?`<small>${esc(r.badge)}</small>`:""}</span><span class="sc">${Number(r.score).toLocaleString("en-US")}</span></li>`).join("");}
+async function lbLoad(el){el.innerHTML='<li class="lbEmpty">Loading…</li>';
+  try{const d=await lbCall({action:"top"});lbRender(el,d.top);}catch(e){el.innerHTML='<li class="lbEmpty">The leaderboard couldn\'t load. Check your connection and try again.</li>';}}
+function lbShowEnd(){if(!LEADERBOARD_URL)return;lbSubmitted=false;$("lbEnd").hidden=false;$("lbSubmit").disabled=false;$("lbName").disabled=false;
+  $("lbMsg").className="lbMsg";$("lbMsg").innerHTML='Your nickname and score show publicly until Monday\'s reset. <a href="privacy.html">Privacy</a>';
+  try{$("lbName").value=localStorage.getItem("gbtm-nick")||"";}catch(e){}
+  lbLoad($("lbListEnd"));}
+$("lbForm").addEventListener("submit",async e=>{e.preventDefault();if(lbSubmitted||!LEADERBOARD_URL)return;
+  const name=$("lbName").value.replace(/\s+/g," ").trim(),msg=$("lbMsg");
+  if(name.length<2){msg.className="lbMsg err";msg.textContent="Add a nickname with at least 2 characters.";$("lbName").focus();return;}
+  $("lbSubmit").disabled=true;msg.className="lbMsg";msg.textContent="Saving…";
+  try{const d=await lbCall({action:"submit",name,score:S.hp,badge:ENDINGS[S.ending||"quick"].badge});
+    if(!d.ok){msg.className="lbMsg err";msg.textContent=d.error||"That didn't save. Try again.";$("lbSubmit").disabled=false;return;}
+    lbSubmitted=true;$("lbName").disabled=true;try{localStorage.setItem("gbtm-nick",name);}catch(e){}
+    lbRender($("lbListEnd"),d.top,name);track("lb-submit");
+    msg.className="lbMsg ok";msg.textContent=d.rank&&d.rank<=10?`You're #${d.rank} this week! 🏆`:`Saved. You're #${d.rank} of ${d.total} this week. Play again to climb!`;
+    if(d.best>S.hp)msg.textContent=`Your best this week (${Number(d.best).toLocaleString("en-US")}) still stands at #${d.rank}.`;
+  }catch(err){msg.className="lbMsg err";msg.textContent="The leaderboard couldn't be reached. Check your connection and try again.";$("lbSubmit").disabled=false;}});
+$("lbTopBtn").onclick=()=>{track("lb-view");show("s-lb");lbLoad($("lbListTop"));};
+$("lbBackBtn").onclick=()=>show("s-title");
+$("lbPlayBtn").onclick=()=>$("startBtn").click();
+if(LEADERBOARD_URL)$("lbTopBtn").hidden=false;
+
 /* ---------- boot ---------- */
 function reset(){Object.assign(S,{hp:0,conf:70,l1pass:0,l1fail:0,l2:0,replies:0,hits:0,flags:0,ending:null,salary:85000,done:[]});hud();}
-$("startBtn").onclick=()=>{track("game-started");reset();beep(523);startL1();};
-$("againBtn").onclick=()=>{reset();show("s-title");};
+$("startBtn").onclick=()=>{track("game-started");clearProgress();$("resumeCard").hidden=true;reset();beep(523);startL1();};
+$("againBtn").onclick=()=>{reset();checkResume();show("s-title");};
 $("soundBtn").onclick=e=>{sound=!sound;e.currentTarget.textContent=sound?"♪ SOUND ON":"SOUND OFF";e.currentTarget.setAttribute("aria-pressed",sound);beep(700);sound?Music.start():Music.stop();};
 hud();
+checkResume();
 </script>
 </body>
 </html>
