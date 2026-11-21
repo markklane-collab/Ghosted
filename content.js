@@ -4,6 +4,8 @@
  * every time someone plays, so adding more questions adds variety.
  *
  * To update: change "week", then add, edit, or remove items below.
+ * Give each new item "added": "YYYY-MM-DD" (the Monday it goes live).
+ * Items show a "New" tag for 14 days after that date.
  * Keep at least 3 items in each job seeker list. The "recruiter" lists add to
  * Recruiter Mode and can start empty. See CONTENT-GUIDE.md for templates.
  */
@@ -122,7 +124,8 @@ window.GAME_CONTENT = {
         "Follows directions",
         "Owns a laptop"
       ],
-      "tip": "A posting this specific is a gift, because it tells you what the job actually is. \"Motivated\" tells me nothing. \"Ran benefits enrollment for 300 people\" tells me you can do the work."
+      "tip": "A posting this specific is a gift, because it tells you what the job actually is. \"Motivated\" tells me nothing. \"Ran benefits enrollment for 300 people\" tells me you can do the work.",
+      "added": "2026-11-02"
     },
     {
       "title": "Talent Acquisition Coordinator",
@@ -141,7 +144,8 @@ window.GAME_CONTENT = {
         "Fast typer",
         "Reached inbox zero once"
       ],
-      "tip": "See \"identity verification\" in a recruiting job? That's newer, and it's there because fake applicants are a real headache now. If you've run background checks or ID steps, say so in those words. And write \"applicant tracking system (ATS)\" so you match whichever version the scanner looks for."
+      "tip": "See \"identity verification\" in a recruiting job? That's newer, and it's there because fake applicants are a real headache now. If you've run background checks or ID steps, say so in those words. And write \"applicant tracking system (ATS)\" so you match whichever version the scanner looks for.",
+      "added": "2026-11-09"
     },
     {
       "title": "Employee Communications Specialist",
@@ -160,7 +164,8 @@ window.GAME_CONTENT = {
         "Word nerd",
         "Loves a good memo"
       ],
-      "tip": "“Great writer” is true, and invisible to the scanner. Name the actual work: newsletters, the intranet, executive messaging. Tools count too. If the posting says Microsoft Teams, write Microsoft Teams, not “chat tools.”"
+      "tip": "“Great writer” is true, and invisible to the scanner. Name the actual work: newsletters, the intranet, executive messaging. Tools count too. If the posting says Microsoft Teams, write Microsoft Teams, not “chat tools.”",
+      "added": "2026-11-16"
     }
   ],
   "interview": [
@@ -403,7 +408,8 @@ window.GAME_CONTENT = {
           "c": 2,
           "fb": "It buffered for a while. Good instinct, though. You're allowed to check that they're real too."
         }
-      ]
+      ],
+      "added": "2026-11-02"
     },
     {
       "q": "So, why are you looking to leave your current job?",
@@ -433,7 +439,8 @@ window.GAME_CONTENT = {
           "c": 2,
           "fb": "Relatable. It's also how fake interviews start. Before round two, check that the recruiter and the role are real on the company's own site."
         }
-      ]
+      ],
+      "added": "2026-11-09"
     },
     {
       "q": "Congratulations! You’ve advanced to Round 6 of 8. Any questions before we continue?",
@@ -463,7 +470,8 @@ window.GAME_CONTENT = {
           "c": -4,
           "fb": "Ghosting is a two-way street. A two-line “I’m withdrawing, thank you” keeps the door open. Hiring people remember who did that."
         }
-      ]
+      ],
+      "added": "2026-11-16"
     }
   ],
   "circus": [
@@ -647,7 +655,8 @@ window.GAME_CONTENT = {
           "hp": 5,
           "fb": "Great negotiating instinct. Wrong negotiation. The size of the check was never the problem."
         }
-      ]
+      ],
+      "added": "2026-11-02"
     },
     {
       "q": "Round two for a remote dev job. The \"CEO\" moves you to a chat app and sends a file: \"Download this project and set it up before tomorrow.\" What's your move?",
@@ -673,7 +682,8 @@ window.GAME_CONTENT = {
           "hp": 5,
           "fb": "Fun callback. But a convincing face proves nothing. Verify the company, not the video."
         }
-      ]
+      ],
+      "added": "2026-11-09"
     },
     {
       "q": "Seven weeks, three rounds, and a take-home later: “We’d love a 30-60-90 day plan presented to leadership.” Still no salary range and no decision date. What’s the red flag?",
@@ -699,7 +709,8 @@ window.GAME_CONTENT = {
           "hp": -10,
           "fb": "Serious about the role, or serious about free strategy? The pay range and timeline tell you which."
         }
-      ]
+      ],
+      "added": "2026-11-16"
     }
   ],
   "recruiter": {
@@ -712,7 +723,8 @@ window.GAME_CONTENT = {
           "Name on the résumé doesn't match the ID",
           "Past employers confirm the work under both names"
         ],
-        "truth": "Real. Changed their name, and the ID hasn't caught up. A failed scan is a reason for a person to take a look, not a reason to reject."
+        "truth": "Real. Changed their name, and the ID hasn't caught up. A failed scan is a reason for a person to take a look, not a reason to reject.",
+        "added": "2026-11-02"
       },
       {
         "n": "“Casey Thornton”",
@@ -722,7 +734,8 @@ window.GAME_CONTENT = {
           "Camera is \"broken\" for every interview, so it's always chat",
           "First question is which code repos and admin tools they'd get on day one"
         ],
-        "truth": "Fake. Fraud rings posing as remote workers apply widely (one group was reported applying to over 1,100 companies), and they're after system access. A broken camera alone isn't a red flag. All three together are."
+        "truth": "Fake. Fraud rings posing as remote workers apply widely (one group was reported applying to over 1,100 companies), and they're after system access. A broken camera alone isn't a red flag. All three together are.",
+        "added": "2026-11-09"
       },
       {
         "n": "Maya O.",
@@ -732,7 +745,8 @@ window.GAME_CONTENT = {
           "Keeps glancing to one side of the screen",
           "Blurred, generic office background"
         ],
-        "truth": "Real. She uses a screen reader and live captions on a second monitor, so she looks to the side and takes a beat to process. Ask about accommodations. Don’t assume someone is feeding her answers."
+        "truth": "Real. She uses a screen reader and live captions on a second monitor, so she looks to the side and takes a beat to process. Ask about accommodations. Don’t assume someone is feeding her answers.",
+        "added": "2026-11-16"
       }
     ],
     "offer": [
@@ -773,7 +787,8 @@ window.GAME_CONTENT = {
             "post": "Emailed numbers that aren't approved yet.",
             "fb": "Fast and kind, until a number changes. Then you've created the exact broken promise they feared. Get approval, then send."
           }
-        ]
+        ],
+        "added": "2026-11-02"
       },
       {
         "ask": "“Before I sign: a fake recruiter almost got me last month. How do I know this offer is really from you?”",
@@ -812,7 +827,8 @@ window.GAME_CONTENT = {
             "post": "Texted offer numbers with no paperwork.",
             "fb": "Fast feels friendly, but a texted offer looks like the very scam they just described. And the hiring manager loses the paper trail."
           }
-        ]
+        ],
+        "added": "2026-11-09"
       },
       {
         "ask": "“Honestly, I almost withdrew. Eight weeks and nobody told me where things stood. Why should I believe it’ll be different once I’m there?”",
@@ -851,7 +867,8 @@ window.GAME_CONTENT = {
             "post": "Offer unchanged",
             "fb": "Pressure after silence feels like a threat. Strong candidates walk."
           }
-        ]
+        ],
+        "added": "2026-11-16"
       }
     ]
   }

@@ -19,7 +19,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Ghosted">
 <script data-goatcounter="https://ghostgame.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}.newTag{display:inline-block;margin-left:8px;background:#f2c14e;color:#2a2008;border-radius:999px;padding:1px 9px;font-weight:800;letter-spacing:.06em;font-size:11.5px;vertical-align:2px;font-style:normal;text-transform:uppercase}
+</style>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
@@ -559,6 +560,9 @@ function dHud(){
 function rShuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function weekly(k){const r=window.GAME_CONTENT&&GAME_CONTENT.recruiter;return r&&Array.isArray(r[k])?r[k]:[];}
 const okAsk=Q=>Q&&typeof Q.ask==="string"&&typeof Q.field==="string"&&Array.isArray(Q.o)&&Q.o.length===4&&Q.o.filter(o=>o.best).length===1&&Q.o.every(o=>typeof o.t==="string"&&typeof o.post==="string"&&typeof o.fb==="string"&&[o.m,o.a,o.b].every(n=>typeof n==="number"));
+const NEW_DAYS=14;
+function isNew(x){if(!x||!x.added)return false;const age=Date.now()-Date.parse(x.added+"T13:00:00Z");return age>=0&&age<NEW_DAYS*864e5;}
+function addNewTag(el,x){if(isNew(x)){const t=document.createElement("span");t.className="newTag";t.textContent="New";el.appendChild(t);}}
 const okSuspect=c=>c&&typeof c.n==="string"&&Array.isArray(c.clues)&&c.clues.length===3&&typeof c.truth==="string";
 function dStart(key,timed){
   dCfg=DIALOGS[key];
@@ -577,7 +581,7 @@ function dStart(key,timed){
 function dShow(){
   const Q=dCfg.asks[D.q];D.paused=false;
   $("dProg").textContent=`${D.q+1} of ${dCfg.asks.length} · ${dCfg.prog}`;
-  $("dAsk").textContent=Q.ask;$("dFb").hidden=true;
+  $("dAsk").textContent=Q.ask;addNewTag($("dAsk"),Q);$("dFb").hidden=true;
   const box=$("dOpts");box.innerHTML="";
   Q.o.forEach((o,k)=>{const b=document.createElement("button");b.type="button";b.className="opt";
     b.innerHTML=`<span></span><span class="cost">${o.m} min</span>`;b.firstChild.textContent=o.t;
@@ -733,7 +737,7 @@ function rStart(timed){
 }
 function rCard(){
   const c=SUSPECTS[RF.i];RF.paused=false;RF.verified=false;
-  $("rName").textContent=c.n;$("rClues").innerHTML="";c.clues.forEach(t=>{const li=document.createElement("li");li.textContent=t;$("rClues").appendChild(li);});
+  $("rName").textContent=c.n;addNewTag($("rName"),c);$("rClues").innerHTML="";c.clues.forEach(t=>{const li=document.createElement("li");li.textContent=t;$("rClues").appendChild(li);});
   $("rFb").hidden=true;$("rActs").hidden=false;$("rVerify").disabled=RF.left<R_VER;$("rVerify").textContent=`Verify first · ${R_VER} min`;$("rVerTxt").hidden=true;
 }
 $("rVerify").onclick=()=>{const c=SUSPECTS[RF.i];RF.left-=R_VER;RF.verified=true;rHud();$("rVerify").disabled=true;

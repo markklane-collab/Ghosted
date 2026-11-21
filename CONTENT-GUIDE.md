@@ -1,6 +1,6 @@
 # Weekly content guide
 
-All weekly questions live in **`content.js`**, for both job seeker mode and Recruiter Mode. **The newest item in each list always appears in every play** (with a "New this week" tag in job seeker mode), and the rest of each play leans on the last few weeks of questions before older ones. Add new items to the **end** of each list.
+All weekly questions live in **`content.js`**, for both job seeker mode and Recruiter Mode. **The newest item in each list always appears in every play** (with a "New this week" tag in job seeker mode), and the rest of each play leans on the last few weeks of questions before older ones. Add new items to the **end** of each list, and give each one `"added"`: the Monday it goes live (like `"2026-11-23"`). Items show a **New** tag for 14 days after that date, in both modes.
 
 ## The weekly routine (about 15 minutes)
 
@@ -22,6 +22,7 @@ Or simply send the theme or episode notes to Claude and ask it to write, test, a
 
 ```js
 {
+  "added": "2026-11-23",
   "q": "The interviewer's question goes here?",
   "o": [
     { "t": "A weak answer", "hp": -15, "c": -4, "fb": "Why it falls flat." },
@@ -38,6 +39,7 @@ Or simply send the theme or episode notes to Claude and ask it to write, test, a
 
 ```js
 {
+  "added": "2026-11-23",
   "q": "The scenario or question goes here?",
   "o": [
     { "t": "Option A", "hp": -10, "fb": "Feedback." },
@@ -52,6 +54,7 @@ Or simply send the theme or episode notes to Claude and ask it to write, test, a
 
 ```js
 {
+  "added": "2026-11-23",
   "title": "Job title",
   "co": "Company name · Remote",
   "jd": "Posting text. Put the [exact keywords] players should match in square brackets.",
@@ -71,6 +74,7 @@ Recruiter Mode has built-in scenarios, and anything you add here joins the pool.
 
 ```js
 {
+  "added": "2026-11-23",
   "n": "Candidate name",
   "fake": 0,
   "clues": ["Clue one", "Clue two", "Clue three"],
@@ -84,6 +88,7 @@ Use `"fake": 1` for a fake candidate. Put fake candidates' names in quotation ma
 
 ```js
 {
+  "added": "2026-11-23",
   "ask": "“What the candidate says.”",
   "field": "Short topic label",
   "o": [
