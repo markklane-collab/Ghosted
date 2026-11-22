@@ -10,7 +10,7 @@
  * Recruiter Mode and can start empty. See CONTENT-GUIDE.md for templates.
  */
 window.GAME_CONTENT = {
-  "week": "Nov 16",
+  "week": "Nov 23",
   "resumes": [
     {
       "title": "Marketing Communications Manager",
@@ -166,6 +166,26 @@ window.GAME_CONTENT = {
       ],
       "tip": "“Great writer” is true, and invisible to the scanner. Name the actual work: newsletters, the intranet, executive messaging. Tools count too. If the posting says Microsoft Teams, write Microsoft Teams, not “chat tools.”",
       "added": "2026-11-16"
+    },
+    {
+      "added": "2026-11-23",
+      "title": "Workforce Planning Analyst",
+      "co": "Silverpine Medical Group · Hybrid",
+      "jd": "Help us decide who we hire, and when. You'll own [headcount planning] and [workforce forecasting], partner with finance on [budget tracking], turn the numbers into [data visualization] leaders can read in a minute, and keep it all clear with strong [stakeholder communication].",
+      "right": [
+        "Headcount planning",
+        "Workforce forecasting",
+        "Budget tracking",
+        "Data visualization",
+        "Stakeholder communication"
+      ],
+      "wrong": [
+        "Number crunching",
+        "Forecasting the weather",
+        "Spreadsheet ninja",
+        "Big-picture thinker"
+      ],
+      "tip": "This is the person who decides whether a job posting turns into a real hire. Use their exact phrases, then add one example: a forecast you built and the decision it changed. That tells me you know a plan only matters if someone acts on it."
     }
   ],
   "interview": [
@@ -472,6 +492,37 @@ window.GAME_CONTENT = {
         }
       ],
       "added": "2026-11-16"
+    },
+    {
+      "added": "2026-11-23",
+      "q": "We got 900 applications for this role. In one minute: why should you be the one we call back?",
+      "o": [
+        {
+          "t": "Honestly? I'm just grateful to be one of the 900.",
+          "hp": -10,
+          "c": -3,
+          "fb": "Humble, but it puts you right back in the pile. Gratitude is nice. A reason to pick you is better."
+        },
+        {
+          "t": "Your posting says the top priority is faster onboarding. At my last job I cut it from six weeks to three. That's where I'd start here.",
+          "hp": 60,
+          "c": 8,
+          "best": true,
+          "fb": "Huge applicant pools get sorted by one question: who can solve our problem? Pick the top priority from the posting, match it to one result with a number, and say what you'd do first."
+        },
+        {
+          "t": "I'm a hard worker, a fast learner, and a great team player.",
+          "hp": 15,
+          "c": 2,
+          "fb": "All true, probably. So is every other answer they heard today. Swap one adjective for one proof point."
+        },
+        {
+          "t": "Statistically, one of us has to get it. Why not me?",
+          "hp": 10,
+          "c": 2,
+          "fb": "The math checks out. The pitch doesn't. Keep the confidence, then add the one result that makes you the obvious pick."
+        }
+      ]
     }
   ],
   "circus": [
@@ -711,6 +762,33 @@ window.GAME_CONTENT = {
         }
       ],
       "added": "2026-11-16"
+    },
+    {
+      "added": "2026-11-23",
+      "q": "Final round in December. The recruiter says: “Great news, you’re a finalist! The role is on hold until the new budget is approved, but let’s keep going.” What’s your move?",
+      "o": [
+        {
+          "t": "Cancel your other interviews. You're basically hired.",
+          "hp": -15,
+          "fb": "A finalist for a role with no budget isn't a job yet. Never pause your search for a maybe."
+        },
+        {
+          "t": "Ask: “Is this role approved and funded right now? If not, when will you know, and what happens to finalists?”",
+          "hp": 50,
+          "best": true,
+          "fb": "Roles go on hold a lot at year-end. It's not a scam, just not a sure thing. Asking about approval and timing is professional, not pushy. Keep your other options moving until you have a written offer."
+        },
+        {
+          "t": "Ghost them first. They'll probably ghost you anyway.",
+          "hp": -10,
+          "fb": "Tempting, but it burns a bridge you might need in January. A short, polite check-in keeps the door open."
+        },
+        {
+          "t": "Keep going, but don't ask about it. Asking might seem rude.",
+          "hp": 5,
+          "fb": "Staying in is fine. Staying quiet means you're guessing. One clear question can save you weeks of waiting."
+        }
+      ]
     }
   ],
   "recruiter": {
@@ -747,6 +825,17 @@ window.GAME_CONTENT = {
         ],
         "truth": "Real. She uses a screen reader and live captions on a second monitor, so she looks to the side and takes a beat to process. Ask about accommodations. Don’t assume someone is feeding her answers.",
         "added": "2026-11-16"
+      },
+      {
+        "added": "2026-11-23",
+        "n": "“Devon Hale”",
+        "fake": 1,
+        "clues": [
+          "Says they live in Denver, but the phone number is an internet calling number",
+          "Asked about a favorite lunch spot near home: long pause, then keyboard clicking",
+          "Take-home code and live coding look like two different people wrote them"
+        ],
+        "truth": "Fake. A masked location, a looked-up answer to an easy local question, and work in someone else's style. Verify contact details and run a short live exercise before any offer."
       }
     ],
     "offer": [
@@ -869,6 +958,46 @@ window.GAME_CONTENT = {
           }
         ],
         "added": "2026-11-16"
+      },
+      {
+        "added": "2026-11-23",
+        "ask": "“Before I resign from my current job: is this role fully approved? A friend’s offer got pulled last year when budgets froze.”",
+        "field": "Approved role",
+        "o": [
+          {
+            "t": "Totally safe. Offers never get pulled here.",
+            "m": 1,
+            "a": -5,
+            "b": 0,
+            "post": "No confirmation the role is approved",
+            "fb": "A promise you can't keep is worse than no promise. If it ever happens, you're the one who said never."
+          },
+          {
+            "t": "Fair question. The role is approved and funded. I'll send that, the start date, and the full offer in writing today. Please don't resign until you've signed.",
+            "m": 3,
+            "a": 15,
+            "b": 5,
+            "best": 1,
+            "post": "Written offer confirming the role is approved, with a start date",
+            "fb": "Candidates ask this more at year-end, and they should. Confirm approval with the hiring manager or finance before the call, then put it in writing. Telling them to resign only after signing protects them and you."
+          },
+          {
+            "t": "Good question. Let me check with the hiring manager and get back to you.",
+            "m": 2,
+            "a": 5,
+            "b": 2,
+            "post": "Approval status still pending",
+            "fb": "Honest, and better than guessing. But you should know this before you make an offer. Confirm approval first so the answer is ready when they ask."
+          },
+          {
+            "t": "Sign today and I'll personally make sure it's protected, whatever happens.",
+            "m": 1,
+            "a": 5,
+            "b": -10,
+            "post": "A verbal guarantee nobody approved",
+            "fb": "Kind, but you just promised something only the business can promise. The hiring manager now has a commitment they never agreed to. Offer only what's in writing."
+          }
+        ]
       }
     ]
   }
